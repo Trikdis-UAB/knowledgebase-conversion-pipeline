@@ -1,0 +1,70 @@
+/* GitHub-style alerts for MkDocs (if MkDocs Material renders them) */
+.md-alert,
+blockquote[class*="alert-"] {
+  border: 1px solid transparent;
+  border-left-width: 6px;
+  padding: .8rem 1rem;
+  margin: 1rem 0;
+  border-radius: .5rem;
+  background: #f8f9fb;
+}
+
+/* Base box (legacy HTML style for compatibility) */
+.admonition {
+  border: 1px solid transparent;
+  border-left-width: 6px;
+  padding: .8rem 1rem;
+  margin: 1rem 0;
+  border-radius: .5rem;
+  background: #f8f9fb;
+}
+
+/* Title */
+.admonition .admonition-title {
+  margin: 0 0 .35rem;
+  font-weight: 700;
+}
+
+/* Info (blue) */
+.admonition.info {
+  border-color: #2f73da;
+  background: rgba(47,115,218,.08);
+  color: #1e5bbf;
+}
+.admonition.info .admonition-title { color: #1e5bbf; }
+
+/* Warning/Important (orange) */
+.admonition.warning {
+  border-color: #ff9800;
+  background: rgba(255,152,0,.12);
+  color: #b8860b;
+}
+.admonition.warning .admonition-title { color: #d17e00; }
+
+/* Make it work in both MkDocs and Typora */
+.md-typeset .admonition { /* inherit the same styles inside site wrapper */ }
+
+/* Additional compatibility for Typora - override any theme conflicts */
+.typora-export .admonition,
+body .admonition {
+  border: 1px solid transparent !important;
+  border-left-width: 6px !important;
+  padding: .8rem 1rem !important;
+  margin: 1rem 0 !important;
+  border-radius: .5rem !important;
+  background: #f8f9fb !important;
+}
+
+.typora-export .admonition.info,
+body .admonition.info {
+  border-color: #2f73da !important;
+  background: rgba(47,115,218,.08) !important;
+  color: #1e5bbf !important;
+}
+
+.typora-export .admonition.warning,
+body .admonition.warning {
+  border-color: #ff9800 !important;
+  background: rgba(255,152,0,.12) !important;
+  color: #b8860b !important;
+}

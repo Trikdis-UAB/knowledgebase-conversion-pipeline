@@ -1,0 +1,44 @@
+/* Let content wrap inside flexy table cells */
+.md-typeset table, table { table-layout: fixed; width: 100%; }
+
+.md-typeset table td, .md-typeset table th,
+table td, table th {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  vertical-align: top;
+}
+
+/* Important: flex items can refuse to shrink unless min-width:0 */
+.md-typeset table.two-col td, table.two-col td { min-width: 0; }
+.md-typeset table.two-col td > *, table.two-col td > * { min-width: 0; }
+
+/* Two fixed-ish columns for spec tables */
+.md-typeset table.two-col td:first-child,
+.md-typeset table.two-col th:first-child,
+table.two-col td:first-child, table.two-col th:first-child { width: 38%; }
+.md-typeset table.two-col td:last-child,
+.md-typeset table.two-col th:last-child,
+table.two-col td:last-child, table.two-col th:last-child { width: 62%; }
+
+/* Keep 2 columns; just reorder inside a cell on mobile (text/image rule you wanted) */
+@media (max-width: 768px) {
+  .md-typeset table.two-col td, table.two-col td {
+    display: flex; flex-direction: column; align-items: flex-start; gap: .35rem;
+  }
+  .md-typeset table.two-col td p:has(img), table.two-col td p:has(img) { order: 2; }
+  .md-typeset table.two-col td:has(strong) p:not(:has(img)),
+  table.two-col td:has(strong) p:not(:has(img)) { order: 1; }
+  .md-typeset table.two-col td:has(strong) p:has(img),
+  table.two-col td:has(strong) p:has(img) { order: 2; }
+  .md-typeset table.two-col td p:has(img) img, table.two-col td p:has(img) img {
+    max-width: 100%; height: auto; display: block;
+  }
+}
+
+/* Fallback: multi-column tables remain scrollable on mobile */
+@media (max-width: 768px) {
+  .md-typeset table:not(.two-col), table:not(.two-col) {
+    display: block; overflow-x: auto; -webkit-overflow-scrolling: touch;
+  }
+}

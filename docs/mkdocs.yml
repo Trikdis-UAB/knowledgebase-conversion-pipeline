@@ -1,0 +1,11 @@
+# mkdocs.yml
+site_name: TRIKDIS Knowledgebase
+theme:
+  name: material
+extra_css:
+  - assets/scale.css
+  - assets/tables.css
+  - assets/admonitions.css
+nav:
+  - Manuals:
+      - GT UM ENG 2024 08 08: "manuals/GT UM_ENG_2024 08 08-.md"

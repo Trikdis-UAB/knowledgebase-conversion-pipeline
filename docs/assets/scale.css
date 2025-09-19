@@ -1,0 +1,13 @@
+/* Typography scaling for better readability - no browser zoom needed */
+html { font-size: 18px; }
+.md-typeset { line-height: 1.65; }
+@media (min-width: 76.25em) { .md-grid { max-width: 75rem; } }
+.md-nav, .md-sidebar { font-size: 0.95rem; }
+.md-typeset table:not([class]) td, .md-typeset table:not([class]) th { padding: .6em .8em; }
+.md-typeset code, .md-typeset pre { font-size: 0.95em; }
+.md-typeset .admonition { font-size: 0.98em; }
+.md-typeset img { max-width: 100%; height: auto; }
+
+/* Admonition title weight & wrap */
+.md-typeset .admonition-title { font-weight: 700; }
+.md-typeset .admonition-title, .md-typeset .admonition > p { word-wrap: anywhere; }
