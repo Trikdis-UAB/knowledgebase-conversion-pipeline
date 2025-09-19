@@ -14,7 +14,7 @@ base="$(basename "${inp%.docx}")"
 doc_dir="${OUT_DIR}/${base}"
 
 # Ensure filters exist
-for f in strip-cover.lua strip-toc.lua promote-strong-top.lua normalize-headings.lua split-inline-images.lua convert-image-sizes.lua softwrap-tokens.lua clean-table-pipes.lua mark-two-col.lua strip-classes.lua fix-typography.lua fix-crossrefs.lua; do
+for f in strip-cover.lua strip-toc.lua promote-strong-top.lua normalize-headings.lua move-first-image-to-description.lua split-inline-images.lua convert-image-sizes.lua softwrap-tokens.lua clean-table-pipes.lua mark-two-col.lua strip-classes.lua fix-typography.lua fix-crossrefs.lua; do
   [ -f "$SCRIPT_DIR/$f" ] || { echo "Missing $f"; exit 1; }
 done
 # Check the new filter in filters subdirectory
@@ -34,6 +34,7 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/promote-strong-top.lua" \
   --lua-filter="$SCRIPT_DIR/filters/flatten-two-cell-tables.lua" \
   --lua-filter="$SCRIPT_DIR/normalize-headings.lua" \
+  --lua-filter="$SCRIPT_DIR/move-first-image-to-description.lua" \
   --lua-filter="$SCRIPT_DIR/split-inline-images.lua" \
   --lua-filter="$SCRIPT_DIR/convert-image-sizes.lua" \
   --lua-filter="$SCRIPT_DIR/softwrap-tokens.lua" \
