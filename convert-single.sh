@@ -68,6 +68,7 @@ sed -i '' 's/<blockquote>//g; s/<\/blockquote>//g' index.md
 
 python3 "$SCRIPT_DIR/normalize-callouts.py" index.md
 python3 "$SCRIPT_DIR/fix-relative-images.py" index.md
+python3 "$SCRIPT_DIR/fix-list-continuity.py" index.md
 
 popd >/dev/null
 echo "✅ Wrote: ${doc_dir}/index.md (images in same folder)"
