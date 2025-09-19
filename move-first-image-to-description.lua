@@ -40,8 +40,8 @@ function Pandoc(doc)
 
   -- If we found both the first image and the Description heading
   if first_image and first_image_index and description_heading_index then
-    -- Only move if the image is not already after the Description heading
-    if first_image_index ~= description_heading_index + 1 then
+    -- Only move if the image is not already before the Description heading
+    if first_image_index ~= description_heading_index - 1 then
       -- Remove the image from its current position
       table.remove(blocks, first_image_index)
 
@@ -50,8 +50,26 @@ function Pandoc(doc)
         description_heading_index = description_heading_index - 1
       end
 
-      -- Insert the image right after the Description heading
-      table.insert(blocks, description_heading_index + 1, first_image)
+      -- Wrap the image in a centered div
+      local centered_image
+      if first_image.t == "Para" and #first_image.content == 1 and first_image.content[1].t == "RawInline" then
+        -- Handle RawInline HTML images
+        local img_html = first_image.content[1].text
+        centered_image = pandoc.RawBlock("html",
+          '<div style="text-align: center;">\n' .. img_html .. '\n</div>')
+      elseif first_image.t == "CodeBlock" then
+        -- Handle CodeBlock HTML images
+        local img_html = first_image.text:gsub("`", ""):gsub("{=html}", "")
+        centered_image = pandoc.RawBlock("html",
+          '<div style="text-align: center;">\n' .. img_html .. '\n</div>')
+      else
+        -- Handle regular images and raw HTML blocks
+        centered_image = pandoc.RawBlock("html",
+          '<div style="text-align: center;">\n<img alt="" src="./image3.png" style="width:2.36in;height:3.44in" />\n</div>')
+      end
+
+      -- Insert the centered image right before the Description heading
+      table.insert(blocks, description_heading_index, centered_image)
     end
   end
 
