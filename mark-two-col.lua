@@ -28,7 +28,7 @@ return {
       if ok then
         local id = tbl.attr.identifier or ""
         local classes = tbl.attr.classes or {}
-        table.insert(classes, "two-col")
+        -- table.insert(classes, "two-col")  -- Commented out to prevent removing table borders
         tbl.attr = pandoc.Attr(id, classes, tbl.attr.attributes or {})
       end
       return tbl
