@@ -34,6 +34,7 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/promote-strong-top.lua" \
   --lua-filter="$SCRIPT_DIR/filters/flatten-two-cell-tables.lua" \
   --lua-filter="$SCRIPT_DIR/normalize-headings.lua" \
+  --lua-filter="$SCRIPT_DIR/strip-manual-heading-numbers.lua" \
   --lua-filter="$SCRIPT_DIR/move-first-image-to-description.lua" \
   --lua-filter="$SCRIPT_DIR/split-inline-images.lua" \
   --lua-filter="$SCRIPT_DIR/convert-image-sizes.lua" \
