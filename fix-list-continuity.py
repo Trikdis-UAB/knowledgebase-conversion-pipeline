@@ -16,10 +16,7 @@ def fix_list_continuity(content):
     current_list_num = 0
     in_list = False
 
-    i = 0
-    while i < len(lines):
-        line = lines[i]
-
+    for i, line in enumerate(lines):
         # Check if line is a numbered list item
         list_match = re.match(r'^(\d+)\.\s+(.*)$', line)
 
@@ -27,35 +24,42 @@ def fix_list_continuity(content):
             list_num = int(list_match.group(1))
             list_text = list_match.group(2)
 
-            # If we were in a list and this starts at 1, check if we should continue
-            if in_list and list_num == 1:
-                # Look back to see if there was an image recently
-                found_image = False
-                lookback = min(10, len(result_lines))  # Look back up to 10 lines
-
-                for j in range(1, lookback + 1):
-                    if len(result_lines) >= j:
-                        prev_line = result_lines[-j]
-                        # Check for image syntax or empty lines after images
+            # If this starts at 1 and we were already in a list, check if we should continue
+            if list_num == 1 and in_list:
+                # Look back for images in the last few lines
+                found_image_recently = False
+                for j in range(max(0, i-5), i):
+                    if j < len(lines):
+                        prev_line = lines[j]
                         if ('<img ' in prev_line or
                             prev_line.strip().startswith('![') or
-                            prev_line.strip() == ''):
-                            # Look further back for the last actual list item
-                            for k in range(j + 1, min(j + 15, len(result_lines) + 1)):
-                                if len(result_lines) >= k:
-                                    check_line = result_lines[-k]
-                                    prev_list_match = re.match(r'^(\d+)\.\s+', check_line)
-                                    if prev_list_match:
-                                        found_image = True
-                                        break
+                            prev_line.strip().startswith('<img')):
+                            found_image_recently = True
                             break
 
-                if found_image:
+                # Also check for section breaks that should reset numbering
+                found_section_break = False
+                for j in range(max(0, i-10), i):
+                    if j < len(lines):
+                        prev_line = lines[j]
+                        if (prev_line.startswith('###') or
+                            prev_line.startswith('***') or
+                            'window:' in prev_line.lower() or
+                            'settings' in prev_line.lower() and ('**' in prev_line or 'window' in prev_line)):
+                            # Check if this is a new configuration section
+                            if any(keyword in prev_line.lower() for keyword in ['system settings', 'cms reporting', 'sim card']):
+                                found_section_break = False  # These should continue numbering
+                                break
+                            else:
+                                found_section_break = True
+                                break
+
+                if found_image_recently and not found_section_break:
                     # Continue the numbering
                     current_list_num += 1
                     line = f"{current_list_num}. {list_text}"
                 else:
-                    # This is a new list
+                    # Reset numbering for new sections
                     current_list_num = list_num
             else:
                 current_list_num = list_num
@@ -63,15 +67,14 @@ def fix_list_continuity(content):
             in_list = True
 
         else:
-            # Not a list item - check if we should reset
-            if line.strip() == '' or line.startswith('#') or line.startswith('***'):
-                # Keep in_list state for empty lines, reset for headers/separators
-                if line.startswith('#') or line.startswith('***'):
-                    in_list = False
-                    current_list_num = 0
+            # Check for major section breaks that should reset list tracking
+            if (line.startswith('###') or
+                line.startswith('##') or
+                line.startswith('***')):
+                in_list = False
+                current_list_num = 0
 
         result_lines.append(line)
-        i += 1
 
     return '\n'.join(result_lines)
 
@@ -93,11 +96,13 @@ def main():
     # Fix the list continuity
     fixed_content = fix_list_continuity(content)
 
-    # Write back to file
-    with open(file_path, 'w', encoding='utf-8') as f:
-        f.write(fixed_content)
-
-    print(f"Fixed list continuity in {file_path}")
+    # Only write if there are actual changes
+    if fixed_content != content:
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(fixed_content)
+        print(f"Fixed list continuity in {file_path}")
+    else:
+        print(f"No changes needed in {file_path}")
 
 if __name__ == "__main__":
     main()
