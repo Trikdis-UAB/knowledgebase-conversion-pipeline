@@ -72,6 +72,9 @@ sed -i '' 's/<blockquote>//g; s/<\/blockquote>//g' index.md
 # Fix HTML blocks with {=html} tags that prevent proper rendering in MkDocs
 sed -i '' 's/`<img \([^`]*\)>`{=html}/<img \1>/g' index.md
 
+# Fix GitHub-style alerts by removing backslash escaping from square brackets
+sed -i '' 's/\\\[/[/g; s/\\\]/]/g' index.md
+
 python3 "$SCRIPT_DIR/normalize-callouts.py" index.md
 python3 "$SCRIPT_DIR/fix-relative-images.py" index.md
 python3 "$SCRIPT_DIR/fix-list-continuity.py" index.md
