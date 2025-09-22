@@ -75,6 +75,16 @@ sed -i '' 's/`<img \([^`]*\)>`{=html}/<img \1>/g' index.md
 # Fix GitHub-style alerts by removing backslash escaping from square brackets
 sed -i '' 's/\\\[/[/g; s/\\\]/]/g' index.md
 
+# Convert GitHub-style alerts to MkDocs admonitions format
+sed -i '' 's/> \[!NOTE\]/!!! note/g' index.md
+sed -i '' 's/> \[!IMPORTANT\]/!!! warning "Important"/g' index.md
+sed -i '' 's/> \[!WARNING\]/!!! warning/g' index.md
+sed -i '' 's/> \[!TIP\]/!!! tip/g' index.md
+sed -i '' 's/> \[!CAUTION\]/!!! warning "Caution"/g' index.md
+
+# Fix admonition formatting (proper indentation)
+python3 "$SCRIPT_DIR/fix_admonitions.py" index.md
+
 python3 "$SCRIPT_DIR/normalize-callouts.py" index.md
 python3 "$SCRIPT_DIR/fix-relative-images.py" index.md
 python3 "$SCRIPT_DIR/fix-list-continuity.py" index.md
