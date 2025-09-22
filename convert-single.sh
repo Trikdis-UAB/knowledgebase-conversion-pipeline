@@ -14,7 +14,7 @@ base="$(basename "${inp%.docx}")"
 doc_dir="${OUT_DIR}/${base}"
 
 # Ensure filters exist
-for f in strip-cover.lua strip-toc.lua promote-strong-top.lua normalize-headings.lua move-first-image-to-description.lua split-inline-images.lua convert-image-sizes.lua softwrap-tokens.lua clean-table-pipes.lua mark-two-col.lua convert-underline.lua remove-unwanted-blockquotes.lua maintain-list-continuity.lua strip-classes.lua fix-typography.lua fix-crossrefs.lua; do
+for f in strip-cover.lua strip-toc.lua promote-strong-top.lua normalize-headings.lua move-first-image-to-description.lua split-inline-images.lua convert-image-sizes.lua softwrap-tokens.lua clean-table-pipes.lua mark-two-col.lua convert-underline.lua remove-unwanted-blockquotes.lua maintain-list-continuity.lua strip-classes.lua fix-typography.lua fix-crossrefs.lua clean-html-blocks.lua; do
   [ -f "$SCRIPT_DIR/$f" ] || { echo "Missing $f"; exit 1; }
 done
 # Check the new filter in filters subdirectory
@@ -46,7 +46,8 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/maintain-list-continuity.lua" \
   --lua-filter="$SCRIPT_DIR/strip-classes.lua" \
   --lua-filter="$SCRIPT_DIR/fix-typography.lua" \
-  --lua-filter="$SCRIPT_DIR/fix-crossrefs.lua"
+  --lua-filter="$SCRIPT_DIR/fix-crossrefs.lua" \
+  --lua-filter="$SCRIPT_DIR/clean-html-blocks.lua"
 
 # If Pandoc made ./media/, flatten to current folder and fix links
 if [ -d "media" ]; then
@@ -67,6 +68,9 @@ sed -i '' 's/Error! Reference source not found\./see the referenced section/g' i
 
 # Clean up blockquotes in tables
 sed -i '' 's/<blockquote>//g; s/<\/blockquote>//g' index.md
+
+# Fix HTML blocks with {=html} tags that prevent proper rendering in MkDocs
+sed -i '' 's/`<img \([^`]*\)>`{=html}/<img \1>/g' index.md
 
 python3 "$SCRIPT_DIR/normalize-callouts.py" index.md
 python3 "$SCRIPT_DIR/fix-relative-images.py" index.md
