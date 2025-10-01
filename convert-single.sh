@@ -1,6 +1,16 @@
 #!/bin/bash
 set -euo pipefail
 
+# Document conversion pipeline for TRIKDIS manuals
+#
+# GitHub Alerts: This pipeline converts GitHub alerts (> [!NOTE], > [!IMPORTANT])
+# from DOCX to markdown format. The target MkDocs site MUST have markdown-callouts
+# extension configured to render these properly. See GITHUB_ALERTS_CONFIG.md for details.
+#
+# Table Structure: Automatically fixes malformed table structures from DOCX conversion
+# including H1 tags in cells, rowspan issues, and empty rows. See TABLE_STRUCTURE_FIX.md
+# for details. This ensures tables display properly with horizontal headers in MkDocs.
+
 if [ $# -eq 0 ]; then
   echo "Usage: $0 <input.docx>"; exit 1
 fi
@@ -72,6 +82,22 @@ sed -i '' 's/<blockquote>//g; s/<\/blockquote>//g' index.md
 # Fix HTML blocks with {=html} tags that prevent proper rendering in MkDocs
 sed -i '' 's/`<img \([^`]*\)>`{=html}/<img \1>/g' index.md
 
+# Fix underlined text with HTML tags to proper markdown underline
+sed -i '' 's/`<u>`{=html}\([^`]*\)`<\/u>`{=html}/<u>\1<\/u>/g' index.md
+
+# Fix escaped apostrophes in text (remove backslashes before single quotes)
+sed -i '' "s/\\\\'/'/g" index.md
+
+# Fix title formatting - make "Works with Protegus2 app:" bold like other titles
+sed -i '' 's/^Works with Protegus2 app:/**Works with Protegus2 app:**/g' index.md
+
+# Fix Features section structure - change from bold to H3 (subsection) and make first line bold
+sed -i '' 's/^\*\*Features\*\*$/### Features/g' index.md
+sed -i '' 's/^Connects to the control panel'\''s serial or keyboard bus or telephone line (TIP\/RING)\.$/\*\*Connects to the control panel'\''s serial or keyboard bus or telephone line (TIP\/RING).\*\*/g' index.md
+
+# Add H1 title and image before Description section (numbering handled by plugin)
+sed -i '' 's/^## Description$/# GT Cellular Communicator\n\n![GT Cellular Communicator](image1.png)\n\n## Description/g' index.md
+
 # Fix GitHub-style alerts by removing backslash escaping from square brackets
 sed -i '' 's/\\\[/[/g; s/\\\]/]/g' index.md
 
@@ -85,9 +111,13 @@ sed -i '' 's/> \[!CAUTION\]/!!! warning "Caution"/g' index.md
 # Fix admonition formatting (proper indentation)
 python3 "$SCRIPT_DIR/fix_admonitions.py" index.md
 
+# Fix table structure issues (H1 in cells, empty rows, malformed headers)
+python3 "$SCRIPT_DIR/fix_table_structure.py" index.md
+
 python3 "$SCRIPT_DIR/normalize-callouts.py" index.md
 python3 "$SCRIPT_DIR/fix-relative-images.py" index.md
 python3 "$SCRIPT_DIR/fix-list-continuity.py" index.md
+python3 "$SCRIPT_DIR/reduce-spacing.py" index.md
 
 popd >/dev/null
 echo "✅ Wrote: ${doc_dir}/index.md (images in same folder)"
