@@ -115,10 +115,33 @@ def fix_specifications_table(content: str) -> str:
     and restructures them into proper header row + data rows.
     """
 
-    # Pattern: <td rowspan="2"><strong>Header</strong>\n\n<p>Data</p></td>
+    # Pattern 1: Both cells have <strong>Header</strong><p>Data</p>
+    # This appears in GET manual's "Purpose of terminals" table
+    pattern1 = r'<tbody>\s*<tr>\s*<td rowspan="2"><strong>([^<]+)</strong>\s*<p>([^<]*)</p>\s*</td>\s*<td rowspan="2"><strong>([^<]+)</strong>\s*<p>([^<]*)</p>\s*</td>\s*</tr>'
+
+    def fix_both_cells(match):
+        header1 = match.group(1)  # "Terminal"
+        data1 = match.group(2)     # "+12 VDC"
+        header2 = match.group(3)   # "Description"
+        data2 = match.group(4)     # "+10 V/+18 V DC power supply"
+
+        # Build proper table structure with thead and tbody
+        result = '<thead>\n<tr>\n'
+        result += f'<th><strong>{header1}</strong></th>\n'
+        result += f'<th><strong>{header2}</strong></th>\n'
+        result += '</tr>\n</thead>\n<tbody>\n<tr>\n'
+        result += f'<td>{data1}</td>\n'
+        result += f'<td>{data2}</td>\n'
+        result += '</tr>'
+        return result
+
+    # Apply pattern 1 first
+    content = re.sub(pattern1, fix_both_cells, content, flags=re.DOTALL)
+
+    # Pattern 2: <td rowspan="2"><strong>Header</strong>\n\n<p>Data</p></td>
     # This appears in GET manual's Specifications table
     # Use DOTALL to match across newlines
-    pattern = r'<tbody>\s*<tr>\s*<td rowspan="2"><strong>([^<]+)</strong>\s+<p>([^<]*)</p>\s*</td>\s*<td rowspan="2">([^<]+)</td>\s*</tr>'
+    pattern2 = r'<tbody>\s*<tr>\s*<td rowspan="2"><strong>([^<]+)</strong>\s+<p>([^<]*)</p>\s*</td>\s*<td rowspan="2">([^<]+)</td>\s*</tr>'
 
     def fix_single_table(match):
         # Extract the parts
@@ -148,7 +171,10 @@ def fix_specifications_table(content: str) -> str:
 
         return result
 
-    return re.sub(pattern, fix_single_table, content, flags=re.DOTALL)
+    # Apply pattern 2
+    content = re.sub(pattern2, fix_single_table, content, flags=re.DOTALL)
+
+    return content
 
 def clean_table_content(content: str) -> str:
     """Clean up table cell content."""
