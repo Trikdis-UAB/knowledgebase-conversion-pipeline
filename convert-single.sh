@@ -94,6 +94,9 @@ sed -i '' 's/`<u>`{=html}\([^`]*\)`<\/u>`{=html}/<u>\1<\/u>/g' index.md
 # Fix escaped apostrophes in text (remove backslashes before single quotes)
 sed -i '' "s/\\\\'/'/g" index.md
 
+# Fix escaped quotes (remove backslashes before double quotes)
+sed -i '' 's/\\"/"/g' index.md
+
 # Fix title formatting - make "Works with Protegus2 app:" bold like other titles
 sed -i '' 's/^Works with Protegus2 app:/**Works with Protegus2 app:**/g' index.md
 
