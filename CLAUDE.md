@@ -120,6 +120,7 @@ docs/manuals/[Manual Name]/
 - **Automatic title extraction**: Product name from DOCX → H1 title (e.g., "Cellular communicator GT+" → "# GT+ Cellular Communicator")
 - **Product image formatting**: Centered with width="400" after H1 title
 - **Table structure**: Malformed rowspan headers fixed, empty columns removed
+- **Responsive tables**: Inline width styles removed for consistent screen resizing
 - **Typography**: Escaped quotes (`\"` → `"`), escaped apostrophes (`\'` → `'`)
 - **Clean markers**: Standalone `****` removed (preserved in tables)
 - Heading levels normalized (1.1→H3, 1.1.1→H4)

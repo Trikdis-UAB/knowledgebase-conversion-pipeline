@@ -320,7 +320,15 @@ After Pandoc conversion, the scripts apply sed fixes for:
 - Escaped quotes (`\"` → `"`)
 - Escaped apostrophes (`\'` → `'`)
 - Standalone `****` markers (removed outside tables)
+- Inline table width styles (removed for responsive behavior)
 - Any edge cases not caught by filters
+
+### Responsive Table Design
+Tables are optimized for responsive behavior:
+- Inline `style="width:X%"` removed from `<table>` tags
+- CSS handles all table widths: `width: 100%` with `table-layout: fixed`
+- `<colgroup>` percentages preserved for column ratios
+- Tables resize consistently across all screen sizes
 
 ---
 
@@ -348,6 +356,7 @@ After Pandoc conversion, the scripts apply sed fixes for:
 - ✅ **Standalone asterisks removal**: New `remove-standalone-asterisks.lua` removes `****` markers outside tables
 - ✅ **Empty column removal**: `remove-empty-table-columns.lua` removes separator columns from tables
 - ✅ **Table unwrapping**: `unwrap-table-blockquotes.lua` removes blockquote wrappers from cells
+- ✅ **Responsive tables**: Removes inline width styles for consistent responsive behavior
 - ✅ **Total filters**: Increased from 19 to 23 specialized Lua filters
 - ✅ **CSS enhancement**: Centered H1 titles for better manual presentation
 
