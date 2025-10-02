@@ -1,11 +1,12 @@
 #!/bin/bash
 set -euo pipefail
 
-# Preview converted manuals using trikdis-docs MkDocs configuration
-# This ensures the preview matches exactly how it will look when published
+# Preview converted manuals in trikdis-docs with "Work in Progress" section
+# Keeps converted manuals separate from production content
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 TRIKDIS_DOCS="/Users/local/projects/trikdis-docs/manuals"
+WIP_DIR="$TRIKDIS_DOCS/docs/wip"
 
 # Check if trikdis-docs exists
 if [ ! -d "$TRIKDIS_DOCS" ]; then
@@ -14,59 +15,83 @@ if [ ! -d "$TRIKDIS_DOCS" ]; then
   exit 1
 fi
 
-# Check if mkdocs.yml exists in trikdis-docs
-if [ ! -f "$TRIKDIS_DOCS/mkdocs.yml" ]; then
-  echo "❌ mkdocs.yml not found in trikdis-docs"
-  exit 1
+echo "📋 Syncing converted manuals to trikdis-docs WIP..."
+
+# Clean and create WIP directory
+rm -rf "$WIP_DIR"
+mkdir -p "$WIP_DIR"
+
+# Create symlink from conversion pipeline docs to trikdis-docs WIP
+# This way we don't copy files - they stay in the pipeline
+if [ -d "$SCRIPT_DIR/docs/manuals" ]; then
+  for manual_dir in "$SCRIPT_DIR/docs/manuals"/*; do
+    if [ -d "$manual_dir" ]; then
+      manual_name=$(basename "$manual_dir")
+      ln -s "$manual_dir" "$WIP_DIR/$manual_name"
+    fi
+  done
+  manual_count=$(ls -1 "$SCRIPT_DIR/docs/manuals" | wc -l)
+  echo "   Linked $manual_count manual(s) to WIP"
+else
+  echo "   No manuals found to preview"
 fi
 
-# Copy mkdocs.yml and requirements.txt from trikdis-docs
-echo "📋 Using configuration from trikdis-docs..."
-cp "$TRIKDIS_DOCS/mkdocs.yml" "$SCRIPT_DIR/mkdocs.yml"
-cp "$TRIKDIS_DOCS/requirements.txt" "$SCRIPT_DIR/requirements.txt"
+# Update trikdis-docs navigation
+cd "$TRIKDIS_DOCS"
 
-# Copy stylesheets and javascripts if they exist
-if [ -d "$TRIKDIS_DOCS/docs/stylesheets" ]; then
-  mkdir -p "$SCRIPT_DIR/docs/stylesheets"
-  cp -r "$TRIKDIS_DOCS/docs/stylesheets/"* "$SCRIPT_DIR/docs/stylesheets/"
-fi
+# Backup original mkdocs.yml
+cp mkdocs.yml mkdocs.yml.backup
 
-if [ -d "$TRIKDIS_DOCS/docs/javascripts" ]; then
-  mkdir -p "$SCRIPT_DIR/docs/javascripts"
-  cp -r "$TRIKDIS_DOCS/docs/javascripts/"* "$SCRIPT_DIR/docs/javascripts/"
-fi
-
-# Copy images (logo, favicon) if they exist
-if [ -d "$TRIKDIS_DOCS/docs/images" ]; then
-  mkdir -p "$SCRIPT_DIR/docs/images"
-  cp -r "$TRIKDIS_DOCS/docs/images/"* "$SCRIPT_DIR/docs/images/"
-fi
-
-# Create a simple index.md for preview
-cat > "$SCRIPT_DIR/docs/index.md" <<'EOF'
-# Manual Conversion Preview
-
-This is a local preview of converted manuals using the production MkDocs configuration.
-
-## Converted Manuals
-
-Browse the sidebar to see converted manuals.
-
----
-
-*Configuration synced from `/Users/local/projects/trikdis-docs/manuals/`*
+# Create WIP navigation section
+WIP_NAV=$(cat <<'EOF'
+  - Work in Progress:
 EOF
+)
 
-echo "✅ Configuration synced from trikdis-docs"
+if [ -d "$WIP_DIR" ]; then
+  for manual_link in "$WIP_DIR"/*; do
+    if [ -L "$manual_link" ] || [ -d "$manual_link" ]; then
+      manual_name=$(basename "$manual_link")
+      if [ -f "$manual_link/index.md" ]; then
+        manual_path="wip/$manual_name/index.md"
+        WIP_NAV="$WIP_NAV"$'\n'"      - $manual_name: $manual_path"
+      fi
+    fi
+  done
+fi
+
+# Insert WIP section after last nav item (before extra_css line)
+LINE_NUM=$(grep -n "^extra_css:" mkdocs.yml | cut -d: -f1)
+head -n $((LINE_NUM - 1)) mkdocs.yml > mkdocs.yml.tmp
+echo "$WIP_NAV" >> mkdocs.yml.tmp
+tail -n +$LINE_NUM mkdocs.yml >> mkdocs.yml.tmp
+mv mkdocs.yml.tmp mkdocs.yml
+
+echo "✅ WIP section added to navigation"
 echo ""
-echo "🚀 Starting MkDocs preview server..."
-echo "   Opening http://127.0.0.1:8001 in browser..."
+echo "🚀 Starting MkDocs preview..."
+echo "   Visit: http://127.0.0.1:8000"
 echo ""
-echo "   Press Ctrl+C to stop"
+echo "   📁 Work in Progress - Converted manuals from pipeline"
+echo "   📁 English - Production manuals"
+echo ""
+echo "   Press Ctrl+C to stop and clean up"
 echo ""
 
-# Open browser after a short delay to let server start
-(sleep 2 && open http://127.0.0.1:8001) &
+# Cleanup function
+cleanup() {
+  echo ""
+  echo "🧹 Cleaning up..."
+  rm -rf "$WIP_DIR"
+  mv mkdocs.yml.backup mkdocs.yml
+  echo "✅ Cleanup complete"
+}
 
-# Serve on different port than trikdis-docs (8001 instead of 8000)
-mkdocs serve --dev-addr 127.0.0.1:8001
+# Register cleanup on exit
+trap cleanup EXIT INT TERM
+
+# Open browser after a short delay
+(sleep 2 && open http://127.0.0.1:8000) &
+
+# Serve on port 8000
+mkdocs serve --dev-addr 127.0.0.1:8000
