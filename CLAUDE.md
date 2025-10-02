@@ -37,7 +37,7 @@ uvx mcp-pandoc convert-contents --input-file "file.docx" --output-format markdow
 
 ## What is this project?
 
-Convert TRIKDIS product manuals from .docx to clean Markdown for MkDocs and Typora. Automated pipeline with 19 Lua filters for comprehensive document cleanup and normalization.
+Convert TRIKDIS product manuals from .docx to clean Markdown for MkDocs and Typora. Automated pipeline with 21 Lua filters for comprehensive document cleanup and normalization.
 
 ## Quick Reference
 

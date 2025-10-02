@@ -1,6 +1,6 @@
 ![Product Image](image1.png)
 
-# GT+ Cellular Communicator
+**Cellular communicator GT+**
 
 Installation manual
 

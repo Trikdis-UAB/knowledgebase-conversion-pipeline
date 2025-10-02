@@ -61,11 +61,16 @@ if [ -d "$WIP_DIR" ]; then
 fi
 
 # Insert WIP section after last nav item (before extra_css line)
-LINE_NUM=$(grep -n "^extra_css:" mkdocs.yml | cut -d: -f1)
-head -n $((LINE_NUM - 1)) mkdocs.yml > mkdocs.yml.tmp
-echo "$WIP_NAV" >> mkdocs.yml.tmp
-tail -n +$LINE_NUM mkdocs.yml >> mkdocs.yml.tmp
-mv mkdocs.yml.tmp mkdocs.yml
+# Only if WIP section doesn't already exist
+if ! grep -q "^  - Work in Progress:" mkdocs.yml; then
+  LINE_NUM=$(grep -n "^extra_css:" mkdocs.yml | cut -d: -f1)
+  head -n $((LINE_NUM - 1)) mkdocs.yml > mkdocs.yml.tmp
+  echo "$WIP_NAV" >> mkdocs.yml.tmp
+  tail -n +$LINE_NUM mkdocs.yml >> mkdocs.yml.tmp
+  mv mkdocs.yml.tmp mkdocs.yml
+else
+  echo "   WIP section already exists in navigation"
+fi
 
 echo "✅ WIP section added to navigation"
 echo ""

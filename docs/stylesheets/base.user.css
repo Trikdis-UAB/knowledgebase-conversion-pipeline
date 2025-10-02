@@ -1,0 +1,254 @@
+/* Import Google Fonts - matching trikdis.com */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Open+Sans:wght@400;600;700&family=Roboto+Mono:wght@400;500&display=swap');
+
+/* Override MkDocs Material font variables */
+:root {
+  --md-text-font: "Open Sans", sans-serif;
+  --md-code-font: "Roboto Mono", monospace;
+}
+
+/* Use Poppins for headings - matching trikdis.com */
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4,
+.md-typeset h5,
+.md-typeset h6 {
+  font-family: "Poppins", sans-serif !important;
+}
+
+/* Header title uses Poppins */
+.md-header__title,
+.md-header__topic {
+  font-family: "Poppins", sans-serif !important;
+}
+
+/* Custom TRIKDIS brand color for header - RGB(203, 34, 21) */
+[data-md-color-primary=custom] {
+  --md-primary-fg-color: rgb(203, 34, 21);
+  --md-primary-fg-color--light: rgb(223, 54, 41);
+  --md-primary-fg-color--dark: rgb(183, 14, 1);
+}
+
+/* Make logo larger */
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  height: 2rem;
+  width: auto;
+}
+
+/* GitHub-style alerts for Typora and MkDocs */
+.md-alert,
+.md-typeset .md-alert,
+.md-typeset .admonition {
+  border-left: 6px solid;
+  padding: .8rem 1rem;
+  border-radius: .5rem;
+  margin: 1rem 0;
+  background: rgba(47,115,218,.08);
+  color: #1e5bbf;
+  display: block;
+}
+
+.md-alert-text,
+.md-typeset .admonition-title {
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: .5rem;
+}
+
+.md-alert-body > :first-child,
+.md-typeset .admonition > :nth-child(2) {
+  margin-top: 0;
+}
+
+.md-alert-body > :last-child,
+.md-typeset .admonition > :last-child {
+  margin-bottom: 0;
+}
+
+/* NOTE → blue */
+.md-alert-note,
+.md-typeset .admonition.note {
+  border-left-color: #2f73da;
+  background: rgba(47,115,218,.08);
+  color: #1e5bbf;
+}
+
+.md-alert-note .md-alert-text,
+.md-typeset .admonition.note > .admonition-title {
+  color: #1e5bbf;
+}
+
+/* IMPORTANT → orange */
+.md-alert-important,
+.md-typeset .admonition.important {
+  border-left-color: #ff9800;
+  background: rgba(255,152,0,.12);
+  color: #b8860b;
+}
+
+.md-alert-important .md-alert-text,
+.md-typeset .admonition.important > .admonition-title {
+  color: #d17e00;
+}
+
+/* WARNING → orange (same as important) */
+.md-alert-warning,
+.md-typeset .admonition.warning {
+  border-left-color: #ff9800;
+  background: rgba(255,152,0,.12);
+  color: #b8860b;
+}
+
+.md-alert-warning .md-alert-text,
+.md-typeset .admonition.warning > .admonition-title {
+  color: #d17e00;
+}
+
+/* TIP → green */
+.md-alert-tip,
+.md-typeset .admonition.tip {
+  border-left-color: #00c853;
+  background: rgba(0,200,83,.08);
+  color: #00701a;
+}
+
+.md-alert-tip .md-alert-text,
+.md-typeset .admonition.tip > .admonition-title {
+  color: #00701a;
+}
+
+/* CAUTION → red */
+.md-alert-caution,
+.md-typeset .admonition.caution,
+.md-typeset .admonition.danger {
+  border-left-color: #d32f2f;
+  background: rgba(211,47,47,.08);
+  color: #b71c1c;
+}
+
+.md-alert-caution .md-alert-text,
+.md-typeset .admonition.caution > .admonition-title,
+.md-typeset .admonition.danger > .admonition-title {
+  color: #b71c1c;
+}
+
+/* Reset blockquote defaults when converted to alerts */
+.md-typeset blockquote.md-alert {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Tables - fixed width for better wrapping */
+table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table td,
+table th {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  vertical-align: top;
+}
+
+/* Numbered Headings for Typora */
+/* Consistent with MkDocs via CSS counters */
+
+/* Counter resets for Typora */
+#write { counter-reset: h2counter; }
+#write h2 { counter-reset: h3counter; }
+#write h3 { counter-reset: h4counter; }
+
+/* H2: 1, 2, 3... */
+#write h2::before {
+  counter-increment: h2counter;
+  content: counter(h2counter) ". ";
+  color: #6b7280;
+  font-weight: 600;
+}
+
+/* H3: 1.1, 1.2... */
+#write h3::before {
+  counter-increment: h3counter;
+  content: counter(h2counter) "." counter(h3counter) " ";
+  color: #9ca3af;
+  font-weight: 600;
+}
+
+/* H4: 1.1.1, 1.1.2... */
+#write h4::before {
+  counter-increment: h4counter;
+  content: counter(h2counter) "." counter(h3counter) "." counter(h4counter) " ";
+  color: #c0c4cc;
+  font-weight: 600;
+}
+
+/* Product Category Grid */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.product-category {
+  text-align: center;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.product-category:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.product-image {
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.25rem;
+  padding: 10px;
+}
+
+.product-category img {
+  display: block;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 0 transparent);
+}
+
+/* Adjust vertical position for specific images */
+.product-category:nth-child(1) img,
+.product-category:nth-child(3) img {
+  margin-top: 8px;
+}
+
+.product-category h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 1.2rem;
+  color: #1976d2;
+  min-height: 2.8rem;
+  line-height: 1.4rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 0.5rem;
+}
+
+.product-category p {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+  text-align: center;
+}

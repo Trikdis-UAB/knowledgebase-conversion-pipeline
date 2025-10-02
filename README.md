@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Convert product manuals from **.docx** to clean **Markdown** with correct heading levels and extracted images, ready for **MkDocs** and **Typora**. Source files remain unchanged; all normalization happens during conversion.
+Convert product manuals from **.docx** to clean **Markdown** with correct heading levels and extracted images, ready for **MkDocs** and **Typora**. Automated pipeline with 21 Lua filters plus Python post-processing. Source files remain unchanged; all normalization happens during conversion.
 
 ---
 

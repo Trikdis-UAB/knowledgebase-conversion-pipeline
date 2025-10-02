@@ -1,0 +1,45 @@
+site_name: Manual Conversion Preview
+site_url: http://127.0.0.1:8001
+theme:
+  name: material
+  logo: images/logo.png
+  favicon: images/favicon.png
+  font: false
+  palette:
+    primary: custom
+  features:
+  - navigation.instant
+  - navigation.expand
+  - search.suggest
+  - search.highlight
+
+extra_css:
+- stylesheets/base.user.css
+- stylesheets/numbered-headings.css
+
+plugins:
+  - search:
+      lang:
+        - en
+      separator: '[\s\-]+'
+  - add-number:
+      order: 2
+      strict_mode: false
+      excludes:
+        - index.md
+
+markdown_extensions:
+- attr_list
+- admonition
+- sane_lists
+- pymdownx.details
+- pymdownx.superfences
+- markdown_callouts
+- toc:
+    permalink: true
+    permalink_title: Link to this section
+nav:
+  - Home: index.md
+  - Converted Manuals:
+      - GT UM_ENG_2024 08 08-: manuals/GT UM_ENG_2024 08 08-/index.md
+      - GT+ UM_ENG_2025 09 11: manuals/GT+ UM_ENG_2025 09 11/index.md
