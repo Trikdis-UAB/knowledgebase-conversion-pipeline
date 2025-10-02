@@ -130,5 +130,26 @@ python3 "$SCRIPT_DIR/fix-relative-images.py" index.md
 python3 "$SCRIPT_DIR/fix-list-continuity.py" index.md
 python3 "$SCRIPT_DIR/reduce-spacing.py" index.md
 
+# Optimize images for web and print (max 1200px width, 85% quality)
+echo "Optimizing images..."
+shopt -s nullglob
+for img in *.png *.jpg *.jpeg; do
+  [ -f "$img" ] || continue
+
+  # Get dimensions
+  WIDTH=$(sips -g pixelWidth "$img" 2>/dev/null | grep pixelWidth | awk '{print $2}')
+
+  # Only resize if wider than 1200px
+  if [ "$WIDTH" -gt 1200 ] 2>/dev/null; then
+    sips -Z 1200 "$img" >/dev/null 2>&1
+  fi
+
+  # Optimize PNGs with pngquant if available
+  if [[ "$img" == *.png ]] && command -v pngquant &> /dev/null; then
+    pngquant --quality=80-95 --force --ext .png "$img" >/dev/null 2>&1 || true
+  fi
+done
+echo "Images optimized"
+
 popd >/dev/null
 echo "✅ Wrote: ${doc_dir}/index.md (images in same folder)"
