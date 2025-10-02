@@ -12,7 +12,7 @@ Convert product manuals from **.docx** to clean **Markdown** with correct headin
   ```bash
   brew install pandoc
   ```
-* All Lua filters included in this project (8 filters total)
+* All Lua filters included in this project (19 filters total)
 
 ---
 
@@ -30,14 +30,27 @@ Convert product manuals from **.docx** to clean **Markdown** with correct headin
 * **Stable image URLs**: Forces `./image.png` paths so assets render even when served without trailing slashes
 
 ### Lua Filters (Applied in Order)
+The pipeline applies 19 specialized filters to clean and normalize Word documents:
+
 1. **strip-cover.lua**: Removes cover page content before the first real header
-2. **strip-toc.lua**: Removes Word's Table of Contents sections  
+2. **strip-toc.lua**: Removes Word's Table of Contents sections
 3. **promote-strong-top.lua**: Promotes first bold-only line to H2 if needed
-4. **table-to-admonition.lua**: Converts 2-column callout tables to MkDocs admonitions
+4. **flatten-two-cell-tables.lua**: Flattens simple two-cell tables
 5. **normalize-headings.lua**: Promotes multi-level numbers (1.1, 1.1.1) to proper heading levels
-6. **strip-classes.lua**: Removes Word styling classes like `{.underline}`
-7. **fix-typography.lua**: Converts backticks to proper apostrophes
-8. **fix-crossrefs.lua**: Replaces "Error! Reference source not found" with "see the referenced section"
+6. **strip-manual-heading-numbers.lua**: Removes manual heading numbers for clean output
+7. **move-first-image-to-description.lua**: Positions first image properly
+8. **split-inline-images.lua**: Separates inline images for proper display
+9. **convert-image-sizes.lua**: Converts image sizes to HTML with CSS
+10. **softwrap-tokens.lua**: Handles text wrapping
+11. **clean-table-pipes.lua**: Fixes table pipe characters
+12. **mark-two-col.lua**: Marks two-column tables for processing
+13. **convert-underline.lua**: Converts underline formatting
+14. **remove-unwanted-blockquotes.lua**: Removes spurious blockquotes
+15. **maintain-list-continuity.lua**: Ensures numbered lists continue correctly across interruptions
+16. **strip-classes.lua**: Removes Word styling classes like `{.underline}`
+17. **fix-typography.lua**: Converts backticks to proper apostrophes
+18. **fix-crossrefs.lua**: Replaces "Error! Reference source not found" with "see the referenced section"
+19. **clean-html-blocks.lua**: Cleans HTML block structures
 
 ---
 
@@ -72,6 +85,8 @@ Perfect for:
 ```
 
 Converts all `.docx` files in current directory and `docx manuals/` subdirectory.
+
+**Note:** The batch script calls `convert-single.sh` for each file, ensuring identical output quality and consistency.
 
 ---
 
@@ -221,15 +236,26 @@ knowledgebase-conversion-pipeline/
 ├── convert-single.sh           # Convert single DOCX → folder/index.md
 ├── convert-batch.sh            # Convert all DOCX files
 │
-├── Lua Filters (8 total):
-├── strip-cover.lua             # Remove cover pages
-├── strip-toc.lua              # Remove Table of Contents
-├── promote-strong-top.lua     # Promote bold lines to headings
-├── table-to-admonition.lua    # Convert callout tables to admonitions
-├── normalize-headings.lua     # Fix heading levels for numbered sections
-├── strip-classes.lua          # Remove Word styling classes
-├── fix-typography.lua         # Fix apostrophes and quotes
-├── fix-crossrefs.lua          # Fix broken cross-references
+├── Lua Filters (19 total):
+├── strip-cover.lua                      # Remove cover pages
+├── strip-toc.lua                        # Remove Table of Contents
+├── promote-strong-top.lua               # Promote bold lines to headings
+├── flatten-two-cell-tables.lua          # Flatten simple tables
+├── normalize-headings.lua               # Fix heading levels for numbered sections
+├── strip-manual-heading-numbers.lua     # Remove manual heading numbers
+├── move-first-image-to-description.lua  # Position first image
+├── split-inline-images.lua              # Separate inline images
+├── convert-image-sizes.lua              # Convert image sizes to HTML/CSS
+├── softwrap-tokens.lua                  # Handle text wrapping
+├── clean-table-pipes.lua                # Fix table pipe characters
+├── mark-two-col.lua                     # Mark two-column tables
+├── convert-underline.lua                # Convert underline formatting
+├── remove-unwanted-blockquotes.lua      # Remove spurious blockquotes
+├── maintain-list-continuity.lua         # Fix numbered list continuity
+├── strip-classes.lua                    # Remove Word styling classes
+├── fix-typography.lua                   # Fix apostrophes and quotes
+├── fix-crossrefs.lua                    # Fix broken cross-references
+├── clean-html-blocks.lua                # Clean HTML blocks
 │
 ├── docs/
 │   ├── assets/
@@ -288,7 +314,8 @@ After Pandoc conversion, the scripts apply sed fixes for:
 ### Latest Improvements
 - ✅ Per-manual folder structure with index.md
 - ✅ Images in same folder for Typora compatibility
-- ✅ 9 Lua filters for comprehensive cleanup
+- ✅ 19 Lua filters for comprehensive cleanup
+- ✅ Batch script refactored to use convert-single.sh for consistency
 - ✅ **Image size fix**: Convert Pandoc `{width=...}` to HTML with CSS for browser compatibility
 - ✅ MkDocs Material admonitions support
 - ✅ Typography scaling CSS

@@ -11,7 +11,7 @@
 
 ## What is this project?
 
-Convert TRIKDIS product manuals from .docx to clean Markdown for MkDocs and Typora. Automated pipeline with 8 Lua filters for heading normalization, admonition conversion, and image handling.
+Convert TRIKDIS product manuals from .docx to clean Markdown for MkDocs and Typora. Automated pipeline with 19 Lua filters for comprehensive document cleanup and normalization.
 
 ## Quick Reference
 
@@ -47,8 +47,13 @@ docs/manuals/[Manual Name]/
 
 ### Prerequisites
 - Pandoc installed via Homebrew
-- All 8 Lua filters present
+- All 19 Lua filters present
 - Check with: `./check-requirements.sh`
+
+### Batch Conversion
+- `convert-batch.sh` calls `convert-single.sh` for each file
+- Ensures identical output quality and consistency
+- No duplication of conversion logic
 
 ## File Locations
 
@@ -103,7 +108,8 @@ docs/manuals/[Manual Name]/
 
 ## Status
 ✅ Production ready
-✅ 8 Lua filters working
+✅ 19 Lua filters working
+✅ Batch script refactored for consistency
 ✅ GitHub Pages deployment documented
 ✅ MkDocs Material compatibility confirmed
 ✅ Automatic table structure fixes
