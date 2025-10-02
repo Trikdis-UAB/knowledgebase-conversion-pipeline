@@ -24,7 +24,7 @@ base="$(basename "${inp%.docx}")"
 doc_dir="${OUT_DIR}/${base}"
 
 # Ensure filters exist
-for f in strip-cover.lua strip-toc.lua promote-strong-top.lua normalize-headings.lua move-first-image-to-description.lua split-inline-images.lua convert-image-sizes.lua softwrap-tokens.lua clean-table-pipes.lua mark-two-col.lua convert-underline.lua remove-unwanted-blockquotes.lua maintain-list-continuity.lua strip-classes.lua fix-typography.lua fix-crossrefs.lua clean-html-blocks.lua unwrap-table-blockquotes.lua; do
+for f in strip-cover.lua strip-toc.lua promote-strong-top.lua normalize-headings.lua move-first-image-to-description.lua split-inline-images.lua convert-image-sizes.lua softwrap-tokens.lua clean-table-pipes.lua mark-two-col.lua convert-underline.lua remove-unwanted-blockquotes.lua maintain-list-continuity.lua strip-classes.lua fix-typography.lua fix-crossrefs.lua clean-html-blocks.lua unwrap-table-blockquotes.lua remove-standalone-asterisks.lua; do
   [ -f "$SCRIPT_DIR/$f" ] || { echo "Missing $f"; exit 1; }
 done
 # Check the new filter in filters subdirectory
@@ -59,6 +59,7 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/strip-classes.lua" \
   --lua-filter="$SCRIPT_DIR/fix-typography.lua" \
   --lua-filter="$SCRIPT_DIR/fix-crossrefs.lua" \
+  --lua-filter="$SCRIPT_DIR/remove-standalone-asterisks.lua" \
   --lua-filter="$SCRIPT_DIR/clean-html-blocks.lua"
 
 # If Pandoc made ./media/, flatten to current folder and fix links
