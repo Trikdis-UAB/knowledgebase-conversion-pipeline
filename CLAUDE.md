@@ -9,6 +9,32 @@
 @./TABLE_STRUCTURE_FIX.md
 @./WRITERS_GUIDE.md
 
+## MCP Tools Available
+
+### Pandoc MCP Server
+**Status**: ✅ Configured and available via uvx
+**Purpose**: Document format conversion, AST inspection, testing Pandoc transformations
+
+**Tool**: `convert-contents`
+- Convert between formats (DOCX, Markdown, HTML, PDF, LaTeX, RST, EPUB, ODT, IPYNB, TXT)
+- Test Pandoc filter behavior
+- Inspect document AST structure
+- Validate conversion settings
+
+**Usage**:
+```bash
+# Check AST structure of a DOCX file
+uvx mcp-pandoc convert-contents --input-file "file.docx" --output-format native
+
+# Test GFM table conversion
+uvx mcp-pandoc convert-contents --input-file "file.docx" --output-format gfm
+
+# Test with specific Pandoc flags
+uvx mcp-pandoc convert-contents --input-file "file.docx" --output-format markdown --extra-args "--wrap=none"
+```
+
+**Configuration**: Uses `uvx mcp-pandoc` (installed via Homebrew uv package)
+
 ## What is this project?
 
 Convert TRIKDIS product manuals from .docx to clean Markdown for MkDocs and Typora. Automated pipeline with 19 Lua filters for comprehensive document cleanup and normalization.
