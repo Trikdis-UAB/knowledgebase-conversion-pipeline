@@ -76,16 +76,19 @@ docs/manuals/[Manual Name]/
 ## Processing Pipeline
 
 ### Lua Filters (Applied in Order)
-1. `strip-cover.lua` - Remove cover pages
+1. `strip-cover.lua` - Remove cover pages (preserve product name for title generation)
 2. `strip-toc.lua` - Remove Table of Contents
-3. `promote-strong-top.lua` - Promote bold lines to H2
-4. `table-to-admonition.lua` - Convert callout tables
+3. `promote-strong-top.lua` - Extract product name and create H1 title (e.g., "GT+ Cellular Communicator")
+4. `flatten-two-cell-tables.lua` - Flatten simple tables
 5. `normalize-headings.lua` - Fix heading levels (1.1→H3, 1.1.1→H4)
 6. `strip-classes.lua` - Remove Word styling
 7. `fix-typography.lua` - Clean apostrophes/quotes
 8. `fix-crossrefs.lua` - Fix broken references
+...and 11 more filters (19 total)
 
 ### What Gets Fixed
+- **Automatic title extraction**: Product name from DOCX → H1 title (e.g., "Cellular communicator GT+" → "# GT+ Cellular Communicator")
+- **Product image formatting**: Centered with width="400" after H1 title
 - Heading levels normalized (1.1→H3, 1.1.1→H4)
 - Note/Warning/Tip tables → MkDocs admonitions
 - Images extracted to same folder as index.md
@@ -116,6 +119,8 @@ docs/manuals/[Manual Name]/
 
 ## Status
 ✅ Production ready
+✅ Automatic product title extraction from DOCX cover pages
+✅ Product image formatting (centered, width="400")
 ✅ 19 Lua filters working
 ✅ Batch script refactored for consistency
 ✅ GitHub Pages deployment documented

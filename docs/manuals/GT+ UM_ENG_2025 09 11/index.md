@@ -1,6 +1,8 @@
-# GT Cellular Communicator
+# GT+ Cellular Communicator
 
-![GT Cellular Communicator](./image1.png)
+<div style="text-align: center;">
+  <img src="./image1.png" alt="Product Image" width="400">
+</div>
 
 ## Description
 
@@ -1133,7 +1135,7 @@ You can restrict the phone numbers from which the communicator will accept the c
 
 <div>
 
-<img alt="" src="./image3.png" style="width:2.36in;height:3.44in" />
+<img src="./image3.png" alt="" width="400">
 
 </div>
 

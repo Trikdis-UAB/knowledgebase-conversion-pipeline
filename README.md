@@ -19,8 +19,10 @@ Convert product manuals from **.docx** to clean **Markdown** with correct headin
 ## What the Pipeline Does
 
 ### Conversion Features
+* **Automatic title extraction**: Extracts product name from DOCX cover page and creates proper H1 title (e.g., "GT+ Cellular Communicator")
+* **Product image formatting**: Centers first product image with consistent width (400px) after H1 title
 * **Folder structure**: Each manual gets its own folder with `index.md` + images in the same folder
-* **Clean output**: Removes Word cover pages and Table of Contents
+* **Clean output**: Removes Word cover pages and Table of Contents (preserves product name for title generation)
 * **Heading normalization**: Promotes `1.1 Title` → H3, `1.1.1 Title` → H4 (keeps numbers in text)
 * **Table conversion**: Converts to pipe tables or HTML for MkDocs compatibility
 * **Admonitions**: Converts Note/Warning/Tip tables to MkDocs admonitions
@@ -32,9 +34,9 @@ Convert product manuals from **.docx** to clean **Markdown** with correct headin
 ### Lua Filters (Applied in Order)
 The pipeline applies 19 specialized filters to clean and normalize Word documents:
 
-1. **strip-cover.lua**: Removes cover page content before the first real header
+1. **strip-cover.lua**: Removes cover page content but preserves product name (e.g., "Cellular communicator GT+") for title generation
 2. **strip-toc.lua**: Removes Word's Table of Contents sections
-3. **promote-strong-top.lua**: Promotes first bold-only line to H2 if needed
+3. **promote-strong-top.lua**: Extracts product name from bold text and creates H1 title in format "[MODEL] Cellular Communicator"
 4. **flatten-two-cell-tables.lua**: Flattens simple two-cell tables
 5. **normalize-headings.lua**: Promotes multi-level numbers (1.1, 1.1.1) to proper heading levels
 6. **strip-manual-heading-numbers.lua**: Removes manual heading numbers for clean output
@@ -178,7 +180,9 @@ see the referenced section
 ## QA Checklist
 
 After conversion, verify:
-- ✅ File starts with content (no cover/ToC)
+- ✅ File starts with H1 title extracted from product name (e.g., "# GT+ Cellular Communicator")
+- ✅ Product image centered with width="400" appears after H1 title
+- ✅ No cover page content (removed but product name preserved)
 - ✅ Headings: H2 for main sections, H3 for `1.1`, H4 for `1.1.1`
 - ✅ Images: Links like `](image3.png)` pointing to same folder
 - ✅ Tables: Render as pipe tables or HTML
@@ -256,9 +260,9 @@ knowledgebase-conversion-pipeline/
 ├── convert-batch.sh            # Convert all DOCX files
 │
 ├── Lua Filters (19 total):
-├── strip-cover.lua                      # Remove cover pages
+├── strip-cover.lua                      # Remove cover pages (preserve product name)
 ├── strip-toc.lua                        # Remove Table of Contents
-├── promote-strong-top.lua               # Promote bold lines to headings
+├── promote-strong-top.lua               # Extract product name and create H1 title
 ├── flatten-two-cell-tables.lua          # Flatten simple tables
 ├── normalize-headings.lua               # Fix heading levels for numbered sections
 ├── strip-manual-heading-numbers.lua     # Remove manual heading numbers
@@ -328,9 +332,16 @@ After Pandoc conversion, the scripts apply sed fixes for:
 
 ---
 
-## Updates (September 2024)
+## Updates
 
-### Latest Improvements
+### October 2025 - Automatic Product Title Extraction
+- ✅ **Automatic title generation**: Extracts product name from DOCX cover page (e.g., "Cellular communicator GT+")
+- ✅ **Smart H1 creation**: Creates H1 title in format "[MODEL] Cellular Communicator" (e.g., "GT+ Cellular Communicator")
+- ✅ **Product image formatting**: Centers first image with consistent width (400px) after H1 title
+- ✅ **Updated filters**: `strip-cover.lua` preserves product name, `promote-strong-top.lua` extracts and transforms it
+- ✅ **Works for all products**: GT, GT+, and future models automatically get correct titles
+
+### September 2024 - Core Pipeline
 - ✅ Per-manual folder structure with index.md
 - ✅ Images in same folder for Typora compatibility
 - ✅ 19 Lua filters for comprehensive cleanup
