@@ -81,7 +81,7 @@ docs/manuals/[Manual Name]/
 
 ### Prerequisites
 - Pandoc installed via Homebrew
-- All 19 Lua filters present
+- All 23 Lua filters present
 - Check with: `./check-requirements.sh`
 
 ### Batch Conversion
@@ -106,15 +106,22 @@ docs/manuals/[Manual Name]/
 2. `strip-toc.lua` - Remove Table of Contents
 3. `promote-strong-top.lua` - Extract product name and create H1 title (e.g., "GT+ Cellular Communicator")
 4. `flatten-two-cell-tables.lua` - Flatten simple tables
-5. `normalize-headings.lua` - Fix heading levels (1.1→H3, 1.1.1→H4)
-6. `strip-classes.lua` - Remove Word styling
-7. `fix-typography.lua` - Clean apostrophes/quotes
-8. `fix-crossrefs.lua` - Fix broken references
-...and 11 more filters (19 total)
+5. `unwrap-table-blockquotes.lua` - Remove blockquote wrappers from table cells
+6. `fix-rowspan-headers.lua` - Fix malformed rowspan table headers (splits header from data)
+7. `normalize-headings.lua` - Fix heading levels (1.1→H3, 1.1.1→H4)
+8. `remove-empty-table-columns.lua` - Remove empty separator columns
+9. `remove-standalone-asterisks.lua` - Remove `****` markers outside tables
+10. `strip-classes.lua` - Remove Word styling
+11. `fix-typography.lua` - Clean apostrophes/quotes
+12. `fix-crossrefs.lua` - Fix broken references
+...and 11 more filters (23 total)
 
 ### What Gets Fixed
 - **Automatic title extraction**: Product name from DOCX → H1 title (e.g., "Cellular communicator GT+" → "# GT+ Cellular Communicator")
 - **Product image formatting**: Centered with width="400" after H1 title
+- **Table structure**: Malformed rowspan headers fixed, empty columns removed
+- **Typography**: Escaped quotes (`\"` → `"`), escaped apostrophes (`\'` → `'`)
+- **Clean markers**: Standalone `****` removed (preserved in tables)
 - Heading levels normalized (1.1→H3, 1.1.1→H4)
 - Note/Warning/Tip tables → MkDocs admonitions
 - Images extracted to same folder as index.md
@@ -147,13 +154,18 @@ docs/manuals/[Manual Name]/
 ✅ Production ready
 ✅ Automatic product title extraction from DOCX cover pages
 ✅ Product image formatting (centered, width="400")
-✅ 19 Lua filters working
+✅ 23 Lua filters working (added 4 new table/typography filters)
+✅ Rowspan header fixes at AST level
+✅ Escaped quotes and apostrophes cleaned
+✅ Standalone asterisks removal
+✅ Empty table columns removed
 ✅ Batch script refactored for consistency
 ✅ GitHub Pages deployment documented
 ✅ MkDocs Material compatibility confirmed
 ✅ Automatic table structure fixes
 ✅ GitHub alerts support
 ✅ Numbered list continuity
+✅ Centered H1 titles (CSS)
 
 ---
 

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Convert product manuals from **.docx** to clean **Markdown** with correct heading levels and extracted images, ready for **MkDocs** and **Typora**. Automated pipeline with 21 Lua filters plus Python post-processing. Source files remain unchanged; all normalization happens during conversion.
+Convert product manuals from **.docx** to clean **Markdown** with correct heading levels and extracted images, ready for **MkDocs** and **Typora**. Automated pipeline with 23 Lua filters plus Python post-processing. Source files remain unchanged; all normalization happens during conversion.
 
 ---
 
@@ -12,7 +12,7 @@ Convert product manuals from **.docx** to clean **Markdown** with correct headin
   ```bash
   brew install pandoc
   ```
-* All Lua filters included in this project (19 filters total)
+* All Lua filters included in this project (23 filters total)
 
 ---
 
@@ -27,32 +27,37 @@ Convert product manuals from **.docx** to clean **Markdown** with correct headin
 * **Table conversion**: Converts to pipe tables or HTML for MkDocs compatibility
 * **Admonitions**: Converts Note/Warning/Tip tables to MkDocs admonitions
 * **Callouts**: Normalizes GitHub-style `[!NOTE]` blockquotes into MkDocs/Typora-friendly admonitions
-* **Typography fixes**: Cleans up backticks, broken cross-references, and Word artifacts
+* **Typography fixes**: Cleans up backticks, broken cross-references, escaped quotes, and Word artifacts
+* **Table structure fixes**: Corrects malformed rowspan headers and ensures proper thead/tbody separation
 * **Image optimization**: Extracts and places images in the same folder as index.md
 * **Stable image URLs**: Forces `./image.png` paths so assets render even when served without trailing slashes
 
 ### Lua Filters (Applied in Order)
-The pipeline applies 19 specialized filters to clean and normalize Word documents:
+The pipeline applies 23 specialized filters to clean and normalize Word documents:
 
 1. **strip-cover.lua**: Removes cover page content but preserves product name (e.g., "Cellular communicator GT+") for title generation
 2. **strip-toc.lua**: Removes Word's Table of Contents sections
 3. **promote-strong-top.lua**: Extracts product name from bold text and creates H1 title in format "[MODEL] Cellular Communicator"
 4. **flatten-two-cell-tables.lua**: Flattens simple two-cell tables
-5. **normalize-headings.lua**: Promotes multi-level numbers (1.1, 1.1.1) to proper heading levels
-6. **strip-manual-heading-numbers.lua**: Removes manual heading numbers for clean output
-7. **move-first-image-to-description.lua**: Positions first image properly
-8. **split-inline-images.lua**: Separates inline images for proper display
-9. **convert-image-sizes.lua**: Converts image sizes to HTML with CSS
-10. **softwrap-tokens.lua**: Handles text wrapping
-11. **clean-table-pipes.lua**: Fixes table pipe characters
-12. **mark-two-col.lua**: Marks two-column tables for processing
-13. **convert-underline.lua**: Converts underline formatting
-14. **remove-unwanted-blockquotes.lua**: Removes spurious blockquotes
-15. **maintain-list-continuity.lua**: Ensures numbered lists continue correctly across interruptions
-16. **strip-classes.lua**: Removes Word styling classes like `{.underline}`
-17. **fix-typography.lua**: Converts backticks to proper apostrophes
-18. **fix-crossrefs.lua**: Replaces "Error! Reference source not found" with "see the referenced section"
-19. **clean-html-blocks.lua**: Cleans HTML block structures
+5. **unwrap-table-blockquotes.lua**: Removes blockquote wrappers from table cells
+6. **fix-rowspan-headers.lua**: Fixes malformed rowspan table headers by splitting header from data
+7. **normalize-headings.lua**: Promotes multi-level numbers (1.1, 1.1.1) to proper heading levels
+8. **strip-manual-heading-numbers.lua**: Removes manual heading numbers for clean output
+9. **move-first-image-to-description.lua**: Positions first image properly
+10. **split-inline-images.lua**: Separates inline images for proper display
+11. **convert-image-sizes.lua**: Converts image sizes to HTML with CSS
+12. **softwrap-tokens.lua**: Handles text wrapping
+13. **remove-empty-table-columns.lua**: Removes empty separator columns from tables
+14. **clean-table-pipes.lua**: Fixes table pipe characters
+15. **mark-two-col.lua**: Marks two-column tables for processing
+16. **convert-underline.lua**: Converts underline formatting
+17. **remove-unwanted-blockquotes.lua**: Removes spurious blockquotes
+18. **maintain-list-continuity.lua**: Ensures numbered lists continue correctly across interruptions
+19. **strip-classes.lua**: Removes Word styling classes like `{.underline}`
+20. **fix-typography.lua**: Converts backticks to proper apostrophes
+21. **fix-crossrefs.lua**: Replaces "Error! Reference source not found" with "see the referenced section"
+22. **remove-standalone-asterisks.lua**: Removes standalone `****` markers while preserving them in tables
+23. **clean-html-blocks.lua**: Cleans HTML block structures
 
 ---
 
@@ -312,6 +317,9 @@ Uses `-t commonmark_x+pipe_tables+attributes` for:
 After Pandoc conversion, the scripts apply sed fixes for:
 - Remaining error references
 - Image path corrections
+- Escaped quotes (`\"` → `"`)
+- Escaped apostrophes (`\'` → `'`)
+- Standalone `****` markers (removed outside tables)
 - Any edge cases not caught by filters
 
 ---
@@ -333,6 +341,15 @@ After Pandoc conversion, the scripts apply sed fixes for:
 ---
 
 ## Updates
+
+### October 2025 - Table Structure & Typography Fixes
+- ✅ **Rowspan header fix**: New `fix-rowspan-headers.lua` filter fixes malformed table headers at AST level
+- ✅ **Escaped quotes fix**: Removes backslash escaping from quotes (`\"NETWORK\"` → `"NETWORK"`)
+- ✅ **Standalone asterisks removal**: New `remove-standalone-asterisks.lua` removes `****` markers outside tables
+- ✅ **Empty column removal**: `remove-empty-table-columns.lua` removes separator columns from tables
+- ✅ **Table unwrapping**: `unwrap-table-blockquotes.lua` removes blockquote wrappers from cells
+- ✅ **Total filters**: Increased from 19 to 23 specialized Lua filters
+- ✅ **CSS enhancement**: Centered H1 titles for better manual presentation
 
 ### October 2025 - Automatic Product Title Extraction
 - ✅ **Automatic title generation**: Extracts product name from DOCX cover page (e.g., "Cellular communicator GT+")
