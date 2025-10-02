@@ -58,7 +58,8 @@ The pipeline applies 19 specialized filters to clean and normalize Word document
 
 1. **Check requirements**: `./check-requirements.sh`
 2. **Convert single file**: `./convert-single.sh "filename.docx"`
-3. **Convert all files**: `./convert-batch.sh`
+3. **Preview locally**: `./preview.sh` (serves on http://127.0.0.1:8001)
+4. **Convert all files**: `./convert-batch.sh`
 
 ---
 
@@ -75,6 +76,24 @@ This creates:
 Perfect for:
 - **Typora**: Open the folder directly, images display inline
 - **MkDocs**: Reference as `manuals/GT UM_ENG_2024 08 08-/index.md`
+
+---
+
+## Local Preview
+
+Preview converted manuals exactly as they will appear when published:
+
+```bash
+./preview.sh
+```
+
+This script:
+- Syncs latest `mkdocs.yml` and configuration from `/Users/local/projects/trikdis-docs/manuals/`
+- Copies stylesheets, javascripts, and images
+- Serves on http://127.0.0.1:8001 (different port than trikdis-docs)
+- Ensures preview matches production exactly
+
+**No configuration duplication** - always uses the latest production config.
 
 ---
 

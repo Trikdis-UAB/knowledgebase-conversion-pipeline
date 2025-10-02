@@ -1,0 +1,19 @@
+# MkDocs build output
+site/
+
+# MkDocs config (synced from trikdis-docs)
+mkdocs.yml
+requirements.txt
+
+# Synced assets from trikdis-docs
+docs/stylesheets/
+docs/javascripts/
+docs/images/
+docs/index.md
+
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc

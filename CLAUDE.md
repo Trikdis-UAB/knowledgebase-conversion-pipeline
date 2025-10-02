@@ -21,6 +21,14 @@ cd /Users/local/projects/knowledgebase-conversion-pipeline
 ./convert-single.sh "path/to/manual.docx"
 ```
 
+### Preview Converted Manuals
+```bash
+./preview.sh
+```
+- Syncs latest mkdocs.yml from trikdis-docs
+- Serves on http://127.0.0.1:8001
+- Shows exactly how manuals will look when published
+
 ### Output Location
 ```
 docs/manuals/[Manual Name]/
