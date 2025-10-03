@@ -360,9 +360,11 @@ Tables are optimized for responsive behavior:
 - ✅ **Instruction table flattening**: New `flatten-instruction-tables.lua` converts multi-row instruction tables to sequential format
 - ✅ **Rowspan header fix**: New `fix-rowspan-headers.lua` filter fixes malformed table headers at AST level
 - ✅ **Escaped quotes fix**: Removes backslash escaping from quotes (`\"NETWORK\"` → `"NETWORK"`)
+- ✅ **Escaped angle brackets fix**: Removes backslash escaping from angle brackets in Annex tables (`\<z\>` → `<z>`)
 - ✅ **Standalone asterisks removal**: New `remove-standalone-asterisks.lua` removes `****` markers outside tables
 - ✅ **Empty column removal**: `remove-empty-table-columns.lua` removes separator columns from tables
 - ✅ **Table unwrapping**: `unwrap-table-blockquotes.lua` removes blockquote wrappers from cells
+- ✅ **Duplicate product image removal**: Perl script removes duplicate centered product images before major sections
 - ✅ **Responsive tables**: Removes inline width styles for consistent responsive behavior
 - ✅ **Total filters**: Increased from 19 to 24 specialized Lua filters
 - ✅ **CSS enhancement**: Centered H1 titles for better manual presentation
