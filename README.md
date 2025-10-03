@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Convert product manuals from **.docx** to clean **Markdown** with correct heading levels and extracted images, ready for **MkDocs** and **Typora**. Automated pipeline with 23 Lua filters plus Python post-processing. Source files remain unchanged; all normalization happens during conversion.
+Convert product manuals from **.docx** to clean **Markdown** with correct heading levels and extracted images, ready for **MkDocs** and **Typora**. Automated pipeline with 24 Lua filters plus Python post-processing. Source files remain unchanged; all normalization happens during conversion.
 
 ---
 
@@ -12,7 +12,7 @@ Convert product manuals from **.docx** to clean **Markdown** with correct headin
   ```bash
   brew install pandoc
   ```
-* All Lua filters included in this project (23 filters total)
+* All Lua filters included in this project (24 filters total)
 
 ---
 
@@ -33,31 +33,32 @@ Convert product manuals from **.docx** to clean **Markdown** with correct headin
 * **Stable image URLs**: Forces `./image.png` paths so assets render even when served without trailing slashes
 
 ### Lua Filters (Applied in Order)
-The pipeline applies 23 specialized filters to clean and normalize Word documents:
+The pipeline applies 24 specialized filters to clean and normalize Word documents:
 
 1. **strip-cover.lua**: Removes cover page content but preserves product name (e.g., "Cellular communicator GT+") for title generation
 2. **strip-toc.lua**: Removes Word's Table of Contents sections
 3. **promote-strong-top.lua**: Extracts product name from bold text and creates H1 title in format "[MODEL] Cellular Communicator"
-4. **flatten-two-cell-tables.lua**: Flattens simple two-cell tables
-5. **unwrap-table-blockquotes.lua**: Removes blockquote wrappers from table cells
-6. **fix-rowspan-headers.lua**: Fixes malformed rowspan table headers by splitting header from data
-7. **normalize-headings.lua**: Promotes multi-level numbers (1.1, 1.1.1) to proper heading levels
-8. **strip-manual-heading-numbers.lua**: Removes manual heading numbers for clean output
-9. **move-first-image-to-description.lua**: Positions first image properly
-10. **split-inline-images.lua**: Separates inline images for proper display
-11. **convert-image-sizes.lua**: Converts image sizes to HTML with CSS
-12. **softwrap-tokens.lua**: Handles text wrapping
-13. **remove-empty-table-columns.lua**: Removes empty separator columns from tables
-14. **clean-table-pipes.lua**: Fixes table pipe characters
-15. **mark-two-col.lua**: Marks two-column tables for processing
-16. **convert-underline.lua**: Converts underline formatting
-17. **remove-unwanted-blockquotes.lua**: Removes spurious blockquotes
-18. **maintain-list-continuity.lua**: Ensures numbered lists continue correctly across interruptions
-19. **strip-classes.lua**: Removes Word styling classes like `{.underline}`
-20. **fix-typography.lua**: Converts backticks to proper apostrophes
-21. **fix-crossrefs.lua**: Replaces "Error! Reference source not found" with "see the referenced section"
-22. **remove-standalone-asterisks.lua**: Removes standalone `****` markers while preserving them in tables
-23. **clean-html-blocks.lua**: Cleans HTML block structures
+4. **flatten-two-cell-tables.lua**: Flattens simple two-cell tables (single row)
+5. **flatten-instruction-tables.lua**: Flattens multi-row instruction tables (text + image per row)
+6. **unwrap-table-blockquotes.lua**: Removes blockquote wrappers from table cells
+7. **fix-rowspan-headers.lua**: Fixes malformed rowspan table headers by splitting header from data
+8. **normalize-headings.lua**: Promotes multi-level numbers (1.1, 1.1.1) to proper heading levels
+9. **strip-manual-heading-numbers.lua**: Removes manual heading numbers for clean output
+10. **move-first-image-to-description.lua**: Positions first image properly
+11. **split-inline-images.lua**: Separates inline images for proper display
+12. **convert-image-sizes.lua**: Converts image sizes to HTML with CSS
+13. **softwrap-tokens.lua**: Handles text wrapping
+14. **remove-empty-table-columns.lua**: Removes empty separator columns from tables
+15. **clean-table-pipes.lua**: Fixes table pipe characters
+16. **mark-two-col.lua**: Marks two-column tables for processing
+17. **convert-underline.lua**: Converts underline formatting
+18. **remove-unwanted-blockquotes.lua**: Removes spurious blockquotes
+19. **maintain-list-continuity.lua**: Ensures numbered lists continue correctly across interruptions
+20. **strip-classes.lua**: Removes Word styling classes like `{.underline}`
+21. **fix-typography.lua**: Converts backticks to proper apostrophes
+22. **fix-crossrefs.lua**: Replaces "Error! Reference source not found" with "see the referenced section"
+23. **remove-standalone-asterisks.lua**: Removes standalone `****` markers while preserving them in tables
+24. **clean-html-blocks.lua**: Cleans HTML block structures
 
 ---
 
@@ -264,17 +265,21 @@ knowledgebase-conversion-pipeline/
 ├── convert-single.sh           # Convert single DOCX → folder/index.md
 ├── convert-batch.sh            # Convert all DOCX files
 │
-├── Lua Filters (19 total):
+├── Lua Filters (24 total):
 ├── strip-cover.lua                      # Remove cover pages (preserve product name)
 ├── strip-toc.lua                        # Remove Table of Contents
 ├── promote-strong-top.lua               # Extract product name and create H1 title
 ├── flatten-two-cell-tables.lua          # Flatten simple tables
+├── flatten-instruction-tables.lua       # Flatten multi-row instruction tables
+├── unwrap-table-blockquotes.lua         # Remove blockquote wrappers from table cells
+├── fix-rowspan-headers.lua              # Fix malformed rowspan table headers
 ├── normalize-headings.lua               # Fix heading levels for numbered sections
 ├── strip-manual-heading-numbers.lua     # Remove manual heading numbers
 ├── move-first-image-to-description.lua  # Position first image
 ├── split-inline-images.lua              # Separate inline images
 ├── convert-image-sizes.lua              # Convert image sizes to HTML/CSS
 ├── softwrap-tokens.lua                  # Handle text wrapping
+├── remove-empty-table-columns.lua       # Remove empty separator columns from tables
 ├── clean-table-pipes.lua                # Fix table pipe characters
 ├── mark-two-col.lua                     # Mark two-column tables
 ├── convert-underline.lua                # Convert underline formatting
@@ -283,6 +288,7 @@ knowledgebase-conversion-pipeline/
 ├── strip-classes.lua                    # Remove Word styling classes
 ├── fix-typography.lua                   # Fix apostrophes and quotes
 ├── fix-crossrefs.lua                    # Fix broken cross-references
+├── remove-standalone-asterisks.lua      # Remove standalone **** markers
 ├── clean-html-blocks.lua                # Clean HTML blocks
 │
 ├── docs/
@@ -351,13 +357,14 @@ Tables are optimized for responsive behavior:
 ## Updates
 
 ### October 2025 - Table Structure & Typography Fixes
+- ✅ **Instruction table flattening**: New `flatten-instruction-tables.lua` converts multi-row instruction tables to sequential format
 - ✅ **Rowspan header fix**: New `fix-rowspan-headers.lua` filter fixes malformed table headers at AST level
 - ✅ **Escaped quotes fix**: Removes backslash escaping from quotes (`\"NETWORK\"` → `"NETWORK"`)
 - ✅ **Standalone asterisks removal**: New `remove-standalone-asterisks.lua` removes `****` markers outside tables
 - ✅ **Empty column removal**: `remove-empty-table-columns.lua` removes separator columns from tables
 - ✅ **Table unwrapping**: `unwrap-table-blockquotes.lua` removes blockquote wrappers from cells
 - ✅ **Responsive tables**: Removes inline width styles for consistent responsive behavior
-- ✅ **Total filters**: Increased from 19 to 23 specialized Lua filters
+- ✅ **Total filters**: Increased from 19 to 24 specialized Lua filters
 - ✅ **CSS enhancement**: Centered H1 titles for better manual presentation
 
 ### October 2025 - Automatic Product Title Extraction

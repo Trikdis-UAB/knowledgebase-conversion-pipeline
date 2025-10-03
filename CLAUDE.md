@@ -106,15 +106,16 @@ docs/manuals/[Manual Name]/
 2. `strip-toc.lua` - Remove Table of Contents
 3. `promote-strong-top.lua` - Extract product name and create H1 title (e.g., "GT+ Cellular Communicator")
 4. `flatten-two-cell-tables.lua` - Flatten simple tables
-5. `unwrap-table-blockquotes.lua` - Remove blockquote wrappers from table cells
-6. `fix-rowspan-headers.lua` - Fix malformed rowspan table headers (splits header from data)
-7. `normalize-headings.lua` - Fix heading levels (1.1→H3, 1.1.1→H4)
-8. `remove-empty-table-columns.lua` - Remove empty separator columns
-9. `remove-standalone-asterisks.lua` - Remove `****` markers outside tables
-10. `strip-classes.lua` - Remove Word styling
-11. `fix-typography.lua` - Clean apostrophes/quotes
-12. `fix-crossrefs.lua` - Fix broken references
-...and 11 more filters (23 total)
+5. `flatten-instruction-tables.lua` - Flatten multi-row instruction tables (text + image per row)
+6. `unwrap-table-blockquotes.lua` - Remove blockquote wrappers from table cells
+7. `fix-rowspan-headers.lua` - Fix malformed rowspan table headers (splits header from data)
+8. `normalize-headings.lua` - Fix heading levels (1.1→H3, 1.1.1→H4)
+9. `remove-empty-table-columns.lua` - Remove empty separator columns
+10. `remove-standalone-asterisks.lua` - Remove `****` markers outside tables
+11. `strip-classes.lua` - Remove Word styling
+12. `fix-typography.lua` - Clean apostrophes/quotes
+13. `fix-crossrefs.lua` - Fix broken references
+...and 11 more filters (24 total)
 
 ### What Gets Fixed
 - **Automatic title extraction**: Product name from DOCX → H1 title (e.g., "Cellular communicator GT+" → "# GT+ Cellular Communicator")
@@ -155,7 +156,8 @@ docs/manuals/[Manual Name]/
 ✅ Production ready
 ✅ Automatic product title extraction from DOCX cover pages
 ✅ Product image formatting (centered, width="400")
-✅ 23 Lua filters working (added 4 new table/typography filters)
+✅ 24 Lua filters working (added 5 new table/typography filters)
+✅ Instruction table flattening (multi-row text+image → sequential format)
 ✅ Rowspan header fixes at AST level
 ✅ Escaped quotes and apostrophes cleaned
 ✅ Standalone asterisks removal
