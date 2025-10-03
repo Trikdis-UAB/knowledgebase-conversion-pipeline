@@ -99,6 +99,9 @@ sed -i '' "s/\\\\'/'/g" index.md
 # Fix escaped quotes (remove backslashes before double quotes)
 sed -i '' 's/\\"/"/g' index.md
 
+# Fix escaped angle brackets in Annex conversion table (\<z\> → <z>, \<v\> → <v>, \<n\> → <n>)
+sed -i '' 's/\\</</g; s/\\>/>/g' index.md
+
 # Remove duplicate product images wrapped in <div> tags (keeps only the one after H1 title)
 # This removes standalone <div><img src="./imageN.png" ... width="400"></div> blocks
 perl -i -0pe 's/<div>\s*<img src="\.\/(image[1-5]\.png)"[^>]*width="400"[^>]*>\s*<\/div>\s*\n\s*\n(?=##)/\n/g' index.md
