@@ -38,27 +38,30 @@ The pipeline applies 24 specialized filters to clean and normalize Word document
 1. **strip-cover.lua**: Removes cover page content but preserves product name (e.g., "Cellular communicator GT+") for title generation
 2. **strip-toc.lua**: Removes Word's Table of Contents sections
 3. **promote-strong-top.lua**: Extracts product name from bold text and creates H1 title in format "[MODEL] Cellular Communicator"
-4. **flatten-two-cell-tables.lua**: Flattens simple two-cell tables (single row)
-5. **flatten-instruction-tables.lua**: Flattens multi-row instruction tables (text + image per row)
-6. **unwrap-table-blockquotes.lua**: Removes blockquote wrappers from table cells
-7. **fix-rowspan-headers.lua**: Fixes malformed rowspan table headers by splitting header from data
-8. **normalize-headings.lua**: Promotes multi-level numbers (1.1, 1.1.1) to proper heading levels
-9. **strip-manual-heading-numbers.lua**: Removes manual heading numbers for clean output
-10. **move-first-image-to-description.lua**: Positions first image properly
-11. **split-inline-images.lua**: Separates inline images for proper display
-12. **convert-image-sizes.lua**: Converts image sizes to HTML with CSS
-13. **softwrap-tokens.lua**: Handles text wrapping
-14. **remove-empty-table-columns.lua**: Removes empty separator columns from tables
-15. **clean-table-pipes.lua**: Fixes table pipe characters
-16. **mark-two-col.lua**: Marks two-column tables for processing
-17. **convert-underline.lua**: Converts underline formatting
-18. **remove-unwanted-blockquotes.lua**: Removes spurious blockquotes
-19. **maintain-list-continuity.lua**: Ensures numbered lists continue correctly across interruptions
-20. **strip-classes.lua**: Removes Word styling classes like `{.underline}`
-21. **fix-typography.lua**: Converts backticks to proper apostrophes
-22. **fix-crossrefs.lua**: Replaces "Error! Reference source not found" with "see the referenced section"
-23. **remove-standalone-asterisks.lua**: Removes standalone `****` markers while preserving them in tables
-24. **clean-html-blocks.lua**: Cleans HTML block structures
+4. **map-docx-heading-levels.lua**: Maps DOCX Word style classes to correct markdown heading levels (H1→H2, H2→H3, H3→H4)
+5. **fix-numbered-heading-levels.lua**: Fixes numbered heading levels (works with map-docx-heading-levels)
+6. **remove-table-widths.lua**: Removes table widths and merges multi-line cells for pipe table compatibility
+7. **flatten-two-cell-tables.lua**: Flattens simple two-cell tables (single row)
+8. **flatten-instruction-tables.lua**: Flattens multi-row instruction tables (text + image per row)
+9. **unwrap-table-blockquotes.lua**: Removes blockquote wrappers from table cells
+10. **fix-rowspan-headers.lua**: Fixes malformed rowspan table headers by splitting header from data
+11. **normalize-headings.lua**: Promotes multi-level numbers (1.1, 1.1.1) to proper heading levels
+12. **strip-manual-heading-numbers.lua**: Removes manual heading numbers for clean output
+13. **move-first-image-to-description.lua**: Positions first image properly
+14. **split-inline-images.lua**: Separates inline images for proper display
+15. **convert-image-sizes.lua**: Converts image sizes to HTML with CSS
+16. **softwrap-tokens.lua**: Handles text wrapping
+17. **remove-empty-table-columns.lua**: Removes empty separator columns from tables
+18. **clean-table-pipes.lua**: Fixes table pipe characters
+19. **mark-two-col.lua**: Marks two-column tables for processing
+20. **convert-underline.lua**: Converts underline formatting
+21. **remove-unwanted-blockquotes.lua**: Removes spurious blockquotes
+22. **maintain-list-continuity.lua**: Ensures numbered lists continue correctly across interruptions
+23. **strip-classes.lua**: Removes Word styling classes like `{.underline}`
+24. **fix-typography.lua**: Converts backticks to proper apostrophes
+25. **fix-crossrefs.lua**: Replaces "Error! Reference source not found" with "see the referenced section"
+26. **remove-standalone-asterisks.lua**: Removes standalone `****` markers while preserving them in tables
+27. **clean-html-blocks.lua**: Cleans HTML block structures
 
 ---
 
@@ -366,6 +369,42 @@ All tables are converted to clean, human-readable pipe tables:
 | Current consumption | Up to 50 mA (stand-by), / Up to 200 mA (short-term, while sending) |
 ```
 
+### Heading Level Mapping
+
+DOCX Word style classes are mapped to correct markdown heading levels because the product title takes H1, requiring all DOCX headings to shift down by one level.
+
+**Process:**
+1. **Lua filter** (`map-docx-heading-levels.lua`):
+   - Maps Word style "Pagrindinis" (main heading) → H2
+   - Maps Word style "2-Po-Pag" (second level) → H3
+   - Maps Word style "3-po-Pag" (third level) → H4
+
+2. **Follow-up filter** (`fix-numbered-heading-levels.lua`):
+   - Works in conjunction with heading level mapping
+   - Ensures numbered sections maintain proper hierarchy
+
+**Why This Is Necessary:**
+- Product title (extracted from cover) becomes H1 (e.g., "# GT+ Cellular Communicator")
+- Original DOCX "Pagrindinis" headings were effectively H1 in the Word document's TOC
+- These need to become H2 in markdown to maintain hierarchy
+- Similarly, H2 → H3, H3 → H4
+
+**Result:**
+- Heading hierarchy matches DOCX Table of Contents exactly
+- Markdown structure reflects original document organization
+- All future conversions maintain consistent heading levels
+- Works automatically for all TRIKDIS product manuals
+
+**Example Mapping:**
+```
+DOCX Word Style          DOCX TOC Level    Markdown Level
+──────────────────────   ──────────────    ──────────────
+(Product title)          (not in TOC)      H1 (# Title)
+Pagrindinis             Level 1            H2 (## Section)
+2-Po-Pag                Level 2            H3 (### Subsection)
+3-po-Pag                Level 3            H4 (#### Sub-subsection)
+```
+
 ---
 
 ## Troubleshooting
@@ -386,13 +425,16 @@ All tables are converted to clean, human-readable pipe tables:
 
 ## Updates
 
-### October 2025 - Human-Readable Pipe Tables
+### October 2025 - Human-Readable Pipe Tables & Heading Level Mapping
 - ✅ **ALL tables now pipe format**: Every table converts to clean `| Column | Column |` format
 - ✅ **Python post-processor**: New `html-tables-to-pipes.py` converts HTML tables to pipes
 - ✅ **Compact format**: No excessive padding - clean and readable in source
 - ✅ **Multi-line cell handling**: Merges with " / " separator for single-line pipe compatibility
 - ✅ **Perfect rendering**: Tables display properly in MkDocs with `tables` extension
 - ✅ **Human-readable source**: Markdown files are now truly readable, not just HTML dumps
+- ✅ **Heading level mapping**: New `map-docx-heading-levels.lua` maps Word styles to correct markdown levels
+- ✅ **TOC hierarchy match**: Heading structure now matches DOCX Table of Contents exactly
+- ✅ **Automatic for all conversions**: Works for all TRIKDIS manuals without manual intervention
 
 ### October 2025 - Table Structure & Typography Fixes
 - ✅ **Instruction table flattening**: New `flatten-instruction-tables.lua` converts multi-row instruction tables to sequential format
