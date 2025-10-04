@@ -54,6 +54,10 @@ class TableConverter(HTMLParser):
         elif tag == "tbody":
             self.in_tbody = False
         elif tag == "tr":
+            # Append row when </tr> is encountered, not after each cell
+            if self.current_row and not self.in_thead:
+                self.rows.append(self.current_row[:])
+            self.current_row = []
             self.in_tr = False
         elif tag == "th":
             self.in_th = False
@@ -63,8 +67,6 @@ class TableConverter(HTMLParser):
             self.in_td = False
             self.current_row.append(self.current_cell.strip())
             self.current_cell = ""
-            if len(self.current_row) == len(self.headers):
-                self.rows.append(self.current_row[:])
 
     def handle_data(self, data):
         if self.in_th or self.in_td:

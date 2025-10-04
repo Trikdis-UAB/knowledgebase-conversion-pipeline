@@ -157,10 +157,12 @@ sed -i '' '/^# .*Cellular Communicator$/a\
 # Pattern: **The *„Product* text** becomes: The „Product text
 # This removes both outer bold (**) and inner bold-italic (***)
 sed -i '' 's/^\*\*The \*„\(FLEXi\)" \([^*]*\)\* control panel\*\*/The „\1" \2 control panel/g' index.md
-# Also clean up remaining *** bold-italic product names in first paragraph
+# Also clean up remaining *** bold-italic product names and stray asterisks
 sed -i '' 's/\*\*\*„\(FLEXi\)" SP3\*\*\*/„\1" SP3/g' index.md
 sed -i '' 's/\*\*\*Protegus2\?\*\*\*/Protegus2/g' index.md
 sed -i '' 's/\*\*\*Protegus\*\*\*/Protegus/g' index.md
+# Remove stray asterisks from description paragraph (e.g., "panel* is" → "panel is")
+sed -i '' 's/\([a-zA-Z]\)\*\( \)/\1\2/g' index.md
 
 # Fix GitHub-style alerts by removing backslash escaping from square brackets
 sed -i '' 's/\\\[/[/g; s/\\\]/]/g' index.md
