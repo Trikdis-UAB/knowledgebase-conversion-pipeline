@@ -24,7 +24,7 @@ Convert product manuals from **.docx** to clean **Markdown** with correct headin
 * **Folder structure**: Each manual gets its own folder with `index.md` + images in the same folder
 * **Clean output**: Removes Word cover pages and Table of Contents (preserves product name for title generation)
 * **Heading normalization**: Promotes `1.1 Title` → H3, `1.1.1 Title` → H4 (keeps numbers in text)
-* **Table conversion**: Converts to pipe tables or HTML for MkDocs compatibility
+* **Table conversion**: Converts ALL tables to clean, human-readable pipe tables in markdown source
 * **Admonitions**: Converts Note/Warning/Tip tables to MkDocs admonitions
 * **Callouts**: Normalizes GitHub-style `[!NOTE]` blockquotes into MkDocs/Typora-friendly admonitions
 * **Typography fixes**: Cleans up backticks, broken cross-references, escaped quotes, and Word artifacts
@@ -191,7 +191,7 @@ After conversion, verify:
 - ✅ No cover page content (removed but product name preserved)
 - ✅ Headings: H2 for main sections, H3 for `1.1`, H4 for `1.1.1`
 - ✅ Images: Links like `](image3.png)` pointing to same folder
-- ✅ Tables: Render as pipe tables or HTML
+- ✅ Tables: All tables in clean, human-readable pipe format (`| Column | Column |`)
 - ✅ Admonitions: `!!! note` blocks for callouts
 - ✅ No Word artifacts: No `{.underline}`, no error references
 - ✅ Typography: Clean apostrophes, no backticks
@@ -290,6 +290,16 @@ knowledgebase-conversion-pipeline/
 ├── fix-crossrefs.lua                    # Fix broken cross-references
 ├── remove-standalone-asterisks.lua      # Remove standalone **** markers
 ├── clean-html-blocks.lua                # Clean HTML blocks
+├── remove-table-widths.lua              # Remove table widths and merge multi-line cells
+│
+├── Python Post-processors:
+├── html-tables-to-pipes.py              # Convert HTML tables to pipe tables
+├── fix_table_structure.py               # Fix table structure issues
+├── normalize-callouts.py                # Normalize callouts
+├── fix-relative-images.py               # Fix image paths
+├── fix_admonitions.py                   # Fix admonition formatting
+├── fix-list-continuity.py               # Fix list continuity
+├── reduce-spacing.py                    # Reduce excessive spacing
 │
 ├── docs/
 │   ├── assets/
@@ -329,12 +339,32 @@ After Pandoc conversion, the scripts apply sed fixes for:
 - Inline table width styles (removed for responsive behavior)
 - Any edge cases not caught by filters
 
-### Responsive Table Design
-Tables are optimized for responsive behavior:
-- Inline `style="width:X%"` removed from `<table>` tags
-- CSS handles all table widths: `width: 100%` with `table-layout: fixed`
-- `<colgroup>` percentages preserved for column ratios
-- Tables resize consistently across all screen sizes
+### Table Conversion to Pipe Format
+All tables are converted to clean, human-readable pipe tables:
+
+**Process:**
+1. **Lua filter** (`remove-table-widths.lua`):
+   - Removes column width specifications
+   - Merges multi-paragraph cells with " / " separator
+   - Removes `<br>` tags and replaces with " / " for single-line cells
+
+2. **Python post-processor** (`html-tables-to-pipes.py`):
+   - Runs AFTER table structure fixes
+   - Converts any remaining HTML tables to compact pipe format
+   - Creates clean `| Column | Column |` format without excessive padding
+
+**Result:**
+- Simple tables: `| Name | Quantity |`
+- Complex tables: Multi-line content separated with " / "
+- All tables human-readable in markdown source
+- Render perfectly in MkDocs with `tables` extension
+
+**Example:**
+```markdown
+| Parameter | Description |
+|-----------|-------------|
+| Current consumption | Up to 50 mA (stand-by), / Up to 200 mA (short-term, while sending) |
+```
 
 ---
 
@@ -356,6 +386,14 @@ Tables are optimized for responsive behavior:
 
 ## Updates
 
+### October 2025 - Human-Readable Pipe Tables
+- ✅ **ALL tables now pipe format**: Every table converts to clean `| Column | Column |` format
+- ✅ **Python post-processor**: New `html-tables-to-pipes.py` converts HTML tables to pipes
+- ✅ **Compact format**: No excessive padding - clean and readable in source
+- ✅ **Multi-line cell handling**: Merges with " / " separator for single-line pipe compatibility
+- ✅ **Perfect rendering**: Tables display properly in MkDocs with `tables` extension
+- ✅ **Human-readable source**: Markdown files are now truly readable, not just HTML dumps
+
 ### October 2025 - Table Structure & Typography Fixes
 - ✅ **Instruction table flattening**: New `flatten-instruction-tables.lua` converts multi-row instruction tables to sequential format
 - ✅ **Rowspan header fix**: New `fix-rowspan-headers.lua` filter fixes malformed table headers at AST level
@@ -365,7 +403,6 @@ Tables are optimized for responsive behavior:
 - ✅ **Empty column removal**: `remove-empty-table-columns.lua` removes separator columns from tables
 - ✅ **Table unwrapping**: `unwrap-table-blockquotes.lua` removes blockquote wrappers from cells
 - ✅ **Duplicate product image removal**: Perl script removes duplicate centered product images before major sections
-- ✅ **Responsive tables**: Removes inline width styles for consistent responsive behavior
 - ✅ **Total filters**: Increased from 19 to 24 specialized Lua filters
 - ✅ **CSS enhancement**: Centered H1 titles for better manual presentation
 
