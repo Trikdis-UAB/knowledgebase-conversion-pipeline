@@ -99,6 +99,10 @@ class TableConverter(HTMLParser):
 
 def convert_html_table_to_pipe(html_table):
     """Convert a single HTML table to pipe table format"""
+    # Skip tables with rowspan - they're too complex for pipe tables
+    if 'rowspan=' in html_table:
+        return html_table
+
     parser = TableConverter()
     parser.feed(html_table)
     pipe_table = parser.get_pipe_table()
