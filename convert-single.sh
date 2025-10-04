@@ -154,15 +154,10 @@ sed -i '' '/^# .*Cellular Communicator$/a\
 ' index.md
 
 # Remove excessive bold/italic formatting from Description opening paragraph
-# Pattern: **The *„Product* text** becomes: The „Product text
-# This removes both outer bold (**) and inner bold-italic (***)
-sed -i '' 's/^\*\*The \*„\(FLEXi\)" \([^*]*\)\* control panel\*\*/The „\1" \2 control panel/g' index.md
-# Also clean up remaining *** bold-italic product names and stray asterisks
-sed -i '' 's/\*\*\*„\(FLEXi\)" SP3\*\*\*/„\1" SP3/g' index.md
-sed -i '' 's/\*\*\*Protegus2\?\*\*\*/Protegus2/g' index.md
-sed -i '' 's/\*\*\*Protegus\*\*\*/Protegus/g' index.md
-# Remove stray asterisks from description paragraph (e.g., "panel* is" → "panel is")
-sed -i '' 's/\([a-zA-Z]\)\*\( \)/\1\2/g' index.md
+# First remove all bold-italic (***text***) → (text)
+sed -i '' 's/\*\*\*\([^*][^*]*[^*]\)\*\*\*/\1/g' index.md
+# Then clean up nested bold/italic: **The *text* word** → The text word
+sed -i '' 's/^\*\*The \*\([^*]*\) control panel\*\*/The \1 control panel/g' index.md
 
 # Fix GitHub-style alerts by removing backslash escaping from square brackets
 sed -i '' 's/\\\[/[/g; s/\\\]/]/g' index.md
