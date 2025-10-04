@@ -105,6 +105,12 @@ sed -i '' 's/\\"/"/g' index.md
 # Fix escaped angle brackets in Annex conversion table (\<z\> → <z>, \<v\> → <v>, \<n\> → <n>)
 sed -i '' 's/\\</</g; s/\\>/>/g' index.md
 
+# Remove stray pipe characters from table cells (author formatting artifact from DOCX)
+# Pattern 1: ", | " or " | " inside text → ", " (just comma-space)
+sed -i '' 's/\([,<]\) | /\1 /g' index.md
+# Pattern 2: trailing " |" before </td> → remove entirely
+sed -i '' 's/ |<\/td>/<\/td>/g' index.md
+
 # Remove duplicate heading IDs like {#id .class} {#id-id-.class}
 # Pattern: {#something} {#something-something-.class} → {#something}
 sed -i '' -E 's/\{#([^}]+)\} \{#[^}]+\}/{#\1}/g' index.md
