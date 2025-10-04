@@ -187,6 +187,9 @@ python3 "$SCRIPT_DIR/fix-relative-images.py" index.md
 python3 "$SCRIPT_DIR/fix-list-continuity.py" index.md
 python3 "$SCRIPT_DIR/reduce-spacing.py" index.md
 
+# Fix table spacing: ensure blank line before tables
+python3 "$SCRIPT_DIR/fix-table-spacing.py" index.md
+
 # Optimize images for web and print (max 1200px width, 85% quality)
 echo "Optimizing images..."
 shopt -s nullglob
