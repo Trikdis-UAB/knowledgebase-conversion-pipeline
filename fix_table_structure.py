@@ -46,7 +46,8 @@ def fix_malformed_rowspan_tables(content: str) -> str:
 
         # Check for the specific malformed pattern we've seen:
         # <th rowspan="2">Header</th>\n<p>content</p>\n</td>
-        malformed_pattern = r'<th rowspan="2"><strong>([^<]+)</strong></th>\s*<p>([^<]*)</p>\s*</td>'
+        # OR <td rowspan="2"><strong>Header</strong>\n<p>content</p></td>
+        malformed_pattern = r'<t[dh] rowspan="2"><strong>([^<]+)</strong>\s*\n\s*<p>([^<]*)</p></t[dh]>'
 
         if re.search(malformed_pattern, table_content):
             print("Fixing malformed table with rowspan headers and mismatched tags")
@@ -115,6 +116,10 @@ def fix_specifications_table(content: str) -> str:
     and restructures them into proper header row + data rows.
     """
 
+    # Pattern 0: Both cells have <h1>Header</h1><p>Data</p> (SP3 manual)
+    # This appears when Pandoc outputs H1 tags in table cells
+    pattern0 = r'<tbody>\s*<tr>\s*<td rowspan="2"><h1[^>]*>([^<]+)</h1>\s*<p>([^<]*)</p>\s*</td>\s*<td rowspan="2"><h1[^>]*>([^<]+)</h1>\s*<p>([^<]*)</p>\s*</td>\s*</tr>'
+
     # Pattern 1: Both cells have <strong>Header</strong><p>Data</p>
     # This appears in GET manual's "Purpose of terminals" table
     pattern1 = r'<tbody>\s*<tr>\s*<td rowspan="2"><strong>([^<]+)</strong>\s*<p>([^<]*)</p>\s*</td>\s*<td rowspan="2"><strong>([^<]+)</strong>\s*<p>([^<]*)</p>\s*</td>\s*</tr>'
@@ -135,7 +140,10 @@ def fix_specifications_table(content: str) -> str:
         result += '</tr>'
         return result
 
-    # Apply pattern 1 first
+    # Apply pattern 0 first (H1 tags - SP3 manual)
+    content = re.sub(pattern0, fix_both_cells, content, flags=re.DOTALL)
+
+    # Apply pattern 1 (strong tags - GET manual)
     content = re.sub(pattern1, fix_both_cells, content, flags=re.DOTALL)
 
     # Pattern 2: <td rowspan="2"><strong>Header</strong>\n\n<p>Data</p></td>

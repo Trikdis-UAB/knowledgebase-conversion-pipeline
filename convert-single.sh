@@ -106,10 +106,15 @@ sed -i '' 's/\\"/"/g' index.md
 sed -i '' 's/\\</</g; s/\\>/>/g' index.md
 
 # Remove stray pipe characters from table cells (author formatting artifact from DOCX)
-# Pattern 1: ", | " or " | " inside text → ", " (just comma-space)
-sed -i '' 's/\([,<]\) | /\1 /g' index.md
-# Pattern 2: trailing " |" before </td> → remove entirely
-sed -i '' 's/ |<\/td>/<\/td>/g' index.md
+# Pattern 1: " | " between any text → " " (just space)
+sed -i '' 's/ | / /g' index.md
+# Pattern 2: trailing " |" at end of line or before tags → remove entirely
+sed -i '' 's/ |$//' index.md
+sed -i '' 's/ |</</g' index.md
+
+# Remove table separator artifacts from DOCX (equal signs and plus)
+# Pattern: "Model ======...+ " → "Model "
+sed -i '' 's/Model [=]+\+ /Model /g' index.md
 
 # Remove duplicate heading IDs like {#id .class} {#id-id-.class}
 # Pattern: {#something} {#something-something-.class} → {#something}
