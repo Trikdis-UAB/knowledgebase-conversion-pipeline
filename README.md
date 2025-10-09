@@ -68,9 +68,43 @@ The pipeline applies 24 specialized filters to clean and normalize Word document
 ## Quick Start
 
 1. **Check requirements**: `./check-requirements.sh`
-2. **Convert single file**: `./convert-single.sh "filename.docx"`
-3. **Preview locally**: `./preview.sh` (serves on http://127.0.0.1:8001)
-4. **Convert all files**: `./convert-batch.sh`
+2. **Find latest manual**: `./find-latest-manual.sh "/Volumes/TRIKDIS/PRODUKTAI/GT"`
+3. **Convert single file**: `./convert-single.sh "filename.docx"`
+4. **Preview locally**: `./preview.sh` (serves on http://127.0.0.1:8001)
+5. **Convert all files**: `./convert-batch.sh`
+
+---
+
+## Finding Latest Manuals
+
+Use the `find-latest-manual.sh` script to locate the most recent manual for a product:
+
+```bash
+# Find latest GT manual
+./find-latest-manual.sh "/Volumes/TRIKDIS/PRODUKTAI/GT"
+
+# Find latest GT+ manual
+./find-latest-manual.sh "/Volumes/TRIKDIS/PRODUKTAI/GT+"
+
+# Find latest GET manual
+./find-latest-manual.sh "/Volumes/TRIKDIS/PRODUKTAI/GET"
+```
+
+The script:
+- Searches for `.docx` files in the `_EN` subdirectory
+- Excludes temporary files (starting with `~$`)
+- Excludes archive folders
+- Returns the latest manual by alphabetical sort (which corresponds to date: YYYY MM DD)
+
+**Typical output:**
+```
+/Volumes/TRIKDIS/PRODUKTAI/GT/_EN/GT UM_ENG_2025 09 11.docx
+```
+
+**Use in conversion:**
+```bash
+./convert-single.sh "$(./find-latest-manual.sh /Volumes/TRIKDIS/PRODUKTAI/GT)"
+```
 
 ---
 
