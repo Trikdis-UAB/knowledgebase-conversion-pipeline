@@ -3,8 +3,10 @@ import re
 import sys
 
 def fix_admonitions(content):
-    # Pattern to match malformed admonitions
-    pattern = r'^(!!! (?:note|warning(?: "[^"]*")?)) (.+)$'
+    # Pattern to match admonitions with content on same line
+    pattern_same_line = r'^(!!! (?:note|warning|tip|caution|important)(?: "[^"]*")?)\s+(.+)$'
+    # Pattern to match admonitions without content on same line
+    pattern_admonition = r'^!!! (?:note|warning|tip|caution|important)(?: "[^"]*")?$'
 
     lines = content.split('\n')
     result = []
@@ -12,13 +14,17 @@ def fix_admonitions(content):
 
     while i < len(lines):
         line = lines[i]
-        match = re.match(pattern, line)
 
-        if match:
-            admonition_type = match.group(1)
-            first_content = match.group(2)
+        # Check for admonition with content on same line
+        match_same = re.match(pattern_same_line, line)
+        # Check for admonition without content on same line
+        match_admon = re.match(pattern_admonition, line)
 
-            # Start the admonition block
+        if match_same:
+            # Content on same line - process it
+            admonition_type = match_same.group(1)
+            first_content = match_same.group(2)
+
             result.append(admonition_type)
             result.append(f"    {first_content}")
 
@@ -26,19 +32,39 @@ def fix_admonitions(content):
             i += 1
             while i < len(lines) and (lines[i].startswith('>') or lines[i].strip() == ''):
                 if lines[i].startswith('> '):
+                    result.append(f"    {lines[i][2:]}")
+                elif lines[i].startswith('>'):
+                    result.append(f"    {lines[i][1:]}")
+                elif lines[i].strip() == '':
+                    result.append('')
+                i += 1
+
+            result.append('')
+            continue
+
+        elif match_admon:
+            # Content on next line - process it
+            result.append(line)  # Add the !!! note line
+
+            # Look ahead for content lines starting with >
+            i += 1
+            while i < len(lines) and (lines[i].startswith('>') or lines[i].strip() == ''):
+                if lines[i].startswith('> '):
                     # Remove > and add proper indentation
                     result.append(f"    {lines[i][2:]}")
                 elif lines[i].startswith('>'):
-                    # Just > with content directly
-                    result.append(f"    {lines[i][1:]}")
+                    # Just > with content directly (or empty >)
+                    if lines[i] == '>':
+                        result.append('')
+                    else:
+                        result.append(f"    {lines[i][1:]}")
                 elif lines[i].strip() == '':
-                    # Empty line
+                    # Empty line within admonition
                     result.append('')
                 i += 1
 
             # Add an empty line after the admonition
             result.append('')
-            # Don't increment i as we've already processed the next lines
             continue
         else:
             result.append(line)
