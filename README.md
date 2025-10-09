@@ -51,7 +51,7 @@ The pipeline applies 24 specialized filters to clean and normalize Word document
 14. **split-inline-images.lua**: Separates inline images for proper display
 15. **convert-image-sizes.lua**: Converts image sizes to HTML with CSS
 16. **softwrap-tokens.lua**: Handles text wrapping
-17. **remove-empty-table-columns.lua**: Removes empty separator columns from tables
+17. **remove-empty-table-columns.lua**: Removes empty separator columns from tables (e.g., single-char "S" columns with no data)
 18. **clean-table-pipes.lua**: Fixes table pipe characters
 19. **mark-two-col.lua**: Marks two-column tables for processing
 20. **convert-underline.lua**: Converts underline formatting
