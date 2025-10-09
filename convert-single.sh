@@ -124,8 +124,9 @@ sed -i '' -E 's/\{#([^}]+)\} \{#[^}]+\}/{#\1}/g' index.md
 sed -i '' 's/<!-- -->//g' index.md
 
 # Remove duplicate product images wrapped in <div> tags (keeps only the one after H1 title)
-# This removes standalone <div><img src="./imageN.png" ... width="400"></div> blocks
-perl -i -0pe 's/<div>\s*<img src="\.\/(image[1-5]\.png)"[^>]*width="400"[^>]*>\s*<\/div>\s*\n\s*\n(?=##)/\n/g' index.md
+# This removes standalone <div><img src="imageN.png" ... width="400"></div> blocks (before ./ is added)
+# The H1 image is added later by sed, so this safely removes all duplicates
+perl -i -0777 -pe 's/<div>[\s\n]*<img\s+src="(?:\.\/)?(image[1-5]\.png)"[^>]*width="400"[^>]*>[\s\n]*<\/div>[\s\n]*/\n/g' index.md
 
 # Fix title formatting - make "Works with Protegus2 app:" bold like other titles
 sed -i '' 's/^Works with Protegus2 app:/**Works with Protegus2 app:**/g' index.md
