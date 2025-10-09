@@ -385,13 +385,24 @@ All tables are converted to clean, human-readable pipe tables:
    - Merges multi-paragraph cells with " / " separator
    - Removes `<br>` tags and replaces with " / " for single-line cells
 
-2. **Python post-processor** (`html-tables-to-pipes.py`):
+2. **Underline preservation** (`convert-underline.lua`):
+   - Converts underlined text to special markers: `⟪U⟫text⟪/U⟫`
+   - Markers survive GFM pipe table conversion (GFM strips HTML)
+   - Works generically for ANY underlined text in ANY table
+   - Post-processed to `<u>text</u>` tags after conversion
+
+3. **Rowspan merging** (`html-tables-to-pipes.py`):
+   - Merges rowspan cells with `<br>` tags to avoid repetition
+   - Example: PARADOX® appears once with models separated by `<br>`
+   - Preserves table structure while reducing redundancy
+
+4. **Python post-processor** (`html-tables-to-pipes.py`):
    - Runs AFTER table structure fixes
    - Converts any remaining HTML tables to compact pipe format
    - **Normalizes whitespace**: Joins multi-paragraph cells into single line
    - Creates clean `| Column | Column |` format without excessive padding
 
-3. **Spacing fix** (`fix-table-spacing.py`):
+5. **Spacing fix** (`fix-table-spacing.py`):
    - Adds blank line before NEW tables only
    - Does NOT add blank lines between table rows
    - Ensures continuous table rows for proper rendering
@@ -399,17 +410,20 @@ All tables are converted to clean, human-readable pipe tables:
 **Result:**
 - Simple tables: `| Name | Quantity |`
 - Complex tables: Multi-line content joined with spaces on one line
+- Rowspan tables: Manufacturer once, models with `<br>` separators
+- Underlines preserved: `<u>PC585</u>` exactly as in DOCX
 - All tables human-readable in markdown source
 - Render perfectly in MkDocs with `tables` extension
 
-**Example:**
+**Example with all features:**
 ```markdown
-| Parameter | Description |
-|-----------|-------------|
-| Dual purpose terminals | 2, can be set as either NC; NO; NC/EOL type inputs or open collector outputs. Expandable with iO-8 expanders. |
+| Manufacturer | Model |
+|--------------|-------|
+| DSC® | <u>PC585</u>, <u>PC1404</u>, <u>PC1565</u> |
+| PARADOX® | <u>SPECTRA SP4000</u>, <u>SP5500</u><br><u>MAGELLAN MG5000</u>, <u>MG5050</u> |
 ```
 
-**Important:** See `TABLE_FIXES.md` for details on table conversion fixes (October 2025).
+**Important:** See `TABLE_FIXES.md` for details on 5 table conversion issues resolved (October 2025).
 
 ### Heading Level Mapping
 
@@ -467,13 +481,48 @@ Pagrindinis             Level 1            H2 (## Section)
 
 ## Updates
 
-### October 9, 2025 - Table Conversion Fixes
+### October 9, 2025 - Table Conversion Fixes (5 Issues Resolved)
+
+#### Issue 1: Tables in HTML Format Instead of Pipe Tables
 - ✅ **Fixed convert-underline.lua**: Removed round-trip markdown conversion that destroyed table structures
+- ✅ **Root cause**: Pandoc() function was re-parsing markdown and corrupting tables
+- ✅ **Result**: Tables now convert to proper pipe format from Pandoc's initial HTML output
+
+#### Issue 2: Blank Lines Between Every Table Row
 - ✅ **Fixed fix-table-spacing.py**: Only adds blank lines before NEW tables, not between rows
+- ✅ **Root cause**: Script was treating every line starting with `|` as a table start
+- ✅ **Result**: Continuous table rows without blank lines for proper MkDocs rendering
+
+#### Issue 3: Multi-Paragraph Cell Content Split Across Lines
 - ✅ **Fixed html-tables-to-pipes.py**: Normalizes whitespace to join multi-paragraph cells on single line
-- ✅ **Result**: All tables now render as proper pipe tables without blank lines or split rows
-- ✅ **Tested with**: GET, GT, GT+ manuals - all specification tables working perfectly
-- 📝 **Documentation**: Created `TABLE_FIXES.md` with detailed analysis and verification
+- ✅ **Root cause**: Multi-paragraph cells from HTML preserved newlines intact
+- ✅ **Result**: All table rows on single lines with proper `|` separators
+
+#### Issue 4: Repeated Manufacturer Names in Rowspan Tables
+- ✅ **Fixed html-tables-to-pipes.py**: Merge rowspan cells with `<br>` tags instead of duplicating
+- ✅ **Root cause**: flatten_rowspan_html() was duplicating manufacturer names across spanned rows
+- ✅ **Result**: PARADOX® appears once with models separated by `<br>` tags
+- ✅ **Example**:
+  ```markdown
+  | PARADOX® | SPECTRA SP4000...<br>MAGELLAN MG5000...<br>DIGIPLEX EVO48... |
+  ```
+
+#### Issue 5: Underlines Lost in Table Cells
+- ✅ **Fixed convert-underline.lua**: Marker-based approach preserves underlines through GFM conversion
+- ✅ **Root cause**: Pandoc's GFM writer strips HTML tags from table cells
+- ✅ **Solution**: Use Unicode markers (⟪U⟫...⟪/U⟫) that survive conversion, then convert to `<u>` tags
+- ✅ **Result**: All underlines preserved exactly as in original DOCX
+- ✅ **Generic**: Works for ANY underlined text in ANY table
+- ✅ **Example**:
+  ```markdown
+  | DSC® | <u>PC585</u>, <u>PC1404</u>, <u>PC1565</u>... |
+  ```
+
+#### Verification
+- ✅ **Tested with**: GET, GT, GT+ manuals - all tables working perfectly
+- ✅ **Compatible panels table**: PARADOX® once, models with `<br>`, underlines preserved
+- ✅ **Specifications table**: Multi-line cells on single rows, proper rendering
+- 📝 **Documentation**: `TABLE_FIXES.md` with detailed analysis and code examples
 
 ### October 2025 - Human-Readable Pipe Tables & Heading Level Mapping
 - ✅ **ALL tables now pipe format**: Every table converts to clean `| Column | Column |` format
