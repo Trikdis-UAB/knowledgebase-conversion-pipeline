@@ -388,11 +388,17 @@ All tables are converted to clean, human-readable pipe tables:
 2. **Python post-processor** (`html-tables-to-pipes.py`):
    - Runs AFTER table structure fixes
    - Converts any remaining HTML tables to compact pipe format
+   - **Normalizes whitespace**: Joins multi-paragraph cells into single line
    - Creates clean `| Column | Column |` format without excessive padding
+
+3. **Spacing fix** (`fix-table-spacing.py`):
+   - Adds blank line before NEW tables only
+   - Does NOT add blank lines between table rows
+   - Ensures continuous table rows for proper rendering
 
 **Result:**
 - Simple tables: `| Name | Quantity |`
-- Complex tables: Multi-line content separated with " / "
+- Complex tables: Multi-line content joined with spaces on one line
 - All tables human-readable in markdown source
 - Render perfectly in MkDocs with `tables` extension
 
@@ -400,8 +406,10 @@ All tables are converted to clean, human-readable pipe tables:
 ```markdown
 | Parameter | Description |
 |-----------|-------------|
-| Current consumption | Up to 50 mA (stand-by), / Up to 200 mA (short-term, while sending) |
+| Dual purpose terminals | 2, can be set as either NC; NO; NC/EOL type inputs or open collector outputs. Expandable with iO-8 expanders. |
 ```
+
+**Important:** See `TABLE_FIXES.md` for details on table conversion fixes (October 2025).
 
 ### Heading Level Mapping
 
@@ -458,6 +466,14 @@ Pagrindinis             Level 1            H2 (## Section)
 ---
 
 ## Updates
+
+### October 9, 2025 - Table Conversion Fixes
+- ✅ **Fixed convert-underline.lua**: Removed round-trip markdown conversion that destroyed table structures
+- ✅ **Fixed fix-table-spacing.py**: Only adds blank lines before NEW tables, not between rows
+- ✅ **Fixed html-tables-to-pipes.py**: Normalizes whitespace to join multi-paragraph cells on single line
+- ✅ **Result**: All tables now render as proper pipe tables without blank lines or split rows
+- ✅ **Tested with**: GET, GT, GT+ manuals - all specification tables working perfectly
+- 📝 **Documentation**: Created `TABLE_FIXES.md` with detailed analysis and verification
 
 ### October 2025 - Human-Readable Pipe Tables & Heading Level Mapping
 - ✅ **ALL tables now pipe format**: Every table converts to clean `| Column | Column |` format
