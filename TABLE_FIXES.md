@@ -225,6 +225,55 @@ if self.in_th or self.in_td:
 ## Date
 October 9, 2025
 
+---
+
+## Issue 5: Underlines Lost in Table Cells
+
+### Symptom
+Underlined text in table cells (indicating directly-controlled control panels) was lost during conversion to pipe tables.
+
+In the PDF, models like "PC585", "SPECTRA SP4000", etc. are underlined to indicate they support direct control.
+
+### Root Cause
+Pandoc's GFM (GitHub Flavored Markdown) writer **strips HTML tags from table cells** when creating pipe tables. Even though `convert-underline.lua` converts `Underline` AST elements to `<u>` tags, these get removed when Pandoc outputs pipe tables.
+
+### Fix
+**Files**: `convert-underline.lua` and `convert-single.sh` (line 199)
+
+Implemented a **marker-based approach** that works for any underlined text in any table:
+
+1. **Lua filter** (convert-underline.lua): Convert `Underline` elements to special Unicode markers that survive GFM conversion:
+   ```lua
+   function Underline(elem)
+     local content = pandoc.utils.stringify(elem.content)
+     return pandoc.Str("⟪U⟫" .. content .. "⟪/U⟫")
+   end
+   ```
+
+2. **Post-processing** (convert-single.sh): Convert markers to HTML after pipe tables are created:
+   ```bash
+   sed -i '' 's/⟪U⟫/<u>/g; s/⟪\/U⟫/<\/u>/g' index.md
+   ```
+
+**Result**: All underlines preserved exactly as they appear in the original DOCX:
+
+```markdown
+| DSC® | <u>PC585</u>, <u>PC1404</u>, <u>PC1565</u>... |
+| PARADOX® | <u>SPECTRA SP4000</u>, <u>SP5500</u>...<br><u>MAGELLAN MG5000</u>... |
+```
+
+**Benefits:**
+- Generic solution works for ANY underlined text in ANY table
+- No hardcoded patterns needed
+- Works with rowspan merging (models with `<br>` tags)
+- Preserves exact underlining from original document
+
+---
+
+## Date
+October 9, 2025
+
 ## Commits
 - `2815350` - Fix table structure issues in pipe table conversion
 - `48ddb21` - Merge rowspan cells with <br> tags instead of duplicating content
+- `faf7512` - Preserve underlines in tables using marker approach
