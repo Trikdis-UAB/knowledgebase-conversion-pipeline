@@ -273,7 +273,45 @@ Implemented a **marker-based approach** that works for any underlined text in an
 ## Date
 October 9, 2025
 
+---
+
+## Issue 6: Underline Tag Preservation in HTML Table Parser
+
+### Symptom
+After implementing the marker-based underline preservation (Issue 5), underline tags were not being properly preserved during HTML table parsing.
+
+### Root Cause
+The `html-tables-to-pipes.py` parser was capturing all inner HTML tags generically without special handling for `<u>` tags used for underlining.
+
+### Fix
+**File**: `html-tables-to-pipes.py` (lines 140-146)
+
+Added special handling for `<u>` tags to ensure they're preserved correctly:
+
+```python
+def handle_starttag(self, tag, attrs):
+    # ... existing code ...
+    elif self.in_cell:
+        # Preserve <u> tags for underlining
+        if tag == 'u':
+            self.current_cell['content_parts'].append('<u>')
+        else:
+            # Capture other inner HTML tags, preserve <br> tags
+            attrs_str = ' '.join(f'{k}="{v}"' for k, v in attrs) if attrs else ''
+            tag_str = f'<{tag}' + (f' {attrs_str}' if attrs_str else '') + '>'
+            self.current_cell['content_parts'].append(tag_str)
+```
+
+**Result**: Underline tags are now properly preserved during HTML table parsing, ensuring the complete end-to-end underline preservation pipeline works correctly.
+
+---
+
+## Date
+October 9, 2025
+
 ## Commits
 - `2815350` - Fix table structure issues in pipe table conversion
 - `48ddb21` - Merge rowspan cells with <br> tags instead of duplicating content
 - `faf7512` - Preserve underlines in tables using marker approach
+- `55187f4` - Fix admonition blockquote wrapping in note sections
+- `65d202a` - Preserve <u> tags during HTML table parsing for underline support
