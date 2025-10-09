@@ -173,8 +173,58 @@ grep -A 10 "| Parameter |" /tmp/test-tables/*/index.md
 grep "<table>" /tmp/test-tables/*/index.md  # Should return nothing
 ```
 
+---
+
+## Issue 4: Repeated Manufacturer Names in Compatible Panels Table
+
+### Symptom
+Manufacturer names like PARADOX® and Texecom® were repeated on every row in the compatible control panels table:
+
+```markdown
+| Manufacturer | Model |
+|--------------|-------|
+| PARADOX® | SPECTRA SP4000, SP5500... |
+| PARADOX® | MAGELLAN MG5000, MG5050... |
+| PARADOX® | DIGIPLEX EVO48, EVO192... |
+| PARADOX® | SPECTRA 1727, 1728, 1738 |
+| PARADOX® | ESPRIT E55 |
+```
+
+In the original PDF, PARADOX® appears once with 5 model rows below it using rowspan.
+
+### Root Cause
+The `flatten_rowspan_html()` function was duplicating the manufacturer cell content across all spanned rows instead of merging the model content with `<br>` tags.
+
+### Fix
+**File**: `html-tables-to-pipes.py` (lines 178-256)
+
+Rewrote `flatten_rowspan_html()` to:
+1. Identify cells with rowspan attribute
+2. Collect content from subsequent rows (the model column)
+3. Merge models with `<br>` separator
+4. Place merged content in second column of first row
+5. Skip rendering the merged rows
+
+**Also updated** (line 46): Changed `<br>` tag handling from converting to " / " to preserving `<br>`:
+```python
+# Keep <br> tags for rowspan merging
+if self.in_th or self.in_td:
+    self.current_cell += "<br>"
+```
+
+**Result**: Manufacturer appears once with all models joined by `<br>`:
+
+```markdown
+| Manufacturer | Model |
+|--------------|-------|
+| PARADOX® | SPECTRA SP4000, SP5500...<br>MAGELLAN MG5000, MG5050...<br>DIGIPLEX EVO48, EVO192...<br>SPECTRA 1727, 1728, 1738<br>ESPRIT E55 |
+```
+
+---
+
 ## Date
 October 9, 2025
 
-## Commit
-`2815350` - Fix table structure issues in pipe table conversion
+## Commits
+- `2815350` - Fix table structure issues in pipe table conversion
+- `48ddb21` - Merge rowspan cells with <br> tags instead of duplicating content
