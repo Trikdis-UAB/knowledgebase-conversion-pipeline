@@ -192,6 +192,12 @@ python3 "$SCRIPT_DIR/fix_table_structure.py" index.md
 echo "Converting HTML tables to pipe tables..."
 python3 "$SCRIPT_DIR/html-tables-to-pipes.py" index.md
 
+# Convert underline markers to HTML tags
+# The convert-underline.lua filter uses special markers (⟪U⟫ and ⟪/U⟫) that survive GFM conversion
+# Now convert them to proper <u> tags
+echo "Converting underline markers to HTML tags..."
+sed -i '' 's/⟪U⟫/<u>/g; s/⟪\/U⟫/<\/u>/g' index.md
+
 python3 "$SCRIPT_DIR/normalize-callouts.py" index.md
 python3 "$SCRIPT_DIR/fix-relative-images.py" index.md
 python3 "$SCRIPT_DIR/fix-list-continuity.py" index.md

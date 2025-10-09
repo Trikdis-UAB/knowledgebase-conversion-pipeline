@@ -1,12 +1,22 @@
 -- convert-underline.lua
--- Convert [text]{.underline} to proper HTML <u>text</u> tags
+-- Convert [text]{.underline} and Underline elements to special markers that survive GFM conversion
+-- These markers are later converted to <u> tags in post-processing
 
+-- Handle Underline elements from DOCX
+function Underline(elem)
+  -- Use special Unicode markers that won't appear in normal text
+  -- ⟪U⟫ and ⟪/U⟫ are unlikely to appear in technical documentation
+  local content = pandoc.utils.stringify(elem.content)
+  return pandoc.Str("⟪U⟫" .. content .. "⟪/U⟫")
+end
+
+-- Handle Span elements with underline class
 function Span(span)
   -- Check if this span has the underline class
   if span.classes and span.classes:includes("underline") then
-    -- Convert to HTML underline tag
+    -- Use the same marker approach
     local content = pandoc.utils.stringify(span.content)
-    return pandoc.RawInline("html", "<u>" .. content .. "</u>")
+    return pandoc.Str("⟪U⟫" .. content .. "⟪/U⟫")
   end
 
   return span
