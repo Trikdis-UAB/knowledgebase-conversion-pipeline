@@ -137,10 +137,14 @@ def flatten_rowspan_html(html_table):
                     'content_parts': []
                 }
             elif self.in_cell:
-                # Capture inner HTML tags, preserve <br> tags
-                attrs_str = ' '.join(f'{k}="{v}"' for k, v in attrs) if attrs else ''
-                tag_str = f'<{tag}' + (f' {attrs_str}' if attrs_str else '') + '>'
-                self.current_cell['content_parts'].append(tag_str)
+                # Preserve <u> tags for underlining
+                if tag == 'u':
+                    self.current_cell['content_parts'].append('<u>')
+                else:
+                    # Capture other inner HTML tags, preserve <br> tags
+                    attrs_str = ' '.join(f'{k}="{v}"' for k, v in attrs) if attrs else ''
+                    tag_str = f'<{tag}' + (f' {attrs_str}' if attrs_str else '') + '>'
+                    self.current_cell['content_parts'].append(tag_str)
 
         def handle_endtag(self, tag):
             if tag == 'thead':
