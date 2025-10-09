@@ -41,9 +41,9 @@ class TableConverter(HTMLParser):
             self.in_td = True
             self.current_cell = ""
         elif tag == "br":
-            # Convert <br> to " / " separator
+            # Keep <br> tags for rowspan merging
             if self.in_th or self.in_td:
-                self.current_cell += " / "
+                self.current_cell += "<br>"
         elif tag == "strong" and (self.in_th or self.in_td):
             # Keep strong tags in cells
             pass
@@ -105,8 +105,8 @@ class TableConverter(HTMLParser):
 
 def flatten_rowspan_html(html_table):
     """
-    Flatten rowspan cells by duplicating content across spanned rows.
-    This ensures all rows have consistent column counts for pipe table conversion.
+    Flatten rowspan cells by merging content with <br> tags.
+    For manufacturer tables, this avoids repeating names like PARADOX®.
     """
     from html.parser import HTMLParser
 
@@ -137,7 +137,7 @@ def flatten_rowspan_html(html_table):
                     'content_parts': []
                 }
             elif self.in_cell:
-                # Capture inner HTML tags
+                # Capture inner HTML tags, preserve <br> tags
                 attrs_str = ' '.join(f'{k}="{v}"' for k, v in attrs) if attrs else ''
                 tag_str = f'<{tag}' + (f' {attrs_str}' if attrs_str else '') + '>'
                 self.current_cell['content_parts'].append(tag_str)
@@ -175,46 +175,91 @@ def flatten_rowspan_html(html_table):
     if not parser.header_rows and not parser.body_rows:
         return html_table
 
-    def flatten_rows(rows):
-        """Helper to flatten rowspan in a set of rows"""
-        grid = []
+    def merge_rowspan_rows(rows):
+        """Merge rowspan cells with <br> tags instead of duplicating"""
+        if not rows:
+            return []
+
+        # Track rows that should be skipped (merged into rowspan)
+        skip_rows = set()
+
+        # First pass: identify rowspan cells and what rows they affect
+        rowspan_cells = []
         for row_idx, row in enumerate(rows):
-            if row_idx >= len(grid):
-                grid.append([])
+            col_offset = 0
+            for cell_idx, cell in enumerate(row):
+                if cell and cell.get('rowspan', 1) > 1:
+                    rowspan_cells.append({
+                        'row': row_idx,
+                        'col': cell_idx + col_offset,
+                        'span': cell['rowspan']
+                    })
+                    # Mark the rows that will be merged
+                    for r in range(1, cell['rowspan']):
+                        skip_rows.add(row_idx + r)
 
-            col_idx = 0
-            for cell in row:
-                # Skip None cells (shouldn't happen but safety check)
-                if cell is None:
-                    continue
+        # Build result grid
+        grid = []
 
-                # Skip columns occupied by previous rowspans
-                while col_idx < len(grid[row_idx]) and grid[row_idx][col_idx] is not None:
-                    col_idx += 1
+        for row_idx, row in enumerate(rows):
+            if row_idx in skip_rows:
+                # This row's content will be merged into a rowspan cell
+                continue
 
-                content = ''.join(cell['content_parts'])
-                rowspan = cell['rowspan']
+            # Check if this row starts with a rowspan cell
+            has_rowspan = any(rc['row'] == row_idx and rc['col'] == 0
+                            for rc in rowspan_cells)
 
-                # Place cell in current and subsequent rows
-                for r in range(rowspan):
-                    target_row = row_idx + r
-                    while len(grid) <= target_row:
-                        grid.append([])
-                    while len(grid[target_row]) <= col_idx:
-                        grid[target_row].append(None)
-                    grid[target_row][col_idx] = {
-                        'tag': cell['tag'],
-                        'content': content
-                    }
+            if has_rowspan:
+                # This row has a rowspan cell - collect content from subsequent rows
+                rowspan_info = next(rc for rc in rowspan_cells
+                                   if rc['row'] == row_idx and rc['col'] == 0)
 
-                col_idx += 1
+                # First cell is the rowspan cell (manufacturer)
+                manufacturer = ''.join(row[0]['content_parts'])
+
+                # Collect model content from this row and subsequent rows
+                models = []
+
+                # Current row model (second cell)
+                if len(row) > 1:
+                    models.append(''.join(row[1]['content_parts']))
+
+                # Subsequent rows models
+                for r in range(1, rowspan_info['span']):
+                    next_row_idx = row_idx + r
+                    if next_row_idx < len(rows) and rows[next_row_idx]:
+                        # Get first cell from subsequent row (it's the model)
+                        next_row = rows[next_row_idx]
+                        if next_row and len(next_row) > 0:
+                            models.append(''.join(next_row[0]['content_parts']))
+
+                # Create merged row with manufacturer and joined models
+                merged_row = [
+                    {'tag': row[0]['tag'], 'content': manufacturer},
+                    {'tag': row[1]['tag'] if len(row) > 1 else 'td',
+                     'content': '<br>'.join(models)}
+                ]
+                grid.append(merged_row)
+            else:
+                # Normal row without rowspan
+                grid_row = []
+                for cell in row:
+                    if cell:
+                        content = ''.join(cell['content_parts'])
+                        grid_row.append({
+                            'tag': cell['tag'],
+                            'content': content
+                        })
+                grid.append(grid_row)
+
         return grid
 
-    # Flatten header and body separately
-    header_grid = flatten_rows(parser.header_rows) if parser.header_rows else []
-    body_grid = flatten_rows(parser.body_rows) if parser.body_rows else []
+    # Process header and body separately
+    header_grid = merge_rowspan_rows(parser.header_rows) if parser.header_rows else []
+    body_grid = merge_rowspan_rows(parser.body_rows) if parser.body_rows else []
 
-    # Rebuild HTML without rowspan, preserving thead/tbody structure
+    # Rebuild HTML with merged rowspan cells
     lines = ['<table>']
 
     if header_grid:
@@ -222,7 +267,7 @@ def flatten_rowspan_html(html_table):
         for row in header_grid:
             lines.append('<tr>')
             for cell in row:
-                if cell:
+                if cell and not cell.get('skip'):
                     lines.append(f"<{cell['tag']}>{cell['content']}</{cell['tag']}>")
             lines.append('</tr>')
         lines.append('</thead>')
@@ -230,11 +275,14 @@ def flatten_rowspan_html(html_table):
     if body_grid:
         lines.append('<tbody>')
         for row in body_grid:
-            lines.append('<tr>')
-            for cell in row:
-                if cell:
-                    lines.append(f"<{cell['tag']}>{cell['content']}</{cell['tag']}>")
-            lines.append('</tr>')
+            # Skip rows that only contain "skip" markers
+            has_content = any(cell and not cell.get('skip') for cell in row if cell)
+            if has_content:
+                lines.append('<tr>')
+                for cell in row:
+                    if cell and not cell.get('skip'):
+                        lines.append(f"<{cell['tag']}>{cell['content']}</{cell['tag']}>")
+                lines.append('</tr>')
         lines.append('</tbody>')
 
     lines.append('</table>')
