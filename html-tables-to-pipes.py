@@ -2,11 +2,13 @@
 """
 Convert HTML tables in markdown to pipe tables for human readability.
 Processes index.md file in-place.
+Flattens rowspan cells by duplicating content across spanned rows.
 """
 
 import re
 import sys
 from html.parser import HTMLParser
+from html import unescape
 
 class TableConverter(HTMLParser):
     def __init__(self):
@@ -61,11 +63,15 @@ class TableConverter(HTMLParser):
             self.in_tr = False
         elif tag == "th":
             self.in_th = False
-            self.headers.append(self.current_cell.strip())
+            # Normalize whitespace: replace multiple spaces/newlines with single space
+            cell_content = ' '.join(self.current_cell.split())
+            self.headers.append(cell_content)
             self.current_cell = ""
         elif tag == "td":
             self.in_td = False
-            self.current_row.append(self.current_cell.strip())
+            # Normalize whitespace: replace multiple spaces/newlines with single space
+            cell_content = ' '.join(self.current_cell.split())
+            self.current_row.append(cell_content)
             self.current_cell = ""
 
     def handle_data(self, data):
@@ -97,11 +103,150 @@ class TableConverter(HTMLParser):
 
         return "\n".join(lines)
 
+def flatten_rowspan_html(html_table):
+    """
+    Flatten rowspan cells by duplicating content across spanned rows.
+    This ensures all rows have consistent column counts for pipe table conversion.
+    """
+    from html.parser import HTMLParser
+
+    class RowspanParser(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.header_rows = []
+            self.body_rows = []
+            self.current_row = []
+            self.current_cell = None
+            self.in_cell = False
+            self.in_thead = False
+            self.in_tbody = False
+
+        def handle_starttag(self, tag, attrs):
+            if tag == 'thead':
+                self.in_thead = True
+            elif tag == 'tbody':
+                self.in_tbody = True
+            elif tag == 'tr':
+                self.current_row = []
+            elif tag in ('td', 'th'):
+                self.in_cell = True
+                attrs_dict = dict(attrs)
+                self.current_cell = {
+                    'tag': tag,
+                    'rowspan': int(attrs_dict.get('rowspan', 1)),
+                    'content_parts': []
+                }
+            elif self.in_cell:
+                # Capture inner HTML tags
+                attrs_str = ' '.join(f'{k}="{v}"' for k, v in attrs) if attrs else ''
+                tag_str = f'<{tag}' + (f' {attrs_str}' if attrs_str else '') + '>'
+                self.current_cell['content_parts'].append(tag_str)
+
+        def handle_endtag(self, tag):
+            if tag == 'thead':
+                self.in_thead = False
+            elif tag == 'tbody':
+                self.in_tbody = False
+            elif tag in ('td', 'th'):
+                self.current_row.append(self.current_cell)
+                self.in_cell = False
+                self.current_cell = None
+            elif tag == 'tr':
+                if self.current_row:
+                    if self.in_thead:
+                        self.header_rows.append(self.current_row)
+                    else:
+                        self.body_rows.append(self.current_row)
+            elif self.in_cell:
+                self.current_cell['content_parts'].append(f'</{tag}>')
+
+        def handle_data(self, data):
+            if self.in_cell:
+                self.current_cell['content_parts'].append(data)
+
+    # Parse the table
+    parser = RowspanParser()
+    try:
+        parser.feed(html_table)
+    except:
+        # If parsing fails, return original
+        return html_table
+
+    if not parser.header_rows and not parser.body_rows:
+        return html_table
+
+    def flatten_rows(rows):
+        """Helper to flatten rowspan in a set of rows"""
+        grid = []
+        for row_idx, row in enumerate(rows):
+            if row_idx >= len(grid):
+                grid.append([])
+
+            col_idx = 0
+            for cell in row:
+                # Skip None cells (shouldn't happen but safety check)
+                if cell is None:
+                    continue
+
+                # Skip columns occupied by previous rowspans
+                while col_idx < len(grid[row_idx]) and grid[row_idx][col_idx] is not None:
+                    col_idx += 1
+
+                content = ''.join(cell['content_parts'])
+                rowspan = cell['rowspan']
+
+                # Place cell in current and subsequent rows
+                for r in range(rowspan):
+                    target_row = row_idx + r
+                    while len(grid) <= target_row:
+                        grid.append([])
+                    while len(grid[target_row]) <= col_idx:
+                        grid[target_row].append(None)
+                    grid[target_row][col_idx] = {
+                        'tag': cell['tag'],
+                        'content': content
+                    }
+
+                col_idx += 1
+        return grid
+
+    # Flatten header and body separately
+    header_grid = flatten_rows(parser.header_rows) if parser.header_rows else []
+    body_grid = flatten_rows(parser.body_rows) if parser.body_rows else []
+
+    # Rebuild HTML without rowspan, preserving thead/tbody structure
+    lines = ['<table>']
+
+    if header_grid:
+        lines.append('<thead>')
+        for row in header_grid:
+            lines.append('<tr>')
+            for cell in row:
+                if cell:
+                    lines.append(f"<{cell['tag']}>{cell['content']}</{cell['tag']}>")
+            lines.append('</tr>')
+        lines.append('</thead>')
+
+    if body_grid:
+        lines.append('<tbody>')
+        for row in body_grid:
+            lines.append('<tr>')
+            for cell in row:
+                if cell:
+                    lines.append(f"<{cell['tag']}>{cell['content']}</{cell['tag']}>")
+            lines.append('</tr>')
+        lines.append('</tbody>')
+
+    lines.append('</table>')
+
+    return '\n'.join(lines)
+
+
 def convert_html_table_to_pipe(html_table):
     """Convert a single HTML table to pipe table format"""
-    # Skip tables with rowspan - they're too complex for pipe tables
+    # Flatten rowspan first if present
     if 'rowspan=' in html_table:
-        return html_table
+        html_table = flatten_rowspan_html(html_table)
 
     parser = TableConverter()
     parser.feed(html_table)

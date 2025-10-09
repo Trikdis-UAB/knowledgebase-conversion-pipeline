@@ -18,20 +18,24 @@ def fix_table_spacing(content):
     while i < len(lines):
         current_line = lines[i]
         result.append(current_line)
-        
-        # Check if next line starts a table
+
+        # Check if next line starts a NEW table (not just any table row)
         if i < len(lines) - 1:
             next_line = lines[i + 1]
-            is_table_start = next_line.strip().startswith('|') and '|' in next_line.strip()[1:]
-            
+            is_table_row = next_line.strip().startswith('|') and '|' in next_line.strip()[1:]
+
+            # Only treat as table start if current line is NOT already a table line
+            current_is_table_row = current_line.strip().startswith('|')
+            is_table_start = is_table_row and not current_is_table_row
+
             if is_table_start:
                 # Check if current line is non-empty and non-blank
                 current_is_content = current_line.strip() and not current_line.strip().startswith('#')
-                
+
                 # Add blank line if missing
                 if current_is_content:
                     result.append('')
-        
+
         i += 1
     
     return '\n'.join(result)

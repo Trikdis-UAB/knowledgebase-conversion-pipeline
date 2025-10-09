@@ -48,7 +48,6 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/filters/flatten-two-cell-tables.lua" \
   --lua-filter="$SCRIPT_DIR/flatten-instruction-tables.lua" \
   --lua-filter="$SCRIPT_DIR/unwrap-table-blockquotes.lua" \
-  --lua-filter="$SCRIPT_DIR/fix-rowspan-headers.lua" \
   --lua-filter="$SCRIPT_DIR/normalize-headings.lua" \
   --lua-filter="$SCRIPT_DIR/strip-manual-heading-numbers.lua" \
   --lua-filter="$SCRIPT_DIR/move-first-image-to-description.lua" \
@@ -106,11 +105,13 @@ sed -i '' 's/\\"/"/g' index.md
 sed -i '' 's/\\</</g; s/\\>/>/g' index.md
 
 # Remove stray pipe characters from table cells (author formatting artifact from DOCX)
+# DISABLED: This was too aggressive and was removing legitimate table column separators
+# The html-tables-to-pipes.py script now handles this properly
 # Pattern 1: " | " between any text → " " (just space)
-sed -i '' 's/ | / /g' index.md
+# sed -i '' 's/ | / /g' index.md
 # Pattern 2: trailing " |" at end of line or before tags → remove entirely
-sed -i '' 's/ |$//' index.md
-sed -i '' 's/ |</</g' index.md
+# sed -i '' 's/ |$//' index.md
+# sed -i '' 's/ |</</g' index.md
 
 # Remove table separator artifacts from DOCX (equal signs and plus)
 # Pattern: "Model ======...+ " → "Model "

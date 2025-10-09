@@ -20,14 +20,6 @@ function Str(str)
   return pandoc.Str(text)
 end
 
--- Post-process the entire document to catch any remaining patterns
-function Pandoc(doc)
-  -- Convert the document to string, fix underline patterns, then back
-  local content = pandoc.write(doc, "markdown")
-
-  -- Fix remaining [text]{.underline} patterns
-  content = content:gsub("%[([^%]]+)%]%{%.underline%}", "<u>%1</u>")
-
-  -- Parse back to Pandoc document
-  return pandoc.read(content, "markdown")
-end
+-- NOTE: Removed the Pandoc() function that was doing round-trip markdown conversion
+-- because it was destroying table structures (converting <thead> to <tbody> with H1 tags).
+-- The Span() and Str() functions above are sufficient for handling underline conversion.
