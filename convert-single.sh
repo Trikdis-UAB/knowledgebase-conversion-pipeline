@@ -192,6 +192,10 @@ python3 "$SCRIPT_DIR/fix_table_structure.py" index.md
 echo "Converting HTML tables to pipe tables..."
 python3 "$SCRIPT_DIR/html-tables-to-pipes.py" index.md
 
+# Fix Vista 48 table (split 6-column table into 3 separate 2-column tables)
+echo "Fixing Vista 48 special settings table..."
+python3 "$SCRIPT_DIR/fix-vista48-table.py" index.md
+
 # Convert underline markers to HTML tags
 # The convert-underline.lua filter uses special markers (⟪U⟫ and ⟪/U⟫) that survive GFM conversion
 # Now convert them to proper <u> tags
