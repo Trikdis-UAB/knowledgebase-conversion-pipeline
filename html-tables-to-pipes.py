@@ -219,31 +219,41 @@ def flatten_rowspan_html(html_table):
                 rowspan_info = next(rc for rc in rowspan_cells
                                    if rc['row'] == row_idx and rc['col'] == 0)
 
-                # First cell is the rowspan cell (manufacturer)
-                manufacturer = ''.join(row[0]['content_parts'])
+                # First cell is the rowspan cell (e.g., Indicator name, Manufacturer)
+                first_cell_content = ''.join(row[0]['content_parts'])
 
-                # Collect model content from this row and subsequent rows
-                models = []
+                # Determine number of columns in the table
+                num_cols = len(row)
 
-                # Current row model (second cell)
-                if len(row) > 1:
-                    models.append(''.join(row[1]['content_parts']))
-
-                # Subsequent rows models
-                for r in range(1, rowspan_info['span']):
-                    next_row_idx = row_idx + r
-                    if next_row_idx < len(rows) and rows[next_row_idx]:
-                        # Get first cell from subsequent row (it's the model)
-                        next_row = rows[next_row_idx]
-                        if next_row and len(next_row) > 0:
-                            models.append(''.join(next_row[0]['content_parts']))
-
-                # Create merged row with manufacturer and joined models
+                # Collect content for all other columns from this row + subsequent rows
                 merged_row = [
-                    {'tag': row[0]['tag'], 'content': manufacturer},
-                    {'tag': row[1]['tag'] if len(row) > 1 else 'td',
-                     'content': '<br>'.join(models)}
+                    {'tag': row[0]['tag'], 'content': first_cell_content}
                 ]
+
+                # For each column after the first
+                for col_idx in range(1, num_cols):
+                    column_values = []
+
+                    # Current row value
+                    if len(row) > col_idx:
+                        column_values.append(''.join(row[col_idx]['content_parts']))
+
+                    # Subsequent rows values
+                    for r in range(1, rowspan_info['span']):
+                        next_row_idx = row_idx + r
+                        if next_row_idx < len(rows) and rows[next_row_idx]:
+                            next_row = rows[next_row_idx]
+                            # In subsequent rows, cells shift left because rowspan cell is missing
+                            cell_idx_in_next_row = col_idx - 1
+                            if len(next_row) > cell_idx_in_next_row:
+                                column_values.append(''.join(next_row[cell_idx_in_next_row]['content_parts']))
+
+                    # Add merged column to row
+                    merged_row.append({
+                        'tag': row[col_idx]['tag'] if len(row) > col_idx else 'td',
+                        'content': '<br>'.join(column_values)
+                    })
+
                 grid.append(merged_row)
             else:
                 # Normal row without rowspan

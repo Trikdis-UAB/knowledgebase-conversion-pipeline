@@ -481,6 +481,40 @@ Pagrindinis             Level 1            H2 (## Section)
 
 ## Updates
 
+### October 10, 2025 - Multi-State Table Expansion & Rowspan Fix
+
+#### Issue: Multi-State Tables with Missing Descriptions
+**Problem**: Tables with rowspan cells (like LED indication tables) were losing all columns except the first two, resulting in missing descriptions for each state.
+
+**Example**: LED indication table had 3 columns (Indicator, Light Status, Description) but only 2 were being converted, losing all the description text.
+
+**Root Cause**: The `html-tables-to-pipes.py` script's `merge_rowspan_rows()` function was hardcoded to only handle 2-column tables (manufacturer + models pattern), dropping any additional columns.
+
+**Fix**:
+- ✅ **Updated html-tables-to-pipes.py**: Rewrote rowspan merging logic to handle ANY number of columns
+- ✅ **New expand-multi-state-tables.py**: Post-processor that expands tables with `<br>` tags into separate rows
+- ✅ **Result**: Multi-state tables now expand correctly with all columns preserved
+
+**Example Output**:
+```markdown
+| Indicator | Light status | Description |
+|-----------|--------------|-------------|
+| NETWORK LTE | Off | No connection to cellular network |
+| NETWORK LTE | Yellow blinking | Connecting to cellular network |
+| NETWORK LTE | Green solid with yellow blinking | Communicator is connected to cellular network |
+```
+
+**Benefits**:
+- 100% markdown-native tables (no HTML)
+- Each state on its own row for clarity
+- Works for any table with rowspan structure
+- Preserves all column content regardless of table width
+
+**Files Modified**:
+- `html-tables-to-pipes.py` - Fixed rowspan column handling
+- `expand-multi-state-tables.py` - New script to expand multi-state rows
+- `convert-single.sh` - Integrated expand script into pipeline
+
 ### October 9, 2025 - Table Conversion Fixes (5 Issues Resolved)
 
 #### Issue 1: Tables in HTML Format Instead of Pipe Tables

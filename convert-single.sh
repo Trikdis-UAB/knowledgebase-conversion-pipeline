@@ -192,6 +192,10 @@ python3 "$SCRIPT_DIR/fix_table_structure.py" index.md
 echo "Converting HTML tables to pipe tables..."
 python3 "$SCRIPT_DIR/html-tables-to-pipes.py" index.md
 
+# Expand multi-state tables (tables with <br> tags) into separate rows
+echo "Expanding multi-state tables..."
+python3 "$SCRIPT_DIR/expand-multi-state-tables.py" index.md
+
 # Convert underline markers to HTML tags
 # The convert-underline.lua filter uses special markers (⟪U⟫ and ⟪/U⟫) that survive GFM conversion
 # Now convert them to proper <u> tags
