@@ -477,38 +477,60 @@ Pagrindinis             Level 1            H2 (## Section)
 - Add `admonition` to `markdown_extensions` in mkdocs.yml
 - Verify the table-to-admonition filter is running
 
-### Schematic images appear cut in half
+### Splitting schematic images with multiple diagrams
 - **Problem**: Some images contain multiple complete diagrams side-by-side (e.g., DSC on left, PARADOX on right)
-- **DO NOT split these images** - splitting them vertically will cut through each diagram
-- **Solution**: Use full-width images with `max-width: 100%` for responsive display
-- **Example**: Section 3.3 wiring schematics show two complete connection diagrams in one image
-- **Lesson**: Always verify image content before attempting to split or crop
+- **Solution**: Use `smart-split-schematics.py` to intelligently detect the boundary between diagrams
+- **How it works**: Analyzes pixel brightness to find the whitest column (whitespace) in the middle region of the image
+- **Result**: Clean split at the actual boundary, not through the diagrams
 
-**Tools available** (but use with caution):
-- `split-image-vertical.sh` - Bash script using macOS `sips` command
-- `split-image-vertical.py` - Python script using PIL/Pillow
-- Only use these when images genuinely contain independent content that should be separated
+**Usage**:
+```bash
+python3 smart-split-schematics.py path/to/image.png
+# Creates: image-left.png and image-right.png
+```
+
+**Responsive display** (example for GET manual images 22-25):
+```html
+<div style="max-width: 1200px; margin: 1rem auto;">
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0;">
+    <img src="./image22-left.png" alt="DSC panel" style="width: 41.2%; min-width: 300px; height: auto; border: 0;" />
+    <img src="./image22-right.png" alt="PARADOX panel" style="width: 58.8%; min-width: 300px; height: auto; border: 0;" />
+  </div>
+</div>
+```
+- **Desktop**: Side-by-side with proportional widths (no distortion)
+- **Mobile**: Stacked vertically, center-aligned (min-width: 300px triggers stacking)
 
 ---
 
 ## Updates
 
-### October 13, 2025 - Schematic Image Handling Lesson
+### October 13, 2025 - Intelligent Schematic Image Splitting
 
-**Issue**: Attempted to split wiring schematic images (section 3.3) that appeared to show two diagrams side-by-side.
+**Challenge**: Wiring schematic images (section 3.3) show two complete diagrams side-by-side (DSC left, PARADOX right) that need to be split for responsive display.
 
-**What went wrong**: The images contain complete DSC and PARADOX connection diagrams arranged horizontally. Splitting them vertically cut each schematic in half, making both diagrams unusable.
+**Initial attempt**: Splitting at 50% width cut through the middle of each diagram, making both unusable.
 
-**Solution**:
-- Reverted to full-width original images
-- Added responsive sizing with `max-width: 100%` for mobile devices
-- Created image splitting tools (bash/Python) for future use with appropriate images
+**Solution - Smart Split Algorithm**:
+- Created `smart-split-schematics.py` that analyzes pixel brightness
+- Finds the whitest column (whitespace) in the middle 40% of the image (30-70% width)
+- Splits at the detected boundary between diagrams, not through them
 
-**Tools created**:
-- `split-image-vertical.sh` - Bash script using macOS `sips` command
-- `split-image-vertical.py` - Python script using PIL/Pillow
+**Results**:
+- GET manual images: Split at 38.8%-44% (not 50%!)
+- GT manual images: Split at 32.8%-64.3% (highly variable)
+- GT+ manual images: Split at 37.2%-64.3%
+- All splits preserved complete diagrams with correct aspect ratios
 
-**Lesson learned**: Always verify image content before attempting to split. Some images showing "two diagrams" are actually two complete schematics meant to be compared side-by-side.
+**Implementation**:
+- Applied to all three manuals (GET, GT, GT+)
+- Responsive flexbox layout with proportional widths
+- Desktop: Side-by-side seamlessly (no borders)
+- Mobile: Stacked vertically, center-aligned
+
+**Dependencies**: `pip3 install Pillow numpy`
+
+**Lesson learned**: Computer vision approach beats manual splitting - let the algorithm find the boundary!
 
 ### October 10, 2025 - Multi-State Table Expansion & Rowspan Fix
 
