@@ -545,6 +545,18 @@ python3 smart-split-schematics.py path/to/image.png
 
 **Status**: The `remove-empty-table-columns.lua` filter already handles this (lines 85-111), but may not catch all cases depending on table structure. Manual review recommended for tables with separator columns.
 
+**Issue 3 - Warranty/Safety Section Removal**: Warranty and safety requirement sections were being removed with cover page instead of relocated.
+
+**Solution**: Activated `relocate-warranty.lua` filter
+- Runs FIRST in pipeline (before strip-cover.lua)
+- Extracts warranty/safety sections from beginning of document
+- Relocates to bottom, BEFORE Annex section (if present)
+- Falls back to end of document if no Annex
+- Multi-language support (EN, LT, ES, RU)
+- See `WARRANTY_RELOCATION.md` for full details
+
+**Result**: Every DOCX conversion now automatically preserves and correctly positions warranty/safety sections.
+
 **Lesson learned**: Computer vision approach beats manual splitting - let the algorithm find the boundary!
 
 ### October 10, 2025 - Multi-State Table Expansion & Rowspan Fix
