@@ -39,6 +39,7 @@ pandoc "$inp" \
   --extract-media="." \
   --wrap=none \
   --markdown-headings=atx \
+  --lua-filter="$SCRIPT_DIR/relocate-warranty.lua" \
   --lua-filter="$SCRIPT_DIR/strip-cover.lua" \
   --lua-filter="$SCRIPT_DIR/strip-toc.lua" \
   --lua-filter="$SCRIPT_DIR/promote-strong-top.lua" \
