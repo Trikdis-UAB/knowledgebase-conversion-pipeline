@@ -212,6 +212,9 @@ python3 "$SCRIPT_DIR/reduce-spacing.py" index.md
 # Remove empty headers (headers with only whitespace)
 python3 "$SCRIPT_DIR/remove-empty-headers.py" index.md
 
+# Fix disposal icon placement in Safety requirements
+python3 "$SCRIPT_DIR/fix-disposal-icon.py" index.md
+
 # Fix table spacing: ensure blank line before tables
 python3 "$SCRIPT_DIR/fix-table-spacing.py" index.md
 
