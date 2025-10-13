@@ -50,6 +50,7 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/unwrap-table-blockquotes.lua" \
   --lua-filter="$SCRIPT_DIR/normalize-headings.lua" \
   --lua-filter="$SCRIPT_DIR/strip-manual-heading-numbers.lua" \
+  --lua-filter="$SCRIPT_DIR/promote-centered-bold.lua" \
   --lua-filter="$SCRIPT_DIR/move-first-image-to-description.lua" \
   --lua-filter="$SCRIPT_DIR/split-inline-images.lua" \
   --lua-filter="$SCRIPT_DIR/convert-image-sizes.lua" \
@@ -206,6 +207,9 @@ python3 "$SCRIPT_DIR/normalize-callouts.py" index.md
 python3 "$SCRIPT_DIR/fix-relative-images.py" index.md
 python3 "$SCRIPT_DIR/fix-list-continuity.py" index.md
 python3 "$SCRIPT_DIR/reduce-spacing.py" index.md
+
+# Remove empty headers (headers with only whitespace)
+python3 "$SCRIPT_DIR/remove-empty-headers.py" index.md
 
 # Fix table spacing: ensure blank line before tables
 python3 "$SCRIPT_DIR/fix-table-spacing.py" index.md

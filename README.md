@@ -505,7 +505,9 @@ python3 smart-split-schematics.py path/to/image.png
 
 ## Updates
 
-### October 13, 2025 - Intelligent Schematic Image Splitting
+### October 13, 2025 - Intelligent Schematic Image Splitting & Pipeline Fixes
+
+**Schematic Image Splitting**:
 
 **Challenge**: Wiring schematic images (section 3.3) show two complete diagrams side-by-side (DSC left, PARADOX right) that need to be split for responsive display.
 
@@ -529,6 +531,19 @@ python3 smart-split-schematics.py path/to/image.png
 - Mobile: Stacked vertically, center-aligned
 
 **Dependencies**: `pip3 install Pillow numpy`
+
+**Pipeline Fixes**:
+
+**Issue 1 - Empty Headers**: Some DOCX files produce empty markdown headers (`####  ` with only whitespace).
+
+**Solution**: Added `remove-empty-headers.py` post-processor
+- Detects and removes headers with only whitespace
+- Prevents empty section headings in output
+- Runs after spacing normalization
+
+**Issue 2 - Single-Character Separator Columns**: Some tables have "S" or similar single-character columns that are visual separators.
+
+**Status**: The `remove-empty-table-columns.lua` filter already handles this (lines 85-111), but may not catch all cases depending on table structure. Manual review recommended for tables with separator columns.
 
 **Lesson learned**: Computer vision approach beats manual splitting - let the algorithm find the boundary!
 
