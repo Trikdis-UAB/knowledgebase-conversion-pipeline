@@ -477,9 +477,38 @@ Pagrindinis             Level 1            H2 (## Section)
 - Add `admonition` to `markdown_extensions` in mkdocs.yml
 - Verify the table-to-admonition filter is running
 
+### Schematic images appear cut in half
+- **Problem**: Some images contain multiple complete diagrams side-by-side (e.g., DSC on left, PARADOX on right)
+- **DO NOT split these images** - splitting them vertically will cut through each diagram
+- **Solution**: Use full-width images with `max-width: 100%` for responsive display
+- **Example**: Section 3.3 wiring schematics show two complete connection diagrams in one image
+- **Lesson**: Always verify image content before attempting to split or crop
+
+**Tools available** (but use with caution):
+- `split-image-vertical.sh` - Bash script using macOS `sips` command
+- `split-image-vertical.py` - Python script using PIL/Pillow
+- Only use these when images genuinely contain independent content that should be separated
+
 ---
 
 ## Updates
+
+### October 13, 2025 - Schematic Image Handling Lesson
+
+**Issue**: Attempted to split wiring schematic images (section 3.3) that appeared to show two diagrams side-by-side.
+
+**What went wrong**: The images contain complete DSC and PARADOX connection diagrams arranged horizontally. Splitting them vertically cut each schematic in half, making both diagrams unusable.
+
+**Solution**:
+- Reverted to full-width original images
+- Added responsive sizing with `max-width: 100%` for mobile devices
+- Created image splitting tools (bash/Python) for future use with appropriate images
+
+**Tools created**:
+- `split-image-vertical.sh` - Bash script using macOS `sips` command
+- `split-image-vertical.py` - Python script using PIL/Pillow
+
+**Lesson learned**: Always verify image content before attempting to split. Some images showing "two diagrams" are actually two complete schematics meant to be compared side-by-side.
 
 ### October 10, 2025 - Multi-State Table Expansion & Rowspan Fix
 
