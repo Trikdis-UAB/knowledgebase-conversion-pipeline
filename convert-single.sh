@@ -42,13 +42,14 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/relocate-warranty.lua" \
   --lua-filter="$SCRIPT_DIR/strip-cover.lua" \
   --lua-filter="$SCRIPT_DIR/strip-toc.lua" \
-  --lua-filter="$SCRIPT_DIR/promote-strong-top.lua" \
   --lua-filter="$SCRIPT_DIR/map-docx-heading-levels.lua" \
   --lua-filter="$SCRIPT_DIR/fix-numbered-heading-levels.lua" \
+  --lua-filter="$SCRIPT_DIR/promote-strong-top.lua" \
   --lua-filter="$SCRIPT_DIR/remove-table-widths.lua" \
   --lua-filter="$SCRIPT_DIR/filters/flatten-two-cell-tables.lua" \
   --lua-filter="$SCRIPT_DIR/flatten-instruction-tables.lua" \
   --lua-filter="$SCRIPT_DIR/unwrap-table-blockquotes.lua" \
+  --lua-filter="$SCRIPT_DIR/convert-image-tables.lua" \
   --lua-filter="$SCRIPT_DIR/normalize-headings.lua" \
   --lua-filter="$SCRIPT_DIR/strip-manual-heading-numbers.lua" \
   --lua-filter="$SCRIPT_DIR/promote-centered-bold.lua" \
@@ -60,12 +61,15 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/clean-table-pipes.lua" \
   --lua-filter="$SCRIPT_DIR/mark-two-col.lua" \
   --lua-filter="$SCRIPT_DIR/convert-underline.lua" \
+  --lua-filter="$SCRIPT_DIR/convert-blockquote-headings.lua" \
   --lua-filter="$SCRIPT_DIR/remove-unwanted-blockquotes.lua" \
   --lua-filter="$SCRIPT_DIR/maintain-list-continuity.lua" \
   --lua-filter="$SCRIPT_DIR/strip-classes.lua" \
   --lua-filter="$SCRIPT_DIR/fix-typography.lua" \
+  --lua-filter="$SCRIPT_DIR/fix-html-tags.lua" \
   --lua-filter="$SCRIPT_DIR/fix-crossrefs.lua" \
   --lua-filter="$SCRIPT_DIR/remove-standalone-asterisks.lua" \
+  --lua-filter="$SCRIPT_DIR/fix-admonition-lists.lua" \
   --lua-filter="$SCRIPT_DIR/clean-html-blocks.lua"
 
 # If Pandoc made ./media/, flatten to current folder and fix links
@@ -84,6 +88,10 @@ fi
 
 # Fix any remaining error references
 sed -i '' 's/Error! Reference source not found\./see the referenced section/g' index.md
+
+# Fix SP3-style H2 title with bold to H1 without bold (if at start of document)
+# Pattern: ## **Title** → # Title (only for first heading)
+sed -i '' '1,/^##/{s/^## \*\*\([^*]*\)\*\*$/# \1/;}' index.md
 
 # Convert first markdown image to centered HTML with width=400 (before Description heading)
 sed -i '' '1,/^## Description/{ s#^!\[GT Cellular Communicator\](./image1.png)$#<div style="text-align: center;">\n  <img src="./image1.png" alt="GT Cellular Communicator" width="400">\n</div>#; }' index.md
@@ -147,6 +155,8 @@ sed -i '' 's/^Connects to the control panel'\''s serial or keyboard bus or telep
 sed -i '' 's/^# \(.*\)$/## \1/g' index.md
 sed -i '' 's/^## \(.*Alarm Panel\)$/# \1/g' index.md
 sed -i '' 's/^## \(.*Cellular Communicator\)$/# \1/g' index.md
+sed -i '' 's/^## \(.*Gate Controller\)$/# \1/g' index.md
+sed -i '' 's/^## \(.*control panel.*\)$/# \1/g' index.md
 
 # Fix heading hierarchy using Word classes and numbered headings
 # - Python script handles unnumbered headings with Word classes (.2-Po-Pag)

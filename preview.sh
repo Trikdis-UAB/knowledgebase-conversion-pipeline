@@ -52,9 +52,12 @@ if [ -d "$WIP_DIR" ]; then
   for manual_link in "$WIP_DIR"/*; do
     if [ -L "$manual_link" ] || [ -d "$manual_link" ]; then
       manual_name=$(basename "$manual_link")
-      if [ -f "$manual_link/index.md" ]; then
-        manual_path="wip/$manual_name/index.md"
-        WIP_NAV="$WIP_NAV"$'\n'"      - $manual_name: $manual_path"
+      # Check for nested structure (e.g., gt-cellular/GT UM_ENG_2025 09 11/index.md)
+      index_file=$(find "$manual_link" -name "index.md" -type f 2>/dev/null | head -1)
+      if [ -n "$index_file" ]; then
+        # Get relative path from WIP dir
+        manual_path=$(echo "$index_file" | sed "s|$WIP_DIR/||")
+        WIP_NAV="$WIP_NAV"$'\n'"      - $manual_name: wip/$manual_path"
       fi
     fi
   done

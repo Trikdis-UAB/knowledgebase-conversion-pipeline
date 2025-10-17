@@ -44,24 +44,38 @@ def fix_admonitions(content):
 
         elif match_admon:
             # Content on next line - process it
-            result.append(line)  # Add the !!! note line
+            admonition_line = line  # Store original !!! note line
 
             # Look ahead for content lines starting with >
             i += 1
+            content_lines = []
             while i < len(lines) and (lines[i].startswith('>') or lines[i].strip() == ''):
                 if lines[i].startswith('> '):
-                    # Remove > and add proper indentation
-                    result.append(f"    {lines[i][2:]}")
+                    # Remove > and collect content
+                    content_lines.append(lines[i][2:])
                 elif lines[i].startswith('>'):
                     # Just > with content directly (or empty >)
                     if lines[i] == '>':
-                        result.append('')
+                        content_lines.append('')
                     else:
-                        result.append(f"    {lines[i][1:]}")
+                        content_lines.append(lines[i][1:])
                 elif lines[i].strip() == '':
                     # Empty line within admonition
-                    result.append('')
+                    content_lines.append('')
                 i += 1
+
+            # Check if first content line is a quoted title
+            if content_lines and re.match(r'^\s*"([^"]+)"\s*$', content_lines[0].strip()):
+                quoted_title = content_lines[0].strip()
+                # Add title to admonition line
+                admonition_line = f"{admonition_line} {quoted_title}"
+                # Remove the quoted title from content
+                content_lines = content_lines[1:]
+
+            # Output the admonition
+            result.append(admonition_line)
+            for content_line in content_lines:
+                result.append(f"    {content_line}")
 
             # Add an empty line after the admonition
             result.append('')
