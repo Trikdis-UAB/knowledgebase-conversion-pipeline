@@ -12,7 +12,7 @@ Convert product manuals from **.docx** to clean **Markdown** with correct headin
   ```bash
   brew install pandoc
   ```
-* All Lua filters included in this project (24 filters total)
+* All Lua filters included in this project (43 filters total)
 
 ---
 
@@ -33,35 +33,39 @@ Convert product manuals from **.docx** to clean **Markdown** with correct headin
 * **Stable image URLs**: Forces `./image.png` paths so assets render even when served without trailing slashes
 
 ### Lua Filters (Applied in Order)
-The pipeline applies 24 specialized filters to clean and normalize Word documents:
+The pipeline applies 43 specialized filters to clean and normalize Word documents:
 
 1. **strip-cover.lua**: Removes cover page content but preserves product name (e.g., "Cellular communicator GT+") for title generation
 2. **strip-toc.lua**: Removes Word's Table of Contents sections
-3. **promote-strong-top.lua**: Extracts product name from bold text and creates H1 title in format "[MODEL] Cellular Communicator"
+3. **promote-strong-top.lua**: Extracts product name from bold text and creates H1 title in format "[MODEL] Product Type" (supports Cellular Communicator, Gate Controller, Control Panel, Alarm Panel)
 4. **map-docx-heading-levels.lua**: Maps DOCX Word style classes to correct markdown heading levels (H1→H2, H2→H3, H3→H4)
 5. **fix-numbered-heading-levels.lua**: Fixes numbered heading levels (works with map-docx-heading-levels)
 6. **remove-table-widths.lua**: Removes table widths and merges multi-line cells for pipe table compatibility
 7. **flatten-two-cell-tables.lua**: Flattens simple two-cell tables (single row)
 8. **flatten-instruction-tables.lua**: Flattens multi-row instruction tables (text + image per row)
 9. **unwrap-table-blockquotes.lua**: Removes blockquote wrappers from table cells
-10. **fix-rowspan-headers.lua**: Fixes malformed rowspan table headers by splitting header from data
-11. **normalize-headings.lua**: Promotes multi-level numbers (1.1, 1.1.1) to proper heading levels
-12. **strip-manual-heading-numbers.lua**: Removes manual heading numbers for clean output
-13. **move-first-image-to-description.lua**: Positions first image properly
-14. **split-inline-images.lua**: Separates inline images for proper display
-15. **convert-image-sizes.lua**: Converts image sizes to HTML with CSS
-16. **softwrap-tokens.lua**: Handles text wrapping
-17. **remove-empty-table-columns.lua**: Removes empty separator columns from tables (e.g., single-char "S" columns with no data)
-18. **clean-table-pipes.lua**: Fixes table pipe characters
-19. **mark-two-col.lua**: Marks two-column tables for processing
-20. **convert-underline.lua**: Converts underline formatting
-21. **remove-unwanted-blockquotes.lua**: Removes spurious blockquotes
-22. **maintain-list-continuity.lua**: Ensures numbered lists continue correctly across interruptions
-23. **strip-classes.lua**: Removes Word styling classes like `{.underline}`
-24. **fix-typography.lua**: Converts backticks to proper apostrophes
-25. **fix-crossrefs.lua**: Replaces "Error! Reference source not found" with "see the referenced section"
-26. **remove-standalone-asterisks.lua**: Removes standalone `****` markers while preserving them in tables
-27. **clean-html-blocks.lua**: Cleans HTML block structures
+10. **convert-image-tables.lua**: Converts tables containing only images to responsive CSS grid layouts
+11. **fix-rowspan-headers.lua**: Fixes malformed rowspan table headers by splitting header from data
+12. **normalize-headings.lua**: Promotes multi-level numbers (1.1, 1.1.1) to proper heading levels
+13. **strip-manual-heading-numbers.lua**: Removes manual heading numbers for clean output
+14. **move-first-image-to-description.lua**: Positions first image properly
+15. **split-inline-images.lua**: Separates inline images for proper display
+16. **convert-image-sizes.lua**: Converts image sizes to HTML with CSS
+17. **softwrap-tokens.lua**: Handles text wrapping
+18. **remove-empty-table-columns.lua**: Removes empty separator columns from tables (e.g., single-char "S" columns with no data)
+19. **clean-table-pipes.lua**: Fixes table pipe characters
+20. **mark-two-col.lua**: Marks two-column tables for processing
+21. **convert-underline.lua**: Converts underline formatting
+22. **convert-blockquote-headings.lua**: Converts blockquote-wrapped headings (e.g., `> **Title**`) to proper markdown headings
+23. **remove-unwanted-blockquotes.lua**: Removes spurious blockquotes and feature descriptions incorrectly wrapped as blockquotes
+24. **maintain-list-continuity.lua**: Ensures numbered lists continue correctly across interruptions
+25. **strip-classes.lua**: Removes Word styling classes like `{.underline}`
+26. **fix-typography.lua**: Converts backticks to proper apostrophes and removes empty bold formatting
+27. **fix-html-tags.lua**: Converts HTML subscript/superscript tags (e.g., `<sub>space</sub>`) to bracketed code format (e.g., `[space]`)
+28. **fix-crossrefs.lua**: Replaces "Error! Reference source not found" with "see the referenced section"
+29. **fix-admonition-lists.lua**: Fixes broken list numbering in admonitions (resets start to 1)
+30. **remove-standalone-asterisks.lua**: Removes standalone `****` markers while preserving them in tables
+31. **clean-html-blocks.lua**: Cleans HTML block structures
 
 ---
 
@@ -302,13 +306,16 @@ knowledgebase-conversion-pipeline/
 ├── convert-single.sh           # Convert single DOCX → folder/index.md
 ├── convert-batch.sh            # Convert all DOCX files
 │
-├── Lua Filters (24 total):
+├── Lua Filters (43 total):
 ├── strip-cover.lua                      # Remove cover pages (preserve product name)
 ├── strip-toc.lua                        # Remove Table of Contents
-├── promote-strong-top.lua               # Extract product name and create H1 title
+├── promote-strong-top.lua               # Extract product name, create H1 (supports gate controllers)
+├── map-docx-heading-levels.lua          # Map DOCX styles to heading levels
+├── fix-numbered-heading-levels.lua      # Fix numbered heading levels
 ├── flatten-two-cell-tables.lua          # Flatten simple tables
 ├── flatten-instruction-tables.lua       # Flatten multi-row instruction tables
 ├── unwrap-table-blockquotes.lua         # Remove blockquote wrappers from table cells
+├── convert-image-tables.lua             # Convert image-only tables to CSS grids (NEW)
 ├── fix-rowspan-headers.lua              # Fix malformed rowspan table headers
 ├── normalize-headings.lua               # Fix heading levels for numbered sections
 ├── strip-manual-heading-numbers.lua     # Remove manual heading numbers
@@ -320,11 +327,14 @@ knowledgebase-conversion-pipeline/
 ├── clean-table-pipes.lua                # Fix table pipe characters
 ├── mark-two-col.lua                     # Mark two-column tables
 ├── convert-underline.lua                # Convert underline formatting
-├── remove-unwanted-blockquotes.lua      # Remove spurious blockquotes
+├── convert-blockquote-headings.lua      # Convert blockquote headings to proper headers (NEW)
+├── remove-unwanted-blockquotes.lua      # Remove spurious blockquotes and feature descriptions
 ├── maintain-list-continuity.lua         # Fix numbered list continuity
 ├── strip-classes.lua                    # Remove Word styling classes
-├── fix-typography.lua                   # Fix apostrophes and quotes
+├── fix-typography.lua                   # Fix apostrophes, quotes, empty bold formatting
+├── fix-html-tags.lua                    # Convert HTML sub/sup to bracketed format (NEW)
 ├── fix-crossrefs.lua                    # Fix broken cross-references
+├── fix-admonition-lists.lua             # Fix broken list numbering in admonitions (NEW)
 ├── remove-standalone-asterisks.lua      # Remove standalone **** markers
 ├── clean-html-blocks.lua                # Clean HTML blocks
 ├── remove-table-widths.lua              # Remove table widths and merge multi-line cells
@@ -504,6 +514,59 @@ python3 smart-split-schematics.py path/to/image.png
 ---
 
 ## Updates
+
+### October 16, 2025 - SP3 Manual Conversion & Gate Controller Support
+
+**SP3 Control Panel Manual** - First successful conversion of a control panel manual (non-cellular communicator product):
+
+**8 Issues Identified and Fixed:**
+1. ✅ **Missing H1 Title** - Added pattern to convert control panel titles to H1
+2. ✅ **Empty Bold Formatting** - Extended `fix-typography.lua` to remove `**  **` artifacts
+3. ✅ **Blockquotes Misused as Headings** - Created `convert-blockquote-headings.lua` filter
+4. ✅ **HTML Subscript Tags** - Created `fix-html-tags.lua` to convert `<sub>space</sub>` to `[space]`
+5. ✅ **Admonition List Numbering** - Created `fix-admonition-lists.lua` to reset list starts to 1
+6. ✅ **Quoted Admonition Titles** - Enhanced `fix_admonitions.py` to move quoted titles to declaration
+7. ✅ **Feature Description Blockquotes** - Extended `remove-unwanted-blockquotes.lua` with 5 new patterns
+8. ✅ **Image-Only Tables** - Created `convert-image-tables.lua` for responsive CSS grid layouts
+
+**4 New Filters Created:**
+- `convert-blockquote-headings.lua` - Converts blockquote headings to proper markdown headers
+- `fix-html-tags.lua` - Converts HTML subscript/superscript to bracketed code format
+- `fix-admonition-lists.lua` - Resets list numbering inside admonitions
+- `convert-image-tables.lua` - Converts image-only tables to responsive grids
+
+**3 Existing Filters Extended:**
+- `fix-typography.lua` - Added empty bold removal
+- `promote-strong-top.lua` - Added H2→H1 logic for SP3-style docs
+- `remove-unwanted-blockquotes.lua` - Added 5 feature description patterns
+
+**Gate Controller Support Added:**
+- ✅ Pattern recognition for "GSM gate controller [MODEL]" products
+- ✅ Automatic H1 title generation (e.g., "# GATOR Gate Controller")
+- ✅ Cover image positioning for gate controller manuals
+- ✅ Tested with GATOR manual - full compatibility confirmed
+
+**Manuals Converted Successfully:**
+- SP3 Control Panel (SP3_TAIM_EN_2025 09 12) - 1542 lines, 75 images
+- GT Cellular Communicator (GT UM_ENG_2025 09 11) - 59 images, 6 multi-state tables
+- GT+ Cellular Communicator (GT+ UM_ENG_2025 09 11) - 60 images, 6 multi-state tables
+- GET Cellular Communicator (GET UM_ENG_2025 09 03) - 59 images, split schematics
+- Gator Gate Controller (GATOR_UM_ENG_2025 10 16) - 76 images, 3 multi-state tables
+
+**Filter Count Update:**
+- Increased from 39 to 43 total filters (4 new + 3 extended = 7 enhancements)
+
+**Generic Compatibility:**
+All filters designed to work with:
+- Cellular Communicators (GT, GT+, GET)
+- Gate Controllers (Gator)
+- Control Panels (SP3)
+- Future TRIKDIS product manuals
+
+**Documentation:**
+- `SP3_IMPLEMENTATION_SUMMARY.md` - Complete implementation details
+- `SP3_CONVERSION_ISSUES.md` - Issue analysis and solutions
+- `NEXT_SESSION_TASKS.md` - Image split validation system (priority task)
 
 ### October 13, 2025 - Intelligent Schematic Image Splitting & Pipeline Fixes
 
