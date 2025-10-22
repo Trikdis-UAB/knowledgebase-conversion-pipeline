@@ -143,6 +143,10 @@ perl -i -0777 -pe 's/<div>[\s\n]*<img\s+src="(?:\.\/)?(image[1-5]\.png)"[^>]*wid
 # Fix title formatting - make "Works with Protegus2 app:" bold like other titles
 sed -i '' 's/^Works with Protegus2 app:/**Works with Protegus2 app:**/g' index.md
 
+# Fix title formatting - make "Reporting to the security company's central monitoring station (CMS):" bold
+# Wrap the entire line with ** at both start and end
+sed -i '' 's/^Reporting to the security company.*central monitoring station (CMS):/**&**/' index.md
+
 # Fix Features section structure - change from bold to H3 (subsection) and make first line bold
 sed -i '' 's/^\*\*Features\*\*$/### Features/g' index.md
 sed -i '' 's/^Connects to the control panel'\''s serial or keyboard bus or telephone line (TIP\/RING)\.$/\*\*Connects to the control panel'\''s serial or keyboard bus or telephone line (TIP\/RING).\*\*/g' index.md

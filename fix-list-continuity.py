@@ -26,35 +26,39 @@ def fix_list_continuity(content):
 
             # If this starts at 1 and we were already in a list, check if we should continue
             if list_num == 1 and in_list:
-                # Look back for images in the last few lines
-                found_image_recently = False
-                for j in range(max(0, i-5), i):
-                    if j < len(lines):
-                        prev_line = lines[j]
-                        if ('<img ' in prev_line or
-                            prev_line.strip().startswith('![') or
-                            prev_line.strip().startswith('<img')):
-                            found_image_recently = True
-                            break
-
-                # Also check for section breaks that should reset numbering
-                found_section_break = False
+                # Look back for images or admonitions in the last few lines
+                found_continuation_context = False
                 for j in range(max(0, i-10), i):
                     if j < len(lines):
                         prev_line = lines[j]
-                        if (prev_line.startswith('###') or
-                            prev_line.startswith('***') or
-                            'window:' in prev_line.lower() or
-                            'settings' in prev_line.lower() and ('**' in prev_line or 'window' in prev_line)):
-                            # Check if this is a new configuration section
-                            if any(keyword in prev_line.lower() for keyword in ['system settings', 'cms reporting', 'sim card']):
-                                found_section_break = False  # These should continue numbering
-                                break
-                            else:
-                                found_section_break = True
-                                break
+                        # Check for images
+                        if ('<img ' in prev_line or
+                            prev_line.strip().startswith('![') or
+                            prev_line.strip().startswith('<img')):
+                            found_continuation_context = True
+                            break
+                        # Check for admonitions (both !!! and > [! formats)
+                        if (prev_line.strip().startswith('!!!') or
+                            prev_line.strip().startswith('> [!')):
+                            found_continuation_context = True
+                            break
+                        # Check for indented list items (inside admonitions)
+                        if re.match(r'^\s{4,}\d+\.\s+', prev_line):
+                            found_continuation_context = True
+                            break
 
-                if found_image_recently and not found_section_break:
+                # Check for headings that should reset numbering
+                found_heading = False
+                for j in range(max(0, i-10), i):
+                    if j < len(lines):
+                        prev_line = lines[j]
+                        # ANY heading (##, ###, ####, etc.) resets numbering
+                        if prev_line.strip().startswith('#'):
+                            found_heading = True
+                            break
+
+                # User's algorithm: continue numbering unless there was a heading
+                if found_continuation_context and not found_heading:
                     # Continue the numbering
                     current_list_num += 1
                     line = f"{current_list_num}. {list_text}"
@@ -67,10 +71,9 @@ def fix_list_continuity(content):
             in_list = True
 
         else:
-            # Check for major section breaks that should reset list tracking
-            if (line.startswith('###') or
-                line.startswith('##') or
-                line.startswith('***')):
+            # Check for headings that should reset list tracking
+            # User's algorithm: ANY heading resets list numbering
+            if line.strip().startswith('#'):
                 in_list = False
                 current_list_num = 0
 

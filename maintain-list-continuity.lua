@@ -1,14 +1,15 @@
 -- maintain-list-continuity.lua
 -- Maintains numbered list continuity across interruptions (images, headers, etc.)
--- This filter preserves semantic markdown while ensuring proper numbering sequence
+-- Algorithm: "if there is a singular numbered item, it is a part of a previous list,
+--            unless there was a new heading, then this is a new list"
 
 local list_state = {
     counter = 0,
     in_continuous_list = false,
-    section_context = ""
+    last_was_admonition = false  -- Track if previous list was inside admonition
 }
 
--- Patterns that indicate list continuation context
+-- Patterns that indicate list continuation context (images, short context text)
 local CONTINUATION_PATTERNS = {
     "^In \".*\" window",
     "^%*%*In \".*\" window",
@@ -16,16 +17,6 @@ local CONTINUATION_PATTERNS = {
     "window:",
     "tab:",
     "group"
-}
-
--- Patterns that indicate major section breaks (reset numbering)
-local RESET_PATTERNS = {
-    "^###", -- H3 headers
-    "^##",  -- H2 headers
-    "%*%*%*[%w%s]+%*%*%*", -- ***SECTION*** format (anywhere in text)
-    "After finishing configuration",
-    "Installation and wiring",
-    "Programming the control panel"
 }
 
 -- Helper: Check if element is a list interruption (continue context)
@@ -60,13 +51,22 @@ local function is_list_interruption(elem)
 end
 
 -- Helper: Check if we should reset list numbering
+-- User's algorithm: ANY heading resets list numbering
 local function should_reset_list(elem)
-    if elem.t == "Header" and elem.level <= 3 then
+    -- ANY heading (H2, H3, H4, H5, H6) resets numbering
+    if elem.t == "Header" then
         return true
-    elseif elem.t == "Para" then
-        local text = pandoc.utils.stringify(elem)
-        for _, pattern in ipairs(RESET_PATTERNS) do
-            if text:match(pattern) then
+    end
+    return false
+end
+
+-- Helper: Check if element is an admonition (note, warning, tip, etc.)
+local function is_admonition(elem)
+    if elem.t == "Div" then
+        -- Pandoc represents admonitions as Div elements
+        for _, class in ipairs(elem.classes or {}) do
+            if class == "note" or class == "warning" or class == "tip" or
+               class == "important" or class == "caution" then
                 return true
             end
         end
@@ -74,87 +74,81 @@ local function should_reset_list(elem)
     return false
 end
 
--- Helper: Detect section context for smarter continuation
-local function get_section_context(elem)
-    if elem.t == "Para" then
-        local text = pandoc.utils.stringify(elem)
-        if text:match("Settings for connection with") then
-            return text
-        elseif text:match("In \".*\" window") then
-            return text
-        end
-    elseif elem.t == "Header" then
-        return pandoc.utils.stringify(elem)
+-- Helper: Check if admonition contains an ordered list
+local function admonition_has_list(elem)
+    if not is_admonition(elem) then
+        return false
     end
-    return ""
+
+    -- Check if any content block is an OrderedList
+    for _, block in ipairs(elem.content or {}) do
+        if block.t == "OrderedList" then
+            return true
+        end
+    end
+    return false
 end
 
 -- Main filter function
+-- Implements user's algorithm: "if there is a singular numbered item, it is a part
+-- of a previous list, unless there was a new heading, then this is a new list"
 function Pandoc(doc)
     local new_blocks = {}
 
     for i, elem in ipairs(doc.blocks) do
-        -- Update section context
-        local context = get_section_context(elem)
-        if context ~= "" then
-            list_state.section_context = context
-        end
+        if elem.t == "Header" then
+            -- ANY heading resets list numbering
+            list_state.in_continuous_list = false
+            list_state.counter = 0
+            list_state.last_was_admonition = false
+            table.insert(new_blocks, elem)
 
-        if elem.t == "OrderedList" then
+        elseif elem.t == "OrderedList" then
+            -- Handle ordered lists
             if list_state.in_continuous_list then
                 -- Continue numbering from where we left off
-                list_state.counter = list_state.counter + #elem.content
-                elem.start = list_state.counter - #elem.content + 1
-
+                local start_num = list_state.counter + 1
+                elem.start = start_num
+                list_state.counter = start_num + #elem.content - 1
             else
                 -- Start new list sequence
                 list_state.in_continuous_list = true
                 list_state.counter = #elem.content
-                elem.start = elem.start or 1
-
+                elem.start = 1
             end
-
+            list_state.last_was_admonition = false
             table.insert(new_blocks, elem)
 
-        elseif should_reset_list(elem) then
-            -- Reset list tracking for major sections
-            list_state.in_continuous_list = false
-            list_state.counter = 0
-            list_state.section_context = ""
-
+        elseif is_admonition(elem) then
+            -- Process admonitions - they may contain lists
+            if admonition_has_list(elem) then
+                -- Find and update the list inside the admonition
+                for _, block in ipairs(elem.content or {}) do
+                    if block.t == "OrderedList" then
+                        if list_state.in_continuous_list then
+                            -- Continue from previous list
+                            local start_num = list_state.counter + 1
+                            block.start = start_num
+                            list_state.counter = start_num + #block.content - 1
+                        else
+                            -- Start new sequence
+                            list_state.in_continuous_list = true
+                            list_state.counter = #block.content
+                            block.start = 1
+                        end
+                        list_state.last_was_admonition = true
+                    end
+                end
+            end
             table.insert(new_blocks, elem)
 
         elseif is_list_interruption(elem) then
-            -- Keep list context active but don't reset
+            -- Images, short context text, etc. - keep list context active
             table.insert(new_blocks, elem)
 
         else
-            -- Check if this element should break list context
-            local text = pandoc.utils.stringify(elem)
-
-            -- Continue context for empty elements, notes, etc.
-            if text:match("^%s*$") or
-               text:match("^!!! note") or
-               text:match("After finishing configuration") or
-               elem.t == "CodeBlock" or
-               elem.t == "Div" then
-                -- Keep context
-            else
-                -- Check for major section breaks (like "MAJOR SECTION BREAK")
-                if text:match("MAJOR.*SECTION.*BREAK") or
-                   text:match("SECTION BREAK") then
-                    list_state.in_continuous_list = false
-                    list_state.counter = 0
-                -- For other substantial content, be conservative
-                elseif #text > 100 and
-                   not text:match("settings") and
-                   not text:match("window") and
-                   not text:match("configuration") then
-                    list_state.in_continuous_list = false
-                    list_state.counter = 0
-                end
-            end
-
+            -- Any other element (paragraphs, code blocks, etc.)
+            -- Keep list context active unless it's substantial content
             table.insert(new_blocks, elem)
         end
     end
