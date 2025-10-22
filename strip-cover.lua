@@ -1,9 +1,10 @@
 -- strip-cover.lua
--- Removes cover page content but preserves product name for title generation
+-- Removes cover page content but preserves product name and cover image
 -- Handles multiple product name formats:
 -- 1. "Cellular communicator [MODEL]" (GT/GT+)
 -- 2. "Cellular/Ethernet communicator [MODEL]" (GET)
--- 3. Other communicator types
+-- 3. "Control panel [MODEL]" (SP3)
+-- 4. Other communicator/controller/panel types
 
 local S = pandoc.utils.stringify
 
@@ -11,14 +12,19 @@ function Pandoc(doc)
   local out = {}
   local started = false
   local product_name_saved = false
+  local cover_image_saved = false
 
   for _, b in ipairs(doc.blocks) do
     if not started then
+      -- Preserve first image (cover photo) for move-first-image-to-description.lua
+      if not cover_image_saved and b.t == "Para" and #b.c == 1 and b.c[1].t == "Image" then
+        table.insert(out, b)
+        cover_image_saved = true
       -- Preserve first bold paragraph (product name) for promote-strong-top.lua
-      if not product_name_saved and b.t == "Para" and #b.c == 1 and b.c[1].t == "Strong" then
+      elseif not product_name_saved and b.t == "Para" and #b.c == 1 and b.c[1].t == "Strong" then
         local txt = S(b.c[1])
 
-        -- Check for various communicator patterns
+        -- Check for various product type patterns
         if txt:match("[Cc]ommunicator") or txt:match("[Cc]ontroller") or txt:match("[Pp]anel") then
           table.insert(out, b)
           product_name_saved = true

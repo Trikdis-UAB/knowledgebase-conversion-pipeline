@@ -1,12 +1,13 @@
 -- move-first-image-to-description.lua
--- Move the first image in the document to immediately after the "Description" heading
+-- Move the first image to immediately after the H1 title (before Description heading)
 
 local first_image = nil
 local first_image_index = nil
-local description_heading_index = nil
+local h1_index = nil
+local description_index = nil
 local blocks = {}
 
--- First pass: collect all blocks and find the first image and Description heading
+-- First pass: collect all blocks and find the first image, H1 title, and Description heading
 function Pandoc(doc)
   blocks = doc.blocks
 
@@ -29,28 +30,52 @@ function Pandoc(doc)
       end
     end
 
-    -- Find Description heading (level 2)
-    if block.t == "Header" and block.level == 2 then
-      local heading_text = pandoc.utils.stringify(block.content):lower()
-      if heading_text:match("description") then
-        description_heading_index = i
+    -- Find H1 heading (the product title)
+    if not h1_index and block.t == "Header" and block.level == 1 then
+      h1_index = i
+    end
+
+    -- Find Description heading (can be H1 or H2 depending on DOCX structure)
+    if not description_index and block.t == "Header" and (block.level == 1 or block.level == 2) then
+      local text = pandoc.utils.stringify(block.content)
+      if text == "Description" then
+        description_index = i
       end
     end
   end
 
-  -- If we found both the first image and the Description heading
-  if first_image and first_image_index and description_heading_index then
-    -- Check if image is already before Description heading
-    local already_positioned = (first_image_index == description_heading_index - 1)
+  -- If we found the first image and either the Description heading or H1
+  if first_image and first_image_index then
+    local target_position
 
-    if not already_positioned then
-      -- Remove the image from its current position
+    if description_index then
+      -- Preferred: Position before Description heading
+      -- First remove the image from wherever it is
       table.remove(blocks, first_image_index)
 
-      -- Adjust description_heading_index if needed
-      if first_image_index < description_heading_index then
-        description_heading_index = description_heading_index - 1
+      -- Adjust description_index if image was before it
+      local adjusted_desc_index = description_index
+      if first_image_index < description_index then
+        adjusted_desc_index = description_index - 1
       end
+
+      -- Set target to position before Description (which is now at adjusted index)
+      target_position = adjusted_desc_index
+
+    elseif h1_index then
+      -- Fallback: Position after H1 heading
+      table.remove(blocks, first_image_index)
+
+      -- Adjust h1_index if image was before it
+      local adjusted_h1_index = h1_index
+      if first_image_index < h1_index then
+        adjusted_h1_index = h1_index - 1
+      end
+
+      target_position = adjusted_h1_index + 1
+    else
+      -- No positioning landmarks found, skip
+      return pandoc.Pandoc(blocks, doc.meta)
     end
 
     -- Wrap the image in a centered div with consistent width (whether moving or reformatting in place)
@@ -95,14 +120,8 @@ function Pandoc(doc)
           '<div style="text-align: center;">\n  <img src="./image1.png" alt="" width="400">\n</div>')
       end
 
-    -- Insert or replace the centered image
-    if already_positioned then
-      -- Replace the existing image in place
-      blocks[first_image_index] = centered_image
-    else
-      -- Insert the centered image right before the Description heading
-      table.insert(blocks, description_heading_index, centered_image)
-    end
+    -- Insert the centered image at the target position
+    table.insert(blocks, target_position, centered_image)
   end
 
   return pandoc.Pandoc(blocks, doc.meta)

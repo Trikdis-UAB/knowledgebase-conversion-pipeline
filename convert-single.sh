@@ -24,7 +24,7 @@ base="$(basename "${inp%.docx}")"
 doc_dir="${OUT_DIR}/${base}"
 
 # Ensure filters exist
-for f in strip-cover.lua strip-toc.lua promote-strong-top.lua fix-numbered-heading-levels.lua normalize-headings.lua move-first-image-to-description.lua split-inline-images.lua convert-image-sizes.lua softwrap-tokens.lua clean-table-pipes.lua mark-two-col.lua convert-underline.lua remove-unwanted-blockquotes.lua maintain-list-continuity.lua strip-classes.lua fix-typography.lua fix-crossrefs.lua clean-html-blocks.lua unwrap-table-blockquotes.lua remove-standalone-asterisks.lua fix-rowspan-headers.lua flatten-instruction-tables.lua; do
+for f in strip-cover.lua strip-toc.lua promote-strong-top.lua demote-extra-h1.lua fix-numbered-heading-levels.lua normalize-headings.lua move-first-image-to-description.lua split-inline-images.lua convert-image-sizes.lua softwrap-tokens.lua clean-table-pipes.lua mark-two-col.lua convert-underline.lua remove-unwanted-blockquotes.lua maintain-list-continuity.lua strip-classes.lua fix-typography.lua fix-crossrefs.lua clean-html-blocks.lua unwrap-table-blockquotes.lua remove-standalone-asterisks.lua fix-rowspan-headers.lua flatten-instruction-tables.lua; do
   [ -f "$SCRIPT_DIR/$f" ] || { echo "Missing $f"; exit 1; }
 done
 # Check the new filter in filters subdirectory
@@ -45,6 +45,7 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/map-docx-heading-levels.lua" \
   --lua-filter="$SCRIPT_DIR/fix-numbered-heading-levels.lua" \
   --lua-filter="$SCRIPT_DIR/promote-strong-top.lua" \
+  --lua-filter="$SCRIPT_DIR/demote-extra-h1.lua" \
   --lua-filter="$SCRIPT_DIR/remove-table-widths.lua" \
   --lua-filter="$SCRIPT_DIR/filters/flatten-two-cell-tables.lua" \
   --lua-filter="$SCRIPT_DIR/flatten-instruction-tables.lua" \
@@ -150,13 +151,8 @@ sed -i '' 's/^Connects to the control panel'\''s serial or keyboard bus or telep
 # It extracts the product name from the cover page and creates proper title
 
 # Normalize heading levels: ALL section headings should be H2, not H1
-# Only the product title (created by promote-strong-top.lua) should be H1
-# Strategy: First convert all H1 to H2, then convert product titles back to H1
-sed -i '' 's/^# \(.*\)$/## \1/g' index.md
-sed -i '' 's/^## \(.*Alarm Panel\)$/# \1/g' index.md
-sed -i '' 's/^## \(.*Cellular Communicator\)$/# \1/g' index.md
-sed -i '' 's/^## \(.*Gate Controller\)$/# \1/g' index.md
-sed -i '' 's/^## \(.*control panel.*\)$/# \1/g' index.md
+# Heading level management now handled by demote-extra-h1.lua filter during Pandoc processing
+# The Lua filter ensures only the first H1 (product title) remains, all others are demoted to H2
 
 # Fix heading hierarchy using Word classes and numbered headings
 # - Python script handles unnumbered headings with Word classes (.2-Po-Pag)
@@ -227,6 +223,11 @@ python3 "$SCRIPT_DIR/fix-disposal-icon.py" index.md
 
 # Fix table spacing: ensure blank line before tables
 python3 "$SCRIPT_DIR/fix-table-spacing.py" index.md
+
+# Remove stray images that interrupt bullet lists (e.g., image3.png in SP3 Features section)
+# These are typically product images incorrectly placed in the middle of feature lists
+# Runs after all Python post-processors to ensure it's not re-added
+sed -i '' '/src="\.\/image3\.png"/d' index.md
 
 # Optimize images for web and print (max 1200px width, 85% quality)
 echo "Optimizing images..."

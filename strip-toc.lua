@@ -32,10 +32,18 @@ local function is_real_header(header)
 
   local text = S(header.content)
 
-  -- Real H2 headers that mark end of TOC:
-  -- - "Description", "Installation", etc. (common section names)
+  -- Real headers that mark end of TOC:
+  -- - H1 with Word styles (e.g., "Description" with .Pagrindinis class)
+  -- - H2 headers like "Description", "Installation", etc.
   -- - NOT starting with numbers like "1.1 Feature"
-  -- - Level 2 only (H2)
+
+  if header.level == 1 then
+    -- H1 headers are always real content (e.g., Description, Installation)
+    -- Check if it's not just a number (like in TOC)
+    if not text:match('^%s*%d+%.?%d*%s*$') then
+      return true
+    end
+  end
 
   if header.level == 2 then
     -- Check if it starts with a number
