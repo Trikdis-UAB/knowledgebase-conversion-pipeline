@@ -27,7 +27,8 @@ doc_dir="${OUT_DIR}/${base}"
 for f in strip-cover.lua strip-toc.lua promote-strong-top.lua demote-extra-h1.lua fix-numbered-heading-levels.lua normalize-headings.lua move-first-image-to-description.lua split-inline-images.lua convert-image-sizes.lua softwrap-tokens.lua clean-table-pipes.lua mark-two-col.lua convert-underline.lua remove-unwanted-blockquotes.lua maintain-list-continuity.lua strip-classes.lua fix-typography.lua fix-crossrefs.lua clean-html-blocks.lua unwrap-table-blockquotes.lua remove-standalone-asterisks.lua fix-rowspan-headers.lua flatten-instruction-tables.lua; do
   [ -f "$SCRIPT_DIR/$f" ] || { echo "Missing $f"; exit 1; }
 done
-# Check the new filter in filters subdirectory
+# Check the filters in filters subdirectory
+[ -f "$SCRIPT_DIR/filters/convert-legend-tables-ordered-lists.lua" ] || { echo "Missing filters/convert-legend-tables-ordered-lists.lua"; exit 1; }
 [ -f "$SCRIPT_DIR/filters/flatten-two-cell-tables.lua" ] || { echo "Missing filters/flatten-two-cell-tables.lua"; exit 1; }
 
 mkdir -p "$doc_dir"
@@ -47,6 +48,7 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/promote-strong-top.lua" \
   --lua-filter="$SCRIPT_DIR/demote-extra-h1.lua" \
   --lua-filter="$SCRIPT_DIR/remove-table-widths.lua" \
+  --lua-filter="$SCRIPT_DIR/filters/convert-legend-tables-ordered-lists.lua" \
   --lua-filter="$SCRIPT_DIR/filters/flatten-two-cell-tables.lua" \
   --lua-filter="$SCRIPT_DIR/flatten-instruction-tables.lua" \
   --lua-filter="$SCRIPT_DIR/unwrap-table-blockquotes.lua" \
@@ -201,6 +203,7 @@ python3 "$SCRIPT_DIR/fix_admonitions.py" index.md
 python3 "$SCRIPT_DIR/fix_table_structure.py" index.md
 
 # Convert HTML tables to pipe tables for human readability (AFTER table structure fixes)
+# Note: Legend tables with ordered lists are handled by convert-legend-tables-ordered-lists.lua filter
 echo "Converting HTML tables to pipe tables..."
 python3 "$SCRIPT_DIR/html-tables-to-pipes.py" index.md
 
