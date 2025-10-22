@@ -515,6 +515,40 @@ python3 smart-split-schematics.py path/to/image.png
 
 ## Updates
 
+### October 22, 2025 - SP3 Manual Final Fixes (Ready for Production)
+
+**SP3 Control Panel Manual** - Completed remaining fixes, now ready for public release:
+
+**3 Critical Fixes:**
+1. ✅ **Cover Image Position** - Fixed `move-first-image-to-description.lua` to check for Description as H1 or H2
+   - SP3 uses H1 "Description" (not H2 like GT manuals)
+   - Cover image now correctly positioned between product title and Description heading
+
+2. ✅ **Heading Hierarchy** - Created `demote-extra-h1.lua` filter for proper H1/H2 structure
+   - Ensures only ONE H1 (product title) in entire document
+   - Uses pattern matching to identify product titles (Control Panel, Cellular Communicator, etc.)
+   - Demotes all non-product H1 headings to H2
+   - Removed conflicting sed commands that were re-promoting headings
+
+3. ✅ **Stray Images** - Added sed command to remove image3.png interrupting Features list
+   - Runs after all Python post-processors
+   - Verified against PDF - image doesn't exist in original
+
+**New Filter Created:**
+- `demote-extra-h1.lua` - Pattern-based H1 heading management
+
+**Filters Updated:**
+- `move-first-image-to-description.lua` - Now checks H1 or H2 for Description heading
+- `strip-cover.lua` - Preserves cover image for positioning
+- `strip-toc.lua` - Fixed H1 recognition for SP3-style Table of Contents
+
+**Pipeline Updated:**
+- Added `demote-extra-h1.lua` after `promote-strong-top.lua` in filter chain
+- Removed redundant sed heading promotion commands (lines 156-160)
+- Added image3.png removal after Python post-processors
+
+**Status:** ✅ SP3 manual ready for public release at https://docs.trikdis.com
+
 ### October 16, 2025 - SP3 Manual Conversion & Gate Controller Support
 
 **SP3 Control Panel Manual** - First successful conversion of a control panel manual (non-cellular communicator product):
