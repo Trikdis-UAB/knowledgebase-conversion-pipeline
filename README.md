@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Convert product manuals from **.docx** to clean **Markdown** with correct heading levels and extracted images, ready for **MkDocs** and **Typora**. Automated pipeline with 44 Lua filters plus Python post-processing. Source files remain unchanged; all normalization happens during conversion.
+Convert product manuals from **.docx** to clean **Markdown** with correct heading levels and extracted images, ready for **MkDocs** and **Typora**. Automated pipeline with 35 Lua filters plus 8 Python post-processors (43 total). Source files remain unchanged; all normalization happens during conversion.
 
 ---
 
@@ -12,7 +12,7 @@ Convert product manuals from **.docx** to clean **Markdown** with correct headin
   ```bash
   brew install pandoc
   ```
-* All Lua filters included in this project (44 filters total)
+* All Lua filters included in this project (35 active Lua filters + 8 Python post-processors = 43 total)
 
 ---
 
@@ -35,7 +35,7 @@ Convert product manuals from **.docx** to clean **Markdown** with correct headin
 * **Stable image URLs**: Forces `./image.png` paths so assets render even when served without trailing slashes
 
 ### Lua Filters (Applied in Order)
-The pipeline applies 44 specialized filters to clean and normalize Word documents:
+The pipeline applies 35 Lua filters to clean and normalize Word documents:
 
 1. **relocate-warranty.lua**: Relocates warranty/safety sections from beginning to end of document (supports multiple consecutive sections as separate H2 headings)
 2. **strip-cover.lua**: Removes cover page content but preserves product name (e.g., "Cellular communicator GT+") for title generation
@@ -519,6 +519,36 @@ python3 smart-split-schematics.py path/to/image.png
 
 ## Updates
 
+### October 22, 2025 - Filter Cleanup & Archival
+
+**Pipeline Cleanup:**
+Archived 10 unused Lua filters to reduce clutter and clarify which filters are actually used in the conversion pipeline.
+
+**Archived Filters (moved to `archive/unused-filters/`):**
+- Old versions replaced by improved filters: 8 filters
+  - `append-warranty.lua`, `preserve-warranty.lua` → replaced by `relocate-warranty.lua`
+  - `clean-table-blockquotes.lua` → replaced by `unwrap-table-blockquotes.lua`
+  - `fix-rowspan-tables.lua`, `flatten-rowspan.lua` → replaced by `fix-rowspan-headers.lua`
+  - `flatten-numbered-list-tables.lua` → functionality merged into other filters
+  - `flatten-two-cell-tables.lua` → duplicate (version in `filters/` subdirectory is used)
+  - `unwrap-post-image-blockquotes.lua` → functionality merged into `remove-unwanted-blockquotes.lua`
+- Experimental filters never used: 2 filters
+  - `extract-table-images.lua` (4664 bytes)
+  - `force-markdown-tables.lua` (1988 bytes)
+
+**Result:**
+- **Before cleanup**: 45 Lua filter files on disk
+- **After cleanup**: 35 active Lua filters + 8 Python post-processors = **43 total active filters**
+- **Archived**: 10 unused filters preserved in `archive/unused-filters/` with documentation
+
+**Benefits:**
+- Clearer project structure (only active filters in main directory)
+- Easier to understand the pipeline (no confusion about which filters are used)
+- Filters preserved for reference (not deleted, just archived)
+- Documentation updated to reflect accurate counts
+
+See `archive/unused-filters/README.md` for details about each archived filter.
+
 ### October 22, 2025 - Duplicate Cover Images & Bold List Titles Fixed
 
 **Two Production Issues Resolved:**
@@ -551,7 +581,7 @@ python3 smart-split-schematics.py path/to/image.png
 - GATOR Manual: List titles now bold ✅
 - Both fixes apply automatically to all future conversions
 
-**Filter Count:** Increased from 43 to 44 total filters
+**Filter Count:** Added bold-list-titles.lua and remove-duplicate-cover-images.py (35 Lua + 8 Python = 43 total active filters)
 
 ### October 22, 2025 - SP3 Manual Final Fixes (Ready for Production)
 
