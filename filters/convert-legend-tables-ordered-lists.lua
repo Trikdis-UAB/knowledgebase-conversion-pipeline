@@ -82,20 +82,21 @@ return {
                 return nil
             end
 
-            -- Build GitHub-style note alert with all items
-            local lines = {}
-            table.insert(lines, "> [!NOTE]")
+            -- Build OrderedList with all items
+            local list_items = {}
 
             for i, item in ipairs(all_items) do
-                table.insert(lines, "> " .. i .. ". " .. item)
-                -- Add blank line between items (except last)
-                if i < #all_items then
-                    table.insert(lines, ">")
-                end
+                -- Each item needs to be a list of blocks
+                -- Parse the item text to create proper Plain/Para blocks
+                local item_blocks = {pandoc.Plain(pandoc.Str(item))}
+                table.insert(list_items, item_blocks)
             end
 
-            local alert_md = table.concat(lines, "\n")
-            return pandoc.RawBlock("markdown", alert_md)
+            -- Create OrderedList: items, then ListAttributes
+            -- ListAttributes: {start = number, style = string, delimiter = string}
+            local list_attr = pandoc.ListAttributes(1, pandoc.DefaultStyle, pandoc.DefaultDelim)
+            local ordered_list = pandoc.OrderedList(list_items, list_attr)
+            return ordered_list
         end
     }
 }
