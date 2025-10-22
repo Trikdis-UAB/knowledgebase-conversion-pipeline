@@ -99,8 +99,9 @@ function Pandoc(doc)
         warranty_heading = pandoc.Header(2, {pandoc.Str(warranty_title)})
         warranty_content = {}
       else
-        -- Subsequent warranty section - add as H3 sub-heading
-        table.insert(warranty_content, pandoc.Header(3, {pandoc.Str(warranty_title)}))
+        -- Subsequent warranty section - add as separate H2 heading
+        table.insert(warranty_content, pandoc.Para{})  -- Blank line before
+        table.insert(warranty_content, pandoc.Header(2, {pandoc.Str(warranty_title)}))
       end
       -- Don't add to filtered_blocks - we'll append at end
       goto continue
