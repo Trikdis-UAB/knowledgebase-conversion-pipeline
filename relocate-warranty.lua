@@ -93,10 +93,15 @@ function Pandoc(doc)
     -- Check for warranty section as bold paragraph
     local warranty_title = is_warranty_paragraph(block)
     if warranty_title then
-      in_warranty_section = true
-      -- Create H2 heading from the bold text
-      warranty_heading = pandoc.Header(2, {pandoc.Str(warranty_title)})
-      warranty_content = {}
+      if not in_warranty_section then
+        -- First warranty section - start collecting
+        in_warranty_section = true
+        warranty_heading = pandoc.Header(2, {pandoc.Str(warranty_title)})
+        warranty_content = {}
+      else
+        -- Subsequent warranty section - add as H3 sub-heading
+        table.insert(warranty_content, pandoc.Header(3, {pandoc.Str(warranty_title)}))
+      end
       -- Don't add to filtered_blocks - we'll append at end
       goto continue
     end
