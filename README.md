@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Convert product manuals from **.docx** to clean **Markdown** with correct heading levels and extracted images, ready for **MkDocs** and **Typora**. Automated pipeline with 24 Lua filters plus Python post-processing. Source files remain unchanged; all normalization happens during conversion.
+Convert product manuals from **.docx** to clean **Markdown** with correct heading levels and extracted images, ready for **MkDocs** and **Typora**. Automated pipeline with 44 Lua filters plus Python post-processing. Source files remain unchanged; all normalization happens during conversion.
 
 ---
 
@@ -12,7 +12,7 @@ Convert product manuals from **.docx** to clean **Markdown** with correct headin
   ```bash
   brew install pandoc
   ```
-* All Lua filters included in this project (43 filters total)
+* All Lua filters included in this project (44 filters total)
 
 ---
 
@@ -20,7 +20,8 @@ Convert product manuals from **.docx** to clean **Markdown** with correct headin
 
 ### Conversion Features
 * **Automatic title extraction**: Extracts product name from DOCX cover page and creates proper H1 title (e.g., "GT+ Cellular Communicator")
-* **Product image formatting**: Centers first product image with consistent width (400px) after H1 title
+* **Product image formatting**: Centers first product image with consistent width (400px) after H1 title (removes duplicates automatically)
+* **Bold list titles**: Automatically bolds short text (≤5 words) that precedes bullet lists for visual hierarchy
 * **Warranty section relocation**: Automatically moves warranty/safety sections from cover pages to end of document (supports multiple consecutive warranty sections)
 * **Folder structure**: Each manual gets its own folder with `index.md` + images in the same folder
 * **Clean output**: Removes Word cover pages and Table of Contents (preserves product name for title generation)
@@ -34,7 +35,7 @@ Convert product manuals from **.docx** to clean **Markdown** with correct headin
 * **Stable image URLs**: Forces `./image.png` paths so assets render even when served without trailing slashes
 
 ### Lua Filters (Applied in Order)
-The pipeline applies 43 specialized filters to clean and normalize Word documents:
+The pipeline applies 44 specialized filters to clean and normalize Word documents:
 
 1. **relocate-warranty.lua**: Relocates warranty/safety sections from beginning to end of document (supports multiple consecutive sections as separate H2 headings)
 2. **strip-cover.lua**: Removes cover page content but preserves product name (e.g., "Cellular communicator GT+") for title generation
@@ -63,11 +64,12 @@ The pipeline applies 43 specialized filters to clean and normalize Word document
 25. **maintain-list-continuity.lua**: Ensures numbered lists continue correctly across interruptions
 26. **strip-classes.lua**: Removes Word styling classes like `{.underline}`
 27. **fix-typography.lua**: Converts backticks to proper apostrophes and removes empty bold formatting
-28. **fix-html-tags.lua**: Converts HTML subscript/superscript tags (e.g., `<sub>space</sub>`) to bracketed code format (e.g., `[space]`)
-29. **fix-crossrefs.lua**: Replaces "Error! Reference source not found" with "see the referenced section"
-30. **fix-admonition-lists.lua**: Fixes broken list numbering in admonitions (resets start to 1)
-31. **remove-standalone-asterisks.lua**: Removes standalone `****` markers while preserving them in tables
-32. **clean-html-blocks.lua**: Cleans HTML block structures
+28. **bold-list-titles.lua**: Automatically bolds short text (≤5 words) preceding bullet lists for visual hierarchy
+29. **fix-html-tags.lua**: Converts HTML subscript/superscript tags (e.g., `<sub>space</sub>`) to bracketed code format (e.g., `[space]`)
+30. **fix-crossrefs.lua**: Replaces "Error! Reference source not found" with "see the referenced section"
+31. **fix-admonition-lists.lua**: Fixes broken list numbering in admonitions (resets start to 1)
+32. **remove-standalone-asterisks.lua**: Removes standalone `****` markers while preserving them in tables
+33. **clean-html-blocks.lua**: Cleans HTML block structures
 
 ---
 
@@ -516,6 +518,40 @@ python3 smart-split-schematics.py path/to/image.png
 ---
 
 ## Updates
+
+### October 22, 2025 - Duplicate Cover Images & Bold List Titles Fixed
+
+**Two Production Issues Resolved:**
+
+**Issue 1 - Duplicate Cover Images (GET Manual)**
+- **Problem**: GET manual showed two identical cover images after H1 title
+- **Root Cause**: Both `move-first-image-to-description.lua` filter AND sed command were creating centered images
+- **Fix Applied**:
+  - Disabled conflicting sed command (line 101 in convert-single.sh)
+  - Enhanced Lua filter to remove ALL images before Description heading
+  - Added `remove-duplicate-cover-images.py` as safety net for edge cases
+- **Result**: Only ONE cover image appears after H1 title (all future manuals)
+
+**Issue 2 - List Titles Not Bold (GATOR Manual)**
+- **Problem**: Short text like "Remote control", "Messages for users" should be bold when preceding bullet lists
+- **Solution**: Created `bold-list-titles.lua` filter
+  - Automatically bolds paragraphs with ≤5 words that immediately precede bullet lists
+  - Only applies in Features/Description sections to avoid false positives
+  - Provides visual hierarchy for list section titles
+- **Result**: List titles now properly formatted across all manuals
+
+**Files Changed:**
+- NEW: `bold-list-titles.lua` - Automatic bold formatting for list titles
+- NEW: `remove-duplicate-cover-images.py` - Safety net for duplicate images
+- MODIFIED: `move-first-image-to-description.lua` - Enhanced to remove all cover images
+- MODIFIED: `convert-single.sh` - Disabled conflicting sed, added new filters
+
+**Tested With:**
+- GET Manual: Duplicate image removed ✅
+- GATOR Manual: List titles now bold ✅
+- Both fixes apply automatically to all future conversions
+
+**Filter Count:** Increased from 43 to 44 total filters
 
 ### October 22, 2025 - SP3 Manual Final Fixes (Ready for Production)
 
