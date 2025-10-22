@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Convert product manuals from **.docx** to clean **Markdown** with correct heading levels and extracted images, ready for **MkDocs** and **Typora**. Automated pipeline with 35 Lua filters plus 8 Python post-processors (43 total). Source files remain unchanged; all normalization happens during conversion.
+Convert product manuals from **.docx** to clean **Markdown** with correct heading levels and extracted images, ready for **MkDocs** and **Typora**. Automated pipeline with 35 Lua filters plus 13 Python post-processors (48 total). Source files remain unchanged; all normalization happens during conversion.
 
 ---
 
@@ -12,7 +12,7 @@ Convert product manuals from **.docx** to clean **Markdown** with correct headin
   ```bash
   brew install pandoc
   ```
-* All Lua filters included in this project (35 active Lua filters + 8 Python post-processors = 43 total)
+* All Lua filters included in this project (35 active Lua filters + 13 Python post-processors = 48 total)
 
 ---
 
@@ -538,8 +538,8 @@ Archived 10 unused Lua filters to reduce clutter and clarify which filters are a
 
 **Result:**
 - **Before cleanup**: 45 Lua filter files on disk
-- **After cleanup**: 35 active Lua filters + 8 Python post-processors = **43 total active filters**
-- **Archived**: 10 unused filters preserved in `archive/unused-filters/` with documentation
+- **After cleanup**: 35 active Lua filters + 13 Python post-processors = **48 total active filters**
+- **Archived**: 10 unused Lua filters preserved in `archive/unused-filters/` with documentation
 
 **Benefits:**
 - Clearer project structure (only active filters in main directory)
@@ -581,7 +581,7 @@ See `archive/unused-filters/README.md` for details about each archived filter.
 - GATOR Manual: List titles now bold ✅
 - Both fixes apply automatically to all future conversions
 
-**Filter Count:** Added bold-list-titles.lua and remove-duplicate-cover-images.py (35 Lua + 8 Python = 43 total active filters)
+**Filter Count:** Added bold-list-titles.lua and remove-duplicate-cover-images.py (35 Lua + 13 Python = 48 total active filters)
 
 ### October 22, 2025 - SP3 Manual Final Fixes (Ready for Production)
 

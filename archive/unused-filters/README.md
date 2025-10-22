@@ -64,6 +64,6 @@ The active conversion pipeline uses **35 Lua filters** located in:
 - Main directory: 33 filters
 - `filters/` subdirectory: 2 filters
 
-Plus **8 Python post-processors** for a total of **43 active filters**.
+Plus **13 Python post-processors** for a total of **48 active filters**.
 
 For the current filter list, see the main README.md.
