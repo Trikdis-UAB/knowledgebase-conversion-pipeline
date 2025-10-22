@@ -1,33 +1,51 @@
 -- move-first-image-to-description.lua
 -- Move the first image to immediately after the H1 title (before Description heading)
+-- Removes ALL standalone images before Description to avoid duplicates
 
 local first_image = nil
 local first_image_index = nil
 local h1_index = nil
 local description_index = nil
 local blocks = {}
+local image_indices = {}  -- Track ALL image indices to remove
 
--- First pass: collect all blocks and find the first image, H1 title, and Description heading
+-- First pass: collect all blocks and find images, H1 title, and Description heading
 function Pandoc(doc)
   blocks = doc.blocks
 
   for i, block in ipairs(blocks) do
-    -- Find the first image (various formats)
-    if not first_image then
-      if block.t == "Para" and #block.content == 1 and block.content[1].t == "Image" then
-        first_image = block
-        first_image_index = i
-      elseif block.t == "RawBlock" and block.format == "html" and block.text:match("<img[^>]*>") then
-        first_image = block
-        first_image_index = i
-      elseif block.t == "Para" and #block.content == 1 and block.content[1].t == "RawInline" and
-             block.content[1].format == "html" and block.content[1].text:match("<img[^>]*>") then
-        first_image = block
-        first_image_index = i
-      elseif block.t == "CodeBlock" and block.text:match("<img[^>]*>") then
+    -- Track all standalone images (we'll remove them all before Description)
+    local is_image = false
+    if block.t == "Para" and #block.content == 1 and block.content[1].t == "Image" then
+      is_image = true
+      if not first_image then
         first_image = block
         first_image_index = i
       end
+    elseif block.t == "RawBlock" and block.format == "html" and block.text:match("<img[^>]*>") then
+      is_image = true
+      if not first_image then
+        first_image = block
+        first_image_index = i
+      end
+    elseif block.t == "Para" and #block.content == 1 and block.content[1].t == "RawInline" and
+           block.content[1].format == "html" and block.content[1].text:match("<img[^>]*>") then
+      is_image = true
+      if not first_image then
+        first_image = block
+        first_image_index = i
+      end
+    elseif block.t == "CodeBlock" and block.text:match("<img[^>]*>") then
+      is_image = true
+      if not first_image then
+        first_image = block
+        first_image_index = i
+      end
+    end
+
+    -- Track this image index for removal
+    if is_image then
+      table.insert(image_indices, i)
     end
 
     -- Find H1 heading (the product title)
@@ -50,27 +68,42 @@ function Pandoc(doc)
 
     if description_index then
       -- Preferred: Position before Description heading
-      -- First remove the image from wherever it is
-      table.remove(blocks, first_image_index)
-
-      -- Adjust description_index if image was before it
-      local adjusted_desc_index = description_index
-      if first_image_index < description_index then
-        adjusted_desc_index = description_index - 1
+      -- Remove ALL standalone images that appear before Description to avoid duplicates
+      local images_to_remove = {}
+      for _, img_idx in ipairs(image_indices) do
+        if img_idx < description_index then
+          table.insert(images_to_remove, img_idx)
+        end
       end
+
+      -- Remove images in reverse order to maintain indices
+      table.sort(images_to_remove, function(a, b) return a > b end)
+      for _, idx in ipairs(images_to_remove) do
+        table.remove(blocks, idx)
+      end
+
+      -- Adjust description_index based on how many images we removed before it
+      local adjusted_desc_index = description_index - #images_to_remove
 
       -- Set target to position before Description (which is now at adjusted index)
       target_position = adjusted_desc_index
 
     elseif h1_index then
       -- Fallback: Position after H1 heading
-      table.remove(blocks, first_image_index)
-
-      -- Adjust h1_index if image was before it
-      local adjusted_h1_index = h1_index
-      if first_image_index < h1_index then
-        adjusted_h1_index = h1_index - 1
+      -- Remove ALL standalone images
+      table.sort(image_indices, function(a, b) return a > b end)
+      for _, idx in ipairs(image_indices) do
+        table.remove(blocks, idx)
       end
+
+      -- Adjust h1_index if any images were before it
+      local removed_before_h1 = 0
+      for _, idx in ipairs(image_indices) do
+        if idx <= h1_index then
+          removed_before_h1 = removed_before_h1 + 1
+        end
+      end
+      local adjusted_h1_index = h1_index - removed_before_h1
 
       target_position = adjusted_h1_index + 1
     else

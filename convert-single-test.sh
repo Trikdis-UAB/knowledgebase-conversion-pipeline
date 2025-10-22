@@ -24,11 +24,10 @@ base="$(basename "${inp%.docx}")"
 doc_dir="${OUT_DIR}/${base}"
 
 # Ensure filters exist
-for f in strip-cover.lua strip-toc.lua promote-strong-top.lua demote-extra-h1.lua fix-numbered-heading-levels.lua normalize-headings.lua move-first-image-to-description.lua split-inline-images.lua convert-image-sizes.lua softwrap-tokens.lua clean-table-pipes.lua mark-two-col.lua convert-underline.lua remove-unwanted-blockquotes.lua maintain-list-continuity.lua strip-classes.lua fix-typography.lua bold-list-titles.lua fix-crossrefs.lua clean-html-blocks.lua unwrap-table-blockquotes.lua remove-standalone-asterisks.lua fix-rowspan-headers.lua flatten-instruction-tables.lua; do
+for f in strip-cover.lua strip-toc.lua promote-strong-top.lua fix-numbered-heading-levels.lua normalize-headings.lua move-first-image-to-description.lua split-inline-images.lua convert-image-sizes.lua softwrap-tokens.lua clean-table-pipes.lua mark-two-col.lua convert-underline.lua remove-unwanted-blockquotes.lua maintain-list-continuity.lua strip-classes.lua fix-typography.lua fix-crossrefs.lua clean-html-blocks.lua unwrap-table-blockquotes.lua remove-standalone-asterisks.lua fix-rowspan-headers.lua flatten-instruction-tables.lua flatten-numbered-list-tables.lua flatten-rowspan.lua relocate-warranty.lua extract-table-images.lua; do
   [ -f "$SCRIPT_DIR/$f" ] || { echo "Missing $f"; exit 1; }
 done
-# Check the filters in filters subdirectory
-[ -f "$SCRIPT_DIR/filters/convert-legend-tables-ordered-lists.lua" ] || { echo "Missing filters/convert-legend-tables-ordered-lists.lua"; exit 1; }
+# Check the new filter in filters subdirectory
 [ -f "$SCRIPT_DIR/filters/flatten-two-cell-tables.lua" ] || { echo "Missing filters/flatten-two-cell-tables.lua"; exit 1; }
 
 mkdir -p "$doc_dir"
@@ -40,22 +39,22 @@ pandoc "$inp" \
   --extract-media="." \
   --wrap=none \
   --markdown-headings=atx \
-  --lua-filter="$SCRIPT_DIR/relocate-warranty.lua" \
   --lua-filter="$SCRIPT_DIR/strip-cover.lua" \
   --lua-filter="$SCRIPT_DIR/strip-toc.lua" \
+  --lua-filter="$SCRIPT_DIR/relocate-warranty.lua" \
+  --lua-filter="$SCRIPT_DIR/promote-strong-top.lua" \
   --lua-filter="$SCRIPT_DIR/map-docx-heading-levels.lua" \
   --lua-filter="$SCRIPT_DIR/fix-numbered-heading-levels.lua" \
-  --lua-filter="$SCRIPT_DIR/promote-strong-top.lua" \
-  --lua-filter="$SCRIPT_DIR/demote-extra-h1.lua" \
   --lua-filter="$SCRIPT_DIR/remove-table-widths.lua" \
-  --lua-filter="$SCRIPT_DIR/filters/convert-legend-tables-ordered-lists.lua" \
+  --lua-filter="$SCRIPT_DIR/extract-table-images.lua" \
+  --lua-filter="$SCRIPT_DIR/flatten-rowspan.lua" \
   --lua-filter="$SCRIPT_DIR/filters/flatten-two-cell-tables.lua" \
   --lua-filter="$SCRIPT_DIR/flatten-instruction-tables.lua" \
+  --lua-filter="$SCRIPT_DIR/flatten-numbered-list-tables.lua" \
   --lua-filter="$SCRIPT_DIR/unwrap-table-blockquotes.lua" \
-  --lua-filter="$SCRIPT_DIR/convert-image-tables.lua" \
+  --lua-filter="$SCRIPT_DIR/fix-rowspan-headers.lua" \
   --lua-filter="$SCRIPT_DIR/normalize-headings.lua" \
   --lua-filter="$SCRIPT_DIR/strip-manual-heading-numbers.lua" \
-  --lua-filter="$SCRIPT_DIR/promote-centered-bold.lua" \
   --lua-filter="$SCRIPT_DIR/move-first-image-to-description.lua" \
   --lua-filter="$SCRIPT_DIR/split-inline-images.lua" \
   --lua-filter="$SCRIPT_DIR/convert-image-sizes.lua" \
@@ -64,16 +63,13 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/clean-table-pipes.lua" \
   --lua-filter="$SCRIPT_DIR/mark-two-col.lua" \
   --lua-filter="$SCRIPT_DIR/convert-underline.lua" \
-  --lua-filter="$SCRIPT_DIR/convert-blockquote-headings.lua" \
   --lua-filter="$SCRIPT_DIR/remove-unwanted-blockquotes.lua" \
+  --lua-filter="$SCRIPT_DIR/unwrap-post-image-blockquotes.lua" \
   --lua-filter="$SCRIPT_DIR/maintain-list-continuity.lua" \
   --lua-filter="$SCRIPT_DIR/strip-classes.lua" \
   --lua-filter="$SCRIPT_DIR/fix-typography.lua" \
-  --lua-filter="$SCRIPT_DIR/bold-list-titles.lua" \
-  --lua-filter="$SCRIPT_DIR/fix-html-tags.lua" \
   --lua-filter="$SCRIPT_DIR/fix-crossrefs.lua" \
   --lua-filter="$SCRIPT_DIR/remove-standalone-asterisks.lua" \
-  --lua-filter="$SCRIPT_DIR/fix-admonition-lists.lua" \
   --lua-filter="$SCRIPT_DIR/clean-html-blocks.lua"
 
 # If Pandoc made ./media/, flatten to current folder and fix links
@@ -93,13 +89,8 @@ fi
 # Fix any remaining error references
 sed -i '' 's/Error! Reference source not found\./see the referenced section/g' index.md
 
-# Fix SP3-style H2 title with bold to H1 without bold (if at start of document)
-# Pattern: ## **Title** → # Title (only for first heading)
-sed -i '' '1,/^##/{s/^## \*\*\([^*]*\)\*\*$/# \1/;}' index.md
-
-# DISABLED: Image centering now handled by move-first-image-to-description.lua filter
-# This was creating duplicate centered images
-# sed -i '' '1,/^## Description/{ s#^!\[GT Cellular Communicator\](./image1.png)$#<div style="text-align: center;">\n  <img src="./image1.png" alt="GT Cellular Communicator" width="400">\n</div>#; }' index.md
+# Convert first markdown image to centered HTML with width=400 (before Description heading)
+sed -i '' '1,/^## Description/{ s#^!\[GT Cellular Communicator\](./image1.png)$#<div style="text-align: center;">\n  <img src="./image1.png" alt="GT Cellular Communicator" width="400">\n</div>#; }' index.md
 
 # Clean up blockquotes in tables
 sed -i '' 's/<blockquote>//g; s/<\/blockquote>//g' index.md
@@ -120,8 +111,8 @@ sed -i '' 's/\\"/"/g' index.md
 sed -i '' 's/\\</</g; s/\\>/>/g' index.md
 
 # Remove stray pipe characters from table cells (author formatting artifact from DOCX)
-# DISABLED: This was too aggressive and was removing legitimate table column separators
-# The html-tables-to-pipes.py script now handles this properly
+# NOTE: Disabled because these patterns destroy pipe table structure
+# The clean-table-pipes.lua filter already handles pipes in cell content at AST level
 # Pattern 1: " | " between any text → " " (just space)
 # sed -i '' 's/ | / /g' index.md
 # Pattern 2: trailing " |" at end of line or before tags → remove entirely
@@ -140,16 +131,11 @@ sed -i '' -E 's/\{#([^}]+)\} \{#[^}]+\}/{#\1}/g' index.md
 sed -i '' 's/<!-- -->//g' index.md
 
 # Remove duplicate product images wrapped in <div> tags (keeps only the one after H1 title)
-# This removes standalone <div><img src="imageN.png" ... width="400"></div> blocks (before ./ is added)
-# The H1 image is added later by sed, so this safely removes all duplicates
-perl -i -0777 -pe 's/<div>[\s\n]*<img\s+src="(?:\.\/)?(image[1-5]\.png)"[^>]*width="400"[^>]*>[\s\n]*<\/div>[\s\n]*/\n/g' index.md
+# This removes standalone <div><img src="./imageN.png" ... width="400"></div> blocks
+perl -i -0pe 's/<div>\s*<img src="\.\/(image[1-5]\.png)"[^>]*width="400"[^>]*>\s*<\/div>\s*\n\s*\n(?=##)/\n/g' index.md
 
 # Fix title formatting - make "Works with Protegus2 app:" bold like other titles
 sed -i '' 's/^Works with Protegus2 app:/**Works with Protegus2 app:**/g' index.md
-
-# Fix title formatting - make "Reporting to the security company's central monitoring station (CMS):" bold
-# Wrap the entire line with ** at both start and end
-sed -i '' 's/^Reporting to the security company.*central monitoring station (CMS):/**&**/' index.md
 
 # Fix Features section structure - change from bold to H3 (subsection) and make first line bold
 sed -i '' 's/^\*\*Features\*\*$/### Features/g' index.md
@@ -159,8 +145,15 @@ sed -i '' 's/^Connects to the control panel'\''s serial or keyboard bus or telep
 # It extracts the product name from the cover page and creates proper title
 
 # Normalize heading levels: ALL section headings should be H2, not H1
-# Heading level management now handled by demote-extra-h1.lua filter during Pandoc processing
-# The Lua filter ensures only the first H1 (product title) remains, all others are demoted to H2
+# Only the product title (created by promote-strong-top.lua) should be H1
+# Strategy: First convert all H1 to H2, then convert product titles back to H1
+sed -i '' 's/^# \(.*\)$/## \1/g' index.md
+sed -i '' 's/^## \(.*Alarm Panel\)$/# \1/g' index.md
+sed -i '' 's/^## \(.*Cellular Communicator\)$/# \1/g' index.md
+sed -i '' 's/^## \(.*[Gg]ate [Cc]ontroller.*\)$/# \1/g' index.md
+
+# Remove bold formatting from H1 titles (product titles should not be bold)
+sed -i '' 's/^# \*\*\(.*\)\*\*$/# \1/g' index.md
 
 # Fix heading hierarchy using Word classes and numbered headings
 # - Python script handles unnumbered headings with Word classes (.2-Po-Pag)
@@ -168,7 +161,7 @@ sed -i '' 's/^Connects to the control panel'\''s serial or keyboard bus or telep
 python3 "$SCRIPT_DIR/fix-heading-hierarchy.py" index.md
 
 # Add centered product image after H1 title (must run AFTER heading normalization)
-# Works for all product types: Communicators, Alarm Panels, etc.
+# Works for all product types: Communicators, Alarm Panels, Gate Controllers, etc.
 sed -i '' '/^# .*Alarm Panel$/a\
 \
 <div style="text-align: center;">\
@@ -176,6 +169,12 @@ sed -i '' '/^# .*Alarm Panel$/a\
 </div>
 ' index.md
 sed -i '' '/^# .*Cellular Communicator$/a\
+\
+<div style="text-align: center;">\
+  <img src="./image1.png" alt="Product Image" width="400">\
+</div>
+' index.md
+sed -i '' '/^# .*[Gg]ate [Cc]ontroller.*$/a\
 \
 <div style="text-align: center;">\
   <img src="./image1.png" alt="Product Image" width="400">\
@@ -191,6 +190,38 @@ sed -i '' 's/^\*\*The \*\([^*]*\) control panel\*\*/The \1 control panel/g' inde
 # Fix GitHub-style alerts by removing backslash escaping from square brackets
 sed -i '' 's/\\\[/[/g; s/\\\]/]/g' index.md
 
+# Fix blockquotes that appear after images (unwrap continuation text)
+# Pattern: Find blank line after image, then remove "> " from following blockquote lines
+# This handles the specific pattern where text continuation is incorrectly wrapped in blockquotes
+perl -i -0pe 's/(<img[^>]*>\n\n)((?:>.*\n)+)/$1 . join("\n", map { s\/^>\s*\/\/r } split(\/\n\/, $2))/ge' index.md
+
+# Remove stray "> " markers from any remaining blockquote lines after images
+# This catches edge cases where blockquotes appear later in the paragraph
+sed -i '' '/^<img.*>$/,/^###/ { /^> / s/^> //; }' index.md
+
+# Fix missing bold formatting for safety warnings
+# Add bold markers to "All wiring should be done with the power supply disconnected."
+sed -i '' 's/^All wiring should be done with the power supply disconnected\./**All wiring should be done with the power supply disconnected.**/g' index.md
+
+# Clean up HTML entities in table headers that represent blockquote markers
+# Remove "&gt; " prefix from table cell content (these are actual > characters from DOCX)
+sed -i '' 's/<strong>&gt; *\([^<]*\)<\/strong>/<strong>\1<\/strong>/g' index.md
+sed -i '' 's/<td[^>]*>&gt; *\([^<]*\)/<td>\1/g' index.md
+# Handle "Description&gt; " pattern specifically
+sed -i '' 's/Description&gt; /Description /g' index.md
+# Handle remaining &gt; between words (replace with space, not remove)
+sed -i '' 's/ &gt; / /g' index.md
+sed -i '' 's/&gt; / /g' index.md
+
+# Replace GSM with Cellular for GATOR English manuals (applies to all English manuals)
+# Pattern: "GSM" → "Cellular" when it appears alone or at start of phrases
+sed -i '' 's/\bGSM modem/Cellular modem/g' index.md
+sed -i '' 's/\bGSM frequencies/Cellular frequencies/g' index.md
+sed -i '' 's/\b2G GSM/2G Cellular/g' index.md
+# Handle lowercase context (e.g., "the GSM" → "the cellular")
+sed -i '' 's/the GSM/the cellular/g' index.md
+sed -i '' 's/via GSM/via cellular/g' index.md
+
 # Convert GitHub-style alerts to MkDocs admonitions format
 sed -i '' 's/> \[!NOTE\]/!!! note/g' index.md
 sed -i '' 's/> \[!IMPORTANT\]/!!! warning "Important"/g' index.md
@@ -204,42 +235,33 @@ python3 "$SCRIPT_DIR/fix_admonitions.py" index.md
 # Fix table structure issues (H1 in cells, empty rows, malformed headers)
 python3 "$SCRIPT_DIR/fix_table_structure.py" index.md
 
+# Fix tables that are actually numbered lists with empty second column
+python3 "$SCRIPT_DIR/fix-numbered-list-tables.py" index.md
+
+# Fix instruction step tables (numbered steps with images in table format)
+python3 "$SCRIPT_DIR/fix-instruction-step-tables.py" index.md
+
 # Convert HTML tables to pipe tables for human readability (AFTER table structure fixes)
-# Note: Legend tables with ordered lists are handled by convert-legend-tables-ordered-lists.lua filter
 echo "Converting HTML tables to pipe tables..."
 python3 "$SCRIPT_DIR/html-tables-to-pipes.py" index.md
 
-# Expand multi-state tables (tables with <br> tags) into separate rows
-echo "Expanding multi-state tables..."
-python3 "$SCRIPT_DIR/expand-multi-state-tables.py" index.md
-
-# Convert underline markers to HTML tags
-# The convert-underline.lua filter uses special markers (⟪U⟫ and ⟪/U⟫) that survive GFM conversion
-# Now convert them to proper <u> tags
-echo "Converting underline markers to HTML tags..."
-sed -i '' 's/⟪U⟫/<u>/g; s/⟪\/U⟫/<\/u>/g' index.md
+# Fix multi-line cells in pipe tables (convert newlines to <br> tags)
+python3 "$SCRIPT_DIR/fix-multiline-pipe-cells.py" index.md
 
 python3 "$SCRIPT_DIR/normalize-callouts.py" index.md
 python3 "$SCRIPT_DIR/fix-relative-images.py" index.md
 python3 "$SCRIPT_DIR/fix-list-continuity.py" index.md
+
+# Fix paragraph separators and image placement (must run BEFORE reduce-spacing)
+python3 "$SCRIPT_DIR/fix-image-placement.py" index.md
+
 python3 "$SCRIPT_DIR/reduce-spacing.py" index.md
 
-# Remove duplicate cover images (safety net for edge cases)
-python3 "$SCRIPT_DIR/remove-duplicate-cover-images.py" index.md
-
-# Remove empty headers (headers with only whitespace)
-python3 "$SCRIPT_DIR/remove-empty-headers.py" index.md
-
-# Fix disposal icon placement in Safety requirements
-python3 "$SCRIPT_DIR/fix-disposal-icon.py" index.md
-
-# Fix table spacing: ensure blank line before tables
+# Remove blank lines within pipe tables (MkDocs requires continuous lines)
 python3 "$SCRIPT_DIR/fix-table-spacing.py" index.md
 
-# Remove stray images that interrupt bullet lists (e.g., image3.png in SP3 Features section)
-# These are typically product images incorrectly placed in the middle of feature lists
-# Runs after all Python post-processors to ensure it's not re-added
-sed -i '' '/src="\.\/image3\.png"/d' index.md
+# Fix image callout lists wrapped in note admonitions (add missing point #1)
+python3 "$SCRIPT_DIR/fix-image-callouts.py" index.md
 
 # Optimize images for web and print (max 1200px width, 85% quality)
 echo "Optimizing images..."
