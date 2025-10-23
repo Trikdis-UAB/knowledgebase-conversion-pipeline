@@ -520,6 +520,54 @@ python3 smart-split-schematics.py path/to/image.png
 
 ## Updates
 
+### October 23, 2025 - Section 2.5 Formatting & Image Extraction Fixes
+
+**Three Critical Issues Resolved:**
+
+**Issue 1 - Pandoc API Bug in flatten-two-cell-tables.lua**
+- **Problem**: Images weren't being extracted from two-cell tables (text + image layout)
+- **Root Cause**: Incorrect Pandoc API syntax on line 123: `pandoc.Para(pandoc.Inlines(inl))`
+- **Fix**: Changed to correct syntax: `pandoc.Para({inl})`
+- **Impact**: Filter was failing silently, preventing image extraction from tables
+
+**Issue 2 - Mass Image Removal (68 out of 72 images missing)**
+- **Problem**: After implementing section 2.5 fixes, all images extracted from tables disappeared
+- **Root Cause**: `move-first-image-to-description.lua` was removing ALL standalone images before Description heading
+- **Investigation**: Systematic debugging revealed filter removed images at indices before Description
+- **Fix**: Modified filter to only remove FIRST image (cover image), preserving table-extracted images
+- **Result**: 65 images now correctly appear in GATOR manual
+
+**Issue 3 - "/" Separators Instead of Paragraph Breaks**
+- **Problem**: Text showed " / " between sentences instead of proper paragraph breaks
+- **Example**: "All wiring... / The purposes and voltages..."
+- **Root Cause**: Filter order - `remove-table-widths.lua` ran before `flatten-two-cell-tables.lua`
+- **Fix**: Swapped filter order in convert-single.sh (line 50 vs 52)
+- **Result**: Clean paragraph breaks throughout section 2.5
+
+**Section 2.5 Specific Enhancements:**
+- Added sed command to bold first sentence: "All wiring should be done with the power supply disconnected."
+- Added perl command to unwrap blockquotes after image10.png
+- Result matches PDF source structure exactly
+
+**Files Modified:**
+- `filters/flatten-two-cell-tables.lua` - Fixed Pandoc API syntax bug (line 123)
+- `move-first-image-to-description.lua` - Only remove first (cover) image, not all images
+- `convert-single.sh` - Swapped filter order, added section 2.5 formatting commands
+
+**Verification:**
+- ✅ Section 2.5 first sentence bold
+- ✅ Clean paragraph breaks (no "/" separators)
+- ✅ Image10.png positioned correctly after text
+- ✅ No blockquote wrappers on continuation text
+- ✅ All 65 images preserved in GATOR manual
+
+**Debugging Methodology:**
+Used systematic approach to isolate the image removal issue:
+1. Tested filter in isolation → 72 images ✓
+2. Added filters incrementally (binary search: 4→7→8→9→10)
+3. Pinpointed `move-first-image-to-description.lua` as culprit (72→10 images when added)
+4. Modified filter logic to preserve table-extracted images
+
 ### October 22, 2025 - Filter Cleanup & Archival
 
 **Pipeline Cleanup:**
