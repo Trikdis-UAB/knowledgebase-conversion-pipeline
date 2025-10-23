@@ -85,12 +85,12 @@ function Pandoc(doc)
       if not model then
         model = txt:match("^GSM%s+gate%s+controller%s+(.+)$")
         if model then
-          product_type = "Gate Controller"
+          product_type = "Cellular Gate Controller"
         end
       end
 
       if model then
-        -- Found product name - create H1 title: "[MODEL] Cellular Communicator"
+        -- Found product name - create H1 title: "[MODEL] Product Type"
         model = model:gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")  -- Trim whitespace
         local title = model .. " " .. product_type
         table.insert(out, pandoc.Header(1, {pandoc.Str(title)}))

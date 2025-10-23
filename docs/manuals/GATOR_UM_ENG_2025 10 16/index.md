@@ -1,4 +1,4 @@
-# GATOR Gate Controller
+# GATOR Cellular Gate Controller
 
 <div style="text-align: center;">
   <img src="./image1.png" alt="" width="400">
@@ -6,9 +6,9 @@
 
 ##  Description 
 
-GSM gate controller can remotely control automatic gates and other equipment.
+Cellular gate controller can remotely control automatic gates and other equipment.
 
-Users can control controller with Protegus2 application, telephone calls and SMS messages. The controller can recognize up to 7 administrator and 1000 user telephone numbers. A user control schedule and counter for how many times a specific user can control the system can be set for the controller. The GSM controller can send SMS messages informing when inputs and outputs are activated and restored (the text of the SMS messages is customizable). The controller is capable of sending event messages to the receiver of a security company. Connecting a WiFi (W485) or Ethernet (E485) module to the controller can send event messages and control the controller over a wireless or wired internet without using SIM card mobile data. By connecting the RF- LORA transceiver, you can connect the iO8-LORA wireless expander (1 pc.) and iO-LORA wireless expanders (up to 8 pcs.) to the GATOR controller. RFID readers connected to the iO-LORA wireless expansion modules can control up to 8 PGM outputs (GATOR controller program version from 2.13). One iO-LORA expander with an RFID reader controls only one PGM output.
+Users can control controller with Protegus2 application, telephone calls and SMS messages. The controller can recognize up to 7 administrator and 1000 user telephone numbers. A user control schedule and counter for how many times a specific user can control the system can be set for the controller. The Cellular controller can send SMS messages informing when inputs and outputs are activated and restored (the text of the SMS messages is customizable). The controller is capable of sending event messages to the receiver of a security company. Connecting a WiFi (W485) or Ethernet (E485) module to the controller can send event messages and control the controller over a wireless or wired internet without using SIM card mobile data. By connecting the RF- LORA transceiver, you can connect the iO8-LORA wireless expander (1 pc.) and iO-LORA wireless expanders (up to 8 pcs.) to the GATOR controller. RFID readers connected to the iO-LORA wireless expansion modules can control up to 8 PGM outputs (GATOR controller program version from 2.13). One iO-LORA expander with an RFID reader controls only one PGM output.
 
 ### Features
 
@@ -61,7 +61,7 @@ Users can control controller with Protegus2 application, telephone calls and SMS
 
 | Parameter | Description |
 |-----------|-------------|
-| 2G GSM modem frequencies | 850 /​ 900 /​ 1800 /​ 1900 MHz |
+| 2G Cellular modem frequencies | 850 /​ 900 /​ 1800 /​ 1900 MHz |
 | LTE modem frequencies: EU (Europe) LA (Latin America) | LTE-FDD: B1/​B3/​B5/​B7/​B8/​B20/​B28 LTE-FDD: B2/​B3/​B4/​B5/​B7/​B8/​B28/​B66 |
 | Power supply voltage | 9-32 V DC 12-24 V AC |
 | Current consumption | 100 mA |
@@ -88,7 +88,7 @@ Users can control controller with Protegus2 application, telephone calls and SMS
 
 5.  Nano-SIM card slot.
 
-6.  GSM antenna SMA connector.
+6.  Cellular antenna SMA connector.
 
 <img alt="" src="./image4.png" style="width:4.606299212598425in;height:2.7874015748031495in" />
 
@@ -113,8 +113,8 @@ Users can control controller with Protegus2 application, telephone calls and SMS
 
 | Indicator | Light status | Description |
 |-----------|--------------|-------------|
-| NETWORK | Green solid | Connected to GSM network |
-| NETWORK | Yellow blinking | Indication of GSM signal strength from 0 to 5. Sufficient strength is 3. |
+| NETWORK | Green solid | Connected to Cellular network |
+| NETWORK | Yellow blinking | Indication of Cellular signal strength from 0 to 5. Sufficient strength is 3. |
 | DATA | Green solid | Message is being sent |
 | DATA | Yellow solid | There are unsent event messages in the data buffer |
 | POWER | Green blinking | The power supply voltage is sufficient |
@@ -123,7 +123,7 @@ Users can control controller with Protegus2 application, telephone calls and SMS
 | TROUBLE | Off | No operation problems |
 | TROUBLE | 1 blink | No SIM card inserted |
 | TROUBLE | 2 blinks | The PIN code of the SIM card is incorrect |
-| TROUBLE | 3 blinks | Unable to connect to GSM network |
+| TROUBLE | 3 blinks | Unable to connect to Cellular network |
 | TROUBLE | 4 blinks | Unable to connect to GATOR or to the primary IP receiver |
 | TROUBLE | 5 blinks | Unable to connect to the backup IP receiver |
 | TROUBLE | 6 blinks | Internal clock is not set |
@@ -141,24 +141,23 @@ If the LED indication is not working, check the power supply and connections.
     
     3.  Flat-head 2,5 mm screwdriver.
     
-    4.  External GSM antenna if reception is weak in the area.
+    4.  External Cellular antenna if reception is weak in the area.
     
     5.  Activated nano-SIM card (can have turn off PIN code requests).
     
-    6.  Instruction manual for the automatic gate to which the GSM gate
-        controller is about to be connected.
+    6.  Instruction manual for the automatic gate to which the Cellular gate controller is about to be connected.
     
     Order the necessary components separately from your local retailer.
-### GSM gate controller *GATOR* standard packing list 
+### Cellular gate controller *GATOR* standard packing list 
 
-| - | GSM gate controller GATOR | 1 pc. |
+| - | Cellular gate controller GATOR | 1 pc. |
 |---|---------------------------|-------|
-| - | GSM antenna | 1 pc. |
+| - | Cellular antenna | 1 pc. |
 | - | Resistor 10 kΩ | 3 pcs. |
 | - | Double-sided adhesive tape (5 cm) | 1 pc. |
 | - | Screw | 2 pcs. |
 
-## Wiring schematics for the GSM gate controller 
+## Wiring schematics for the Cellular gate controller 
 
 ### Fastening 
 
@@ -170,7 +169,7 @@ If the LED indication is not working, check the power supply and connections.
 
 4.  Reinsert the board and the terminal block.
 
-5.  Screw the GSM antenna in.
+5.  Screw the Cellular antenna in.
 
 6.  Insert the nano-SIM card.
 
@@ -297,7 +296,7 @@ iO8-LORA expander connection diagram.
     any additional configuration if such operation mode is acceptable.
 1.  A nano-SIM card must be inserted into the controller. Turn off PIN code requests for the card before inserting it into the controller.
 
-2.  Connect a power source to the controller (see 2 “Wiring schematics for the GSM gate controller”).
+2.  Connect a power source to the controller (see 2 “Wiring schematics for the Cellular gate controller”).
 
 3.  Turn on the power for the controller. This should trigger the following controller LED indications:
 
@@ -502,7 +501,7 @@ SMS configuration command list
 
 | Command | Data | Description |
 |---------|------|-------------|
-| INFO |  | Request information about the controller. The response will include: controller type, IMEI number, GSM signal strength, power voltage magnitude, software version, serial number, date and time. E.g.: INFO 123456 |
+| INFO |  | Request information about the controller. The response will include: controller type, IMEI number, Cellular signal strength, power voltage magnitude, software version, serial number, date and time. E.g.: INFO 123456 |
 | ASKI |  | Input status inquiry. E.g.: ASKI 123456 |
 | ASKO |  | Output status inquiry. E.g.: ASKO 123456 |
 | SETA | NoX=phoneno#name#email | Add administrator to list (administrator number from 1A to 7A). Adds the phone number, name and e-mail to the specified line. The number must be separated from the name with a hash (#). The number must start with “+” and the international code. / E.g.: SETA 123456 No3=+37061234567#John#john_M@trikdis.com |
@@ -1087,7 +1086,7 @@ In the “User settings” window, tick the IN1 box if you want the user to rece
 
 3.  Set the desired settings for the controller and afterwards click **Write [F5]**. To disconnect from the controller click “**Disconnect**” and exit the TrikdisConfig program.
 
-## Testing of GSM gate controller 
+## Testing of Cellular gate controller 
 
 When configuration and installation are finished, test the system:
 
@@ -1127,7 +1126,7 @@ The controller’s firmware can also be updated and changed manually. All prior 
 
 ## Safety precautions 
 
-The GSM gate controller should only be installed and maintained by qualified personnel.
+The Cellular gate controller should only be installed and maintained by qualified personnel.
 
 Please read this manual carefully prior to installation in order to avoid mistakes that can lead to malfunction or even damage to the equipment.
 

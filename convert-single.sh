@@ -256,6 +256,9 @@ python3 "$SCRIPT_DIR/fix-table-spacing.py" index.md
 # Runs after all Python post-processors to ensure it's not re-added
 sed -i '' '/src="\.\/image3\.png"/d' index.md
 
+# Replace GSM with Cellular in gate controller manuals
+python3 "$SCRIPT_DIR/replace-gsm-with-cellular.py" index.md
+
 # Optimize images for web and print (max 1200px width, 85% quality)
 echo "Optimizing images..."
 shopt -s nullglob
