@@ -35,7 +35,7 @@ Convert product manuals from **.docx** to clean **Markdown** with correct headin
 * **Stable image URLs**: Forces `./image.png` paths so assets render even when served without trailing slashes
 
 ### Lua Filters (Applied in Order)
-The pipeline applies 35 Lua filters to clean and normalize Word documents:
+The pipeline applies 36 Lua filters to clean and normalize Word documents:
 
 1. **relocate-warranty.lua**: Relocates warranty/safety sections from beginning to end of document (supports multiple consecutive sections as separate H2 headings)
 2. **strip-cover.lua**: Removes cover page content but preserves product name (e.g., "Cellular communicator GT+") for title generation
@@ -61,15 +61,16 @@ The pipeline applies 35 Lua filters to clean and normalize Word documents:
 22. **convert-underline.lua**: Converts underline formatting
 23. **convert-blockquote-headings.lua**: Converts blockquote-wrapped headings (e.g., `> **Title**`) to proper markdown headings
 24. **remove-unwanted-blockquotes.lua**: Removes spurious blockquotes and feature descriptions incorrectly wrapped as blockquotes
-25. **maintain-list-continuity.lua**: Ensures numbered lists continue correctly across interruptions
-26. **strip-classes.lua**: Removes Word styling classes like `{.underline}`
-27. **fix-typography.lua**: Converts backticks to proper apostrophes and removes empty bold formatting
-28. **bold-list-titles.lua**: Automatically bolds short text (≤5 words) preceding bullet lists for visual hierarchy
-29. **fix-html-tags.lua**: Converts HTML subscript/superscript tags (e.g., `<sub>space</sub>`) to bracketed code format (e.g., `[space]`)
-30. **fix-crossrefs.lua**: Replaces "Error! Reference source not found" with "see the referenced section"
-31. **fix-admonition-lists.lua**: Fixes broken list numbering in admonitions (resets start to 1)
-32. **remove-standalone-asterisks.lua**: Removes standalone `****` markers while preserving them in tables
-33. **clean-html-blocks.lua**: Cleans HTML block structures
+25. **unwrap-post-image-blockquotes.lua**: Unwraps blockquotes that appear after blocks containing images (paragraphs or tables)
+26. **maintain-list-continuity.lua**: Ensures numbered lists continue correctly across interruptions
+27. **strip-classes.lua**: Removes Word styling classes like `{.underline}`
+28. **fix-typography.lua**: Converts backticks to proper apostrophes and removes empty bold formatting
+29. **bold-list-titles.lua**: Automatically bolds short text (≤5 words) preceding bullet lists for visual hierarchy
+30. **fix-html-tags.lua**: Converts HTML subscript/superscript tags (e.g., `<sub>space</sub>`) to bracketed code format (e.g., `[space]`)
+31. **fix-crossrefs.lua**: Replaces "Error! Reference source not found" with "see the referenced section"
+32. **fix-admonition-lists.lua**: Fixes broken list numbering in admonitions (resets start to 1)
+33. **remove-standalone-asterisks.lua**: Removes standalone `****` markers while preserving them in tables
+34. **clean-html-blocks.lua**: Cleans HTML block structures
 
 ---
 
@@ -531,15 +532,14 @@ Archived 10 unused Lua filters to reduce clutter and clarify which filters are a
   - `fix-rowspan-tables.lua`, `flatten-rowspan.lua` → replaced by `fix-rowspan-headers.lua`
   - `flatten-numbered-list-tables.lua` → functionality merged into other filters
   - `flatten-two-cell-tables.lua` → duplicate (version in `filters/` subdirectory is used)
-  - `unwrap-post-image-blockquotes.lua` → functionality merged into `remove-unwanted-blockquotes.lua`
 - Experimental filters never used: 2 filters
   - `extract-table-images.lua` (4664 bytes)
   - `force-markdown-tables.lua` (1988 bytes)
 
 **Result:**
 - **Before cleanup**: 45 Lua filter files on disk
-- **After cleanup**: 35 active Lua filters + 13 Python post-processors = **48 total active filters**
-- **Archived**: 10 unused Lua filters preserved in `archive/unused-filters/` with documentation
+- **After cleanup**: 36 active Lua filters + 13 Python post-processors = **49 total active filters**
+- **Archived**: 9 unused Lua filters preserved in `archive/unused-filters/` with documentation (unwrap-post-image-blockquotes.lua re-activated October 2025)
 
 **Benefits:**
 - Clearer project structure (only active filters in main directory)
