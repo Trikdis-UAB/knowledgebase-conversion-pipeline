@@ -206,13 +206,9 @@ The purposes and voltages of the automatic gate opener‘s terminals are describ
 
 The automatic gate‘s IN, COM terminals are used for controlling the gates.
 
-The automatic gate has a gate state output (OUT) that shows when the gates are closed and when they are open. The gate‘s state output can be a voltage output or a relay output. In the schematic, relay K1 is connected to a voltage automated gate output. There is voltage (~230V) between the voltage outputs OUT and N of the automated gates when the gates are open. The intermediate relay K1 is turned on when the gates are open and it activates
-
 <img alt="" src="./image10.png" style="width:3.8858267716535435in;height:2.6692913385826773in" />
 
-the controller‘s 1IN input. The state of the controller‘s 1IN input gives precise information about the state of the gates (when the gates are closed and when they are open).
-
-Configuring the controller with the gate state indication is described in chapter 5.9 “Settings for gate state indication”.
+The automatic gate has a gate state output (OUT) that shows when the gates are closed and when they are open. The gate‘s state output can be a voltage output or a relay output. In the schematic, relay K1 is connected to a voltage automated gate output. There is voltage (~230V) between the voltage outputs OUT and N of the automated gates when the gates are open. The intermediate relay K1 is turned on when the gates are open and it activates the controller‘s 1IN input. The state of the controller‘s 1IN input gives precise information about the state of the gates (when the gates are closed and when they are open).
 
 ### Schematic for connecting for RFID reader (Wiegand 26/34) 
 
