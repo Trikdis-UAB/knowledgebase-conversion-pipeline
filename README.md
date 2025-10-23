@@ -520,6 +520,38 @@ python3 smart-split-schematics.py path/to/image.png
 
 ## Updates
 
+### October 23, 2025 - GSM to Cellular Terminology Replacement
+
+**Automated Terminology Update System**
+
+**Problem:** GATOR and other gate controller manuals used outdated "GSM" terminology that needed to be replaced with modern "Cellular" terminology.
+
+**Solution:** Created `replace-gsm-with-cellular.py` post-processor script that automatically replaces all GSM references with Cellular throughout the document.
+
+**Features:**
+- **Handles line breaks**: Uses regex DOTALL flag to match patterns across line breaks
+- **Comprehensive coverage**: Replaces GSM in all contexts (gate controller, controller, network, antenna, signal, modem)
+- **Case preservation**: Maintains original capitalization patterns
+- **Technical specs included**: Even replaces in technical specifications ("2G GSM modem" → "2G cellular modem")
+
+**Title Update:**
+Modified `promote-strong-top.lua` to generate "[MODEL] Cellular Gate Controller" instead of "[MODEL] Gate Controller"
+
+**Replacements:**
+```
+GSM gate controller → Cellular gate controller
+GSM controller → Cellular controller
+GSM network → Cellular network
+GSM antenna → Cellular antenna
+GSM signal → Cellular signal
+GSM modem → Cellular modem
+2G GSM modem → 2G cellular modem
+```
+
+**Pipeline Integration:** Runs automatically after structure fixes, before image optimization
+
+**Result:** GATOR manual now uses modern Cellular terminology throughout ✅
+
 ### October 23, 2025 - Image Repositioning for Sentence-Splitting Cases
 
 **New Filter Created: reposition-sentence-splitting-images.lua**
