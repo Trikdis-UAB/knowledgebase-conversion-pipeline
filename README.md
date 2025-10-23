@@ -520,6 +520,43 @@ python3 smart-split-schematics.py path/to/image.png
 
 ## Updates
 
+### October 23, 2025 - Image Repositioning for Sentence-Splitting Cases
+
+**New Filter Created: reposition-sentence-splitting-images.lua**
+
+**Problem Solved:**
+Images appearing in the middle of sentences, breaking readability:
+```markdown
+...it activates
+<img src="./image10.png" />
+the controller's 1IN input...
+```
+
+**Solution:**
+Created intelligent filter that:
+- Detects pattern: Paragraph (no period) → Image → Paragraph/BlockQuote (lowercase start)
+- Recognizes lowercase continuation text as sentence continuation
+- Merges split paragraphs into complete sentence
+- Repositions image ABOVE the merged paragraph
+
+**How It Works:**
+1. Scans for images between paragraphs
+2. Checks if preceding text lacks sentence-ending punctuation (.!?)
+3. Checks if following text starts with lowercase (indicates continuation)
+4. Handles both regular paragraphs and BlockQuote-wrapped text
+5. Merges the split parts and moves image above
+
+**Result:**
+```markdown
+<img src="./image10.png" />
+
+The automatic gate... it activates the controller's 1IN input...
+```
+
+**Filter Count:** 37 active Lua filters + 13 Python post-processors = **50 total filters**
+
+**Tested With:** GATOR manual section 2.5 - image repositioned correctly ✅
+
 ### October 23, 2025 - Section 2.5 Formatting & Image Extraction Fixes
 
 **Three Critical Issues Resolved:**
