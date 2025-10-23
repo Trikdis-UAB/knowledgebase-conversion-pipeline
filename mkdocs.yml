@@ -1,15 +1,14 @@
 site_name: Manual Conversion Preview
-site_url: http://127.0.0.1:8001
+site_url: http://127.0.0.1:8000
 theme:
   name: material
-  logo: images/logo.png
-  favicon: images/favicon.png
   font: false
   palette:
     primary: custom
   features:
   - navigation.instant
   - navigation.expand
+  - navigation.sections
   - search.suggest
   - search.highlight
 
@@ -38,8 +37,15 @@ markdown_extensions:
 - toc:
     permalink: true
     permalink_title: Link to this section
+
 nav:
   - Home: index.md
-  - Converted Manuals:
-      - GT UM_ENG_2024 08 08-: manuals/GT UM_ENG_2024 08 08-/index.md
-      - GT+ UM_ENG_2025 09 11: manuals/GT+ UM_ENG_2025 09 11/index.md
+  - English:
+      - Alarm Communicators:
+          - GT Cellular Communicator: manuals/gt-cellular/GT UM_ENG_2025 09 11/index.md
+          - GT+ Cellular Communicator: manuals/gt-plus-cellular/GT+ UM_ENG_2025 09 11/index.md
+          - GET Cellular Communicator: manuals/get-cellular/GET UM_ENG_2025 09 03/index.md
+      - Control Panels:
+          - SP3 FLEXi Control Panel: manuals/SP3_TAIM_EN_2025 09 12/index.md
+      - Gate Controllers:
+          - GATOR Gate Controller: manuals/GATOR_UM_ENG_2025 10 16/index.md

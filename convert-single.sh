@@ -66,6 +66,7 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/convert-underline.lua" \
   --lua-filter="$SCRIPT_DIR/convert-blockquote-headings.lua" \
   --lua-filter="$SCRIPT_DIR/remove-unwanted-blockquotes.lua" \
+  --lua-filter="$SCRIPT_DIR/unwrap-post-image-blockquotes.lua" \
   --lua-filter="$SCRIPT_DIR/maintain-list-continuity.lua" \
   --lua-filter="$SCRIPT_DIR/strip-classes.lua" \
   --lua-filter="$SCRIPT_DIR/fix-typography.lua" \
