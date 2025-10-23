@@ -47,9 +47,9 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/fix-numbered-heading-levels.lua" \
   --lua-filter="$SCRIPT_DIR/promote-strong-top.lua" \
   --lua-filter="$SCRIPT_DIR/demote-extra-h1.lua" \
+  --lua-filter="$SCRIPT_DIR/filters/flatten-two-cell-tables.lua" \
   --lua-filter="$SCRIPT_DIR/remove-table-widths.lua" \
   --lua-filter="$SCRIPT_DIR/filters/convert-legend-tables-ordered-lists.lua" \
-  --lua-filter="$SCRIPT_DIR/filters/flatten-two-cell-tables.lua" \
   --lua-filter="$SCRIPT_DIR/flatten-instruction-tables.lua" \
   --lua-filter="$SCRIPT_DIR/unwrap-table-blockquotes.lua" \
   --lua-filter="$SCRIPT_DIR/convert-image-tables.lua" \
@@ -191,6 +191,19 @@ sed -i '' 's/^\*\*The \*\([^*]*\) control panel\*\*/The \1 control panel/g' inde
 
 # Fix GitHub-style alerts by removing backslash escaping from square brackets
 sed -i '' 's/\\\[/[/g; s/\\\]/]/g' index.md
+
+# Make first sentence bold in section 2.5 (gate schematic section)
+sed -i '' '/^### Schematic for connecting an automatic gate opener/{
+  n
+  n
+  s/^All wiring should be done with the power supply disconnected\.$/\*\*All wiring should be done with the power supply disconnected.\*\*/
+}' index.md
+
+# Unwrap blockquotes after schematic image in section 2.5
+# Pattern: After image10.png, remove blockquote markers from following lines
+perl -i -0777 -pe '
+  s/(image10\.png[^\n]*\n\n)> ([^\n]+\n)>\n> ([^\n]+)/$1$2\n$3/
+' index.md
 
 # Convert GitHub-style alerts to MkDocs admonitions format
 sed -i '' 's/> \[!NOTE\]/!!! note/g' index.md

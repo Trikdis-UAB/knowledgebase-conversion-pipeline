@@ -2,6 +2,11 @@
 -- Move the first image to immediately after the H1 title (before Description heading)
 -- Removes ALL standalone images before Description to avoid duplicates
 
+-- Debug log function (disabled for production)
+local function debug_log(msg)
+  -- Disabled
+end
+
 local first_image = nil
 local first_image_index = nil
 local h1_index = nil
@@ -46,6 +51,12 @@ function Pandoc(doc)
     -- Track this image index for removal
     if is_image then
       table.insert(image_indices, i)
+      -- Try to get image src for debugging
+      if block.t == "Para" and #block.content == 1 and block.content[1].t == "Image" then
+        debug_log("Found image at index " .. i .. ": " .. block.content[1].src)
+      else
+        debug_log("Found image at index " .. i .. " (non-Para format)")
+      end
     end
 
     -- Find H1 heading (the product title)
@@ -68,44 +79,27 @@ function Pandoc(doc)
 
     if description_index then
       -- Preferred: Position before Description heading
-      -- Remove ALL standalone images that appear before Description to avoid duplicates
-      local images_to_remove = {}
-      for _, img_idx in ipairs(image_indices) do
-        if img_idx < description_index then
-          table.insert(images_to_remove, img_idx)
-        end
+      -- Only remove the FIRST image (cover image) to avoid duplicates
+      -- Other images were likely extracted from tables and should remain
+      if first_image_index < description_index then
+        table.remove(blocks, first_image_index)
+        -- Adjust description_index since we removed one block before it
+        description_index = description_index - 1
       end
 
-      -- Remove images in reverse order to maintain indices
-      table.sort(images_to_remove, function(a, b) return a > b end)
-      for _, idx in ipairs(images_to_remove) do
-        table.remove(blocks, idx)
-      end
-
-      -- Adjust description_index based on how many images we removed before it
-      local adjusted_desc_index = description_index - #images_to_remove
-
-      -- Set target to position before Description (which is now at adjusted index)
-      target_position = adjusted_desc_index
+      -- Set target to position before Description
+      target_position = description_index
 
     elseif h1_index then
       -- Fallback: Position after H1 heading
-      -- Remove ALL standalone images
-      table.sort(image_indices, function(a, b) return a > b end)
-      for _, idx in ipairs(image_indices) do
-        table.remove(blocks, idx)
+      -- Only remove the FIRST image (cover image)
+      if first_image_index <= h1_index then
+        table.remove(blocks, first_image_index)
+        -- Adjust h1_index since we removed one block before/at it
+        h1_index = h1_index - 1
       end
 
-      -- Adjust h1_index if any images were before it
-      local removed_before_h1 = 0
-      for _, idx in ipairs(image_indices) do
-        if idx <= h1_index then
-          removed_before_h1 = removed_before_h1 + 1
-        end
-      end
-      local adjusted_h1_index = h1_index - removed_before_h1
-
-      target_position = adjusted_h1_index + 1
+      target_position = h1_index + 1
     else
       -- No positioning landmarks found, skip
       return pandoc.Pandoc(blocks, doc.meta)

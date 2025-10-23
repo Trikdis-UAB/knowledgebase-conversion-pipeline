@@ -120,7 +120,7 @@ return {
           if b.t == "Para" or b.t == "Plain" then
             for _, inl in ipairs(b.c or b.content or {}) do
               if inl.t == "Image" then
-                table.insert(out_imgs, pandoc.Para(pandoc.Inlines(inl)))
+                table.insert(out_imgs, pandoc.Para({inl}))
               end
             end
           end
