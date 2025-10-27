@@ -599,6 +599,33 @@ These buttons are sourced from the GATOR WiFi manual and serve as fallbacks for 
 
 ## Updates
 
+### October 27, 2025 - Admonition Formatting Fix
+
+**Problem**: Admonitions with inline titles (e.g., `!!! warning "Important"`) were being incorrectly processed, resulting in scrambled formatting where the title appeared as a separate quoted line and blockquote markers were not fully removed.
+
+**Root Cause**: The `fix_admonitions.py` script had overlapping regex patterns that were not mutually exclusive. The pattern for admonitions with content was matching titled admonitions and treating the quoted title as content.
+
+**Solution**: Rewrote pattern matching logic with 4 distinct, mutually exclusive patterns:
+1. **pattern_titled_with_content** - Title AND content on same line
+2. **pattern_no_title_with_content** - Content but NO title (uses negative lookahead `(?! ")`)
+3. **pattern_only_title** - Title but NO content (NEW handler)
+4. **pattern_empty** - Neither title nor content
+
+**Key Changes**:
+- Added negative lookahead to prevent pattern collision
+- Created dedicated handler for titled admonitions without content on same line
+- Fixed pattern priority order to check most specific patterns first
+- Comprehensive blockquote marker removal (handles `>`, `> >`, `    >`, etc.)
+
+**Result**: All admonitions with inline titles now display correctly in MkDocs:
+- Title appears as admonition heading (not as separate line)
+- No visible blockquote markers
+- Clean content indentation
+
+**Documentation**: See `ADMONITION_FIX.md` for complete technical details.
+
+**Tested With**: GATOR Cellular, GATOR WiFi manuals - all admonitions verified correct.
+
 ### October 27, 2025 - Automatic App Store Buttons System
 
 **Problem**: Manuals with Protegus2 app integration needed consistent, clickable app store buttons.
