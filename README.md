@@ -21,6 +21,7 @@ Convert product manuals from **.docx** to clean **Markdown** with correct headin
 ### Conversion Features
 * **Automatic title extraction**: Extracts product name from DOCX cover page and creates proper H1 title (e.g., "GT+ Cellular Communicator")
 * **Product image formatting**: Centers first product image with consistent width (400px) after H1 title (removes duplicates automatically)
+* **App store buttons**: Automatically adds clickable Protegus2 app download buttons (Android/iOS/Web) with intelligent detection
 * **Bold list titles**: Automatically bolds short text (≤5 words) that precedes bullet lists for visual hierarchy
 * **Warranty section relocation**: Automatically moves warranty/safety sections from cover pages to end of document (supports multiple consecutive warranty sections)
 * **Folder structure**: Each manual gets its own folder with `index.md` + images in the same folder
@@ -518,7 +519,104 @@ python3 smart-split-schematics.py path/to/image.png
 
 ---
 
+## Protegus2 App Store Buttons
+
+### Automatic Detection and Insertion
+
+The pipeline automatically adds clickable Protegus2 app download buttons for manuals that include mobile app integration. This is a **fully automatic** system that requires zero manual intervention.
+
+### How It Works
+
+**Pattern Detection:**
+The system searches for the text pattern: "Download and launch the Protegus2 app" in the converted markdown.
+
+**Intelligent Button Handling:**
+
+1. **Try to extract from DOCX** (if buttons are present):
+   - Searches for button images between "Download...Protegus" and "Log in/Launch" text markers
+   - Uses document structure analysis (Pandoc AST) to find images in the correct location
+   - Validates images are actually app store buttons (< 15KB size check)
+   - Rejects large manual images that happen to have similar filenames
+
+2. **Fall back to standard buttons** (if DOCX doesn't contain buttons):
+   - Automatically copies standard button images from `app-store-buttons/` directory
+   - Uses unique filenames (`protegus-*.png`) to avoid overwriting manual images
+   - Ensures consistent appearance across all manuals
+
+**Button HTML Generation:**
+Creates clickable HTML after the download instruction:
+
+```html
+<div style="margin: 20px 0; text-align: left;">
+  <a href="https://play.google.com/store/apps/details?id=lt.apps.protegus2" target="_blank">
+    <img src="./protegus-android.png" alt="Get it on Google Play" style="height:50px;">
+  </a>
+  <a href="https://www.protegus.app" target="_blank">
+    <img src="./protegus-web.png" alt="Open Web App" style="height:50px;">
+  </a>
+  <a href="https://apps.apple.com/us/app/protegus-2/id1555450252" target="_blank">
+    <img src="./protegus-ios.png" alt="Download on the App Store" style="height:50px;">
+  </a>
+</div>
+```
+
+### Standard Button Library
+
+Located in `app-store-buttons/` directory:
+- **protegus-android.png** (3.2 KB) - Google Play Store button
+- **protegus-ios.png** (1.5 KB) - Apple App Store button
+- **protegus-web.png** (3.4 KB) - Web app button
+
+These buttons are sourced from the GATOR WiFi manual and serve as fallbacks for all manuals.
+
+### Key Features
+
+✅ **Zero manual work** - Writers just convert the DOCX, buttons added automatically
+✅ **Intelligent detection** - Only adds buttons if Protegus2 download section exists
+✅ **Safe filename handling** - Uses unique `protegus-*.png` names to preserve manual images
+✅ **Consistent URLs** - All buttons link to correct app stores
+✅ **Works for all formats** - Handles buttons in tables, standalone, or missing entirely
+
+### Files Involved
+
+- **extract-protegus-buttons.py**: Extracts buttons from DOCX by document position
+- **add-app-store-buttons.py**: Adds clickable HTML with intelligent fallback logic
+- **app-store-buttons/**: Standard button image library
+
+### Example Output
+
+**GATOR Cellular** (no buttons in DOCX):
+- Uses standard buttons: `protegus-android.png`, `protegus-ios.png`, `protegus-web.png`
+- Original wiring diagrams preserved: `image16-21.png`
+
+**GATOR WiFi** (buttons in DOCX):
+- Uses extracted buttons: `image16-18.png` (validated as buttons by size)
+
+**SP3 Control Panel** (no Protegus2 section):
+- No buttons added (script detects absence of download instruction)
+
+---
+
 ## Updates
+
+### October 27, 2025 - Automatic App Store Buttons System
+
+**Problem**: Manuals with Protegus2 app integration needed consistent, clickable app store buttons.
+
+**Solution**: Created fully automatic system that:
+- Detects Protegus2 download sections by document pattern
+- Extracts button images from DOCX if present (with validation)
+- Falls back to standard button library if needed
+- Uses unique filenames to avoid overwriting manual images
+
+**Components**:
+1. **extract-protegus-buttons.py** - Position-based button detection using Pandoc AST
+2. **add-app-store-buttons.py** - Intelligent button insertion with size validation
+3. **app-store-buttons/** - Standard button library (protegus-android/ios/web.png)
+
+**Result**: All manuals with Protegus2 integration automatically get clickable app store buttons with zero manual intervention.
+
+
 
 ### October 23, 2025 - GSM to Cellular Terminology Replacement
 

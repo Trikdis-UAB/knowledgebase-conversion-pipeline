@@ -3,15 +3,18 @@
 add-app-store-buttons.py
 Adds clickable app store buttons after "Download and launch the Protegus2 app" text
 Automatically detects which button images are available (image16-21)
+If no buttons found, copies standard buttons from app-store-buttons/ directory
 """
 
 import sys
 import re
 import os
+import shutil
 
 def find_app_store_buttons(directory):
     """Find app store button images in the directory.
 
+    Only considers images < 15KB to be app store buttons (not random manual images).
     Returns dict with button types and their image filenames.
     """
     buttons = {}
@@ -22,31 +25,70 @@ def find_app_store_buttons(directory):
     ios_patterns = ['image17.png', 'image20.png']
     web_patterns = ['image18.png', 'image21.png']
 
+    # Only consider small images (< 15KB) as app store buttons
+    # Manual images are typically much larger (50KB+)
+    MAX_BUTTON_SIZE = 15 * 1024  # 15 KB
+
     for pattern in android_patterns:
-        if os.path.exists(os.path.join(directory, pattern)):
+        filepath = os.path.join(directory, pattern)
+        if os.path.exists(filepath) and os.path.getsize(filepath) < MAX_BUTTON_SIZE:
             buttons['android'] = pattern
             break
 
     for pattern in web_patterns:
-        if os.path.exists(os.path.join(directory, pattern)):
+        filepath = os.path.join(directory, pattern)
+        if os.path.exists(filepath) and os.path.getsize(filepath) < MAX_BUTTON_SIZE:
             buttons['web'] = pattern
             break
 
     for pattern in ios_patterns:
-        if os.path.exists(os.path.join(directory, pattern)):
+        filepath = os.path.join(directory, pattern)
+        if os.path.exists(filepath) and os.path.getsize(filepath) < MAX_BUTTON_SIZE:
             buttons['ios'] = pattern
             break
 
     return buttons
 
-def add_app_store_buttons(content, directory):
+def copy_standard_buttons(directory, script_dir):
+    """Copy standard app store button images with unique names.
+
+    Returns dict with button filenames if successful.
+    """
+    standard_buttons_dir = os.path.join(script_dir, 'app-store-buttons')
+
+    # Check if standard buttons directory exists
+    if not os.path.exists(standard_buttons_dir):
+        return {}
+
+    buttons = {}
+    button_mapping = {
+        'android': ('protegus-android.png', 'protegus-android.png'),
+        'ios': ('protegus-ios.png', 'protegus-ios.png'),
+        'web': ('protegus-web.png', 'protegus-web.png')
+    }
+
+    for button_type, (source_name, dest_name) in button_mapping.items():
+        source_path = os.path.join(standard_buttons_dir, source_name)
+        dest_path = os.path.join(directory, dest_name)
+
+        if os.path.exists(source_path):
+            shutil.copy2(source_path, dest_path)
+            buttons[button_type] = dest_name
+
+    return buttons
+
+def add_app_store_buttons(content, directory, script_dir):
     """Add clickable app store buttons after Protegus2 app download instruction."""
 
-    # Find which button images are available
+    # First, find which button images are already available
     buttons = find_app_store_buttons(directory)
 
+    # If no buttons found, copy standard buttons
     if not buttons:
-        return content  # No button images found
+        buttons = copy_standard_buttons(directory, script_dir)
+
+    if not buttons:
+        return content  # No button images found and no standard buttons available
 
     # Build HTML for available buttons
     button_links = []
@@ -91,14 +133,15 @@ def main():
 
     filepath = sys.argv[1]
     directory = os.path.dirname(filepath)
+    script_dir = os.path.dirname(os.path.abspath(__file__))
 
     try:
         # Read file
         with open(filepath, 'r', encoding='utf-8') as f:
             content = f.read()
 
-        # Add buttons (auto-detect which ones exist)
-        modified_content = add_app_store_buttons(content, directory)
+        # Add buttons (auto-detect which ones exist or use standard buttons)
+        modified_content = add_app_store_buttons(content, directory, script_dir)
 
         # Write back if changed
         if modified_content != content:

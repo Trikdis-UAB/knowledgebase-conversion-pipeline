@@ -24,7 +24,7 @@ base="$(basename "${inp%.docx}")"
 doc_dir="${OUT_DIR}/${base}"
 
 # Ensure filters exist
-for f in strip-cover.lua strip-toc.lua promote-strong-top.lua demote-extra-h1.lua fix-numbered-heading-levels.lua normalize-headings.lua move-first-image-to-description.lua split-inline-images.lua convert-app-store-buttons.lua reposition-sentence-splitting-images.lua convert-image-sizes.lua softwrap-tokens.lua clean-table-pipes.lua mark-two-col.lua convert-underline.lua remove-unwanted-blockquotes.lua maintain-list-continuity.lua strip-classes.lua fix-typography.lua bold-list-titles.lua fix-crossrefs.lua clean-html-blocks.lua unwrap-table-blockquotes.lua remove-standalone-asterisks.lua fix-rowspan-headers.lua flatten-instruction-tables.lua; do
+for f in strip-cover.lua strip-toc.lua promote-strong-top.lua demote-extra-h1.lua fix-numbered-heading-levels.lua normalize-headings.lua move-first-image-to-description.lua split-inline-images.lua reposition-sentence-splitting-images.lua convert-image-sizes.lua softwrap-tokens.lua clean-table-pipes.lua mark-two-col.lua convert-underline.lua remove-unwanted-blockquotes.lua maintain-list-continuity.lua strip-classes.lua fix-typography.lua bold-list-titles.lua fix-crossrefs.lua clean-html-blocks.lua unwrap-table-blockquotes.lua remove-standalone-asterisks.lua fix-rowspan-headers.lua flatten-instruction-tables.lua; do
   [ -f "$SCRIPT_DIR/$f" ] || { echo "Missing $f"; exit 1; }
 done
 # Check the filters in filters subdirectory
@@ -58,7 +58,6 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/promote-centered-bold.lua" \
   --lua-filter="$SCRIPT_DIR/move-first-image-to-description.lua" \
   --lua-filter="$SCRIPT_DIR/split-inline-images.lua" \
-  --lua-filter="$SCRIPT_DIR/convert-app-store-buttons.lua" \
   --lua-filter="$SCRIPT_DIR/reposition-sentence-splitting-images.lua" \
   --lua-filter="$SCRIPT_DIR/convert-image-sizes.lua" \
   --lua-filter="$SCRIPT_DIR/softwrap-tokens.lua" \
@@ -93,8 +92,8 @@ if [ -d "media" ]; then
   echo "  Fixed image paths"
 fi
 
-# Extract app store button images (not extracted by Pandoc)
-"$SCRIPT_DIR/extract-app-store-buttons.sh" "$inp" . 2>/dev/null || true
+# Extract Protegus app store button images (by document position)
+python3 "$SCRIPT_DIR/extract-protegus-buttons.py" "$inp" . 2>/dev/null || true
 
 # Fix any remaining error references
 sed -i '' 's/Error! Reference source not found\./see the referenced section/g' index.md
