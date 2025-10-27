@@ -17,10 +17,10 @@ def find_app_store_buttons(directory):
     buttons = {}
 
     # Check for various button image patterns
-    # Pattern: image16/19 = Google Play, image17/20 = Web, image18/21 = App Store
+    # Pattern: image16/19 = Google Play, image17/20 = App Store, image18/21 = Web
     android_patterns = ['image16.png', 'image19.png']
-    web_patterns = ['image17.png', 'image20.png']
-    ios_patterns = ['image18.png', 'image21.png']
+    ios_patterns = ['image17.png', 'image20.png']
+    web_patterns = ['image18.png', 'image21.png']
 
     for pattern in android_patterns:
         if os.path.exists(os.path.join(directory, pattern)):
