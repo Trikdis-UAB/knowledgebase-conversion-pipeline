@@ -81,11 +81,27 @@ function Pandoc(doc)
         end
       end
 
-      -- Pattern 5: "GSM gate controller [MODEL]" (GATOR style)
+      -- Pattern 5: "GSM gate controller [MODEL]" (GATOR Cellular style)
       if not model then
         model = txt:match("^GSM%s+gate%s+controller%s+(.+)$")
         if model then
           product_type = "Cellular Gate Controller"
+        end
+      end
+
+      -- Pattern 6: "WiFi gate controller [MODEL]" (GATOR WiFi style)
+      if not model then
+        model = txt:match("^WiFi%s+gate%s+controller%s+(.+)$")
+        if model then
+          product_type = "WiFi Gate Controller"
+        end
+      end
+
+      -- Pattern 7: "Gate controller [MODEL]" (generic fallback for gate controllers)
+      if not model then
+        model = txt:match("^Gate%s+controller%s+(.+)$")
+        if model then
+          product_type = "Gate Controller"
         end
       end
 
