@@ -82,9 +82,52 @@ function Table(tbl)
         end
     end
 
-    -- Mark header-only columns with single-char headers as empty (they're separators)
+    -- Helper to extract text from inline elements (handles Strong, Emph, etc.)
+    local function get_inline_text(inline)
+        if inline.t == "Str" then
+            return inline.text
+        elseif inline.t == "Strong" or inline.t == "Emph" then
+            -- Extract text from formatted elements
+            local text = ""
+            for _, inner in ipairs(inline.content) do
+                text = text .. get_inline_text(inner)
+            end
+            return text
+        end
+        return ""
+    end
+
+    -- Helper to check if cell has any non-whitespace content
+    local function has_non_whitespace(cell)
+        if not cell then
+            return false
+        end
+        local contents = cell.contents or cell
+        if not contents or #contents == 0 then
+            return false
+        end
+        for _, block in ipairs(contents) do
+            if block.t == "Plain" or block.t == "Para" then
+                for _, inline in ipairs(block.content) do
+                    local text = get_inline_text(inline)
+                    if text:match("%S") then  -- Has non-whitespace
+                        return true
+                    end
+                end
+            elseif block.t ~= "Null" then
+                return true
+            end
+        end
+        return false
+    end
+
+    -- Detect single-char header columns with only whitespace in data cells
     for i = 1, num_cols do
-        if header_only_columns[i] and tbl.head and tbl.head.rows then
+        if tbl.head and tbl.head.rows then
+            local has_single_char_header = false
+            local header_text = ""
+
+            -- Check if header is single character
             for _, row in ipairs(tbl.head.rows) do
                 if row.cells[i] then
                     local cell = row.cells[i]
@@ -93,18 +136,37 @@ function Table(tbl)
                         for _, block in ipairs(contents) do
                             if block.t == "Plain" or block.t == "Para" then
                                 for _, inline in ipairs(block.content) do
-                                    if inline.t == "Str" then
-                                        -- If header is single character, treat as separator
-                                        if #inline.text == 1 then
-                                            empty_columns[i] = true
-                                            print(string.format("Column %d has single-char header '%s' with no data - treating as separator", i, inline.text))
-                                        end
+                                    local text = get_inline_text(inline)
+                                    if #text == 1 then
+                                        has_single_char_header = true
+                                        header_text = text
                                         break
                                     end
                                 end
                             end
                         end
                     end
+                end
+            end
+
+            -- If header is single char, check if all data cells are whitespace-only
+            if has_single_char_header then
+                local all_data_empty = true
+                for _, body in ipairs(tbl.bodies) do
+                    for _, row in ipairs(body.body) do
+                        if row.cells[i] and has_non_whitespace(row.cells[i]) then
+                            all_data_empty = false
+                            break
+                        end
+                    end
+                    if not all_data_empty then
+                        break
+                    end
+                end
+
+                if all_data_empty then
+                    empty_columns[i] = true
+                    print(string.format("Column %d has single-char header '%s' with only whitespace in data - treating as separator", i, header_text))
                 end
             end
         end
