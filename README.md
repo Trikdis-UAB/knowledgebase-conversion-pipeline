@@ -643,7 +643,61 @@ These buttons are sourced from the GATOR WiFi manual and serve as fallbacks for 
 
 **Result**: All manuals with Protegus2 integration automatically get clickable app store buttons with zero manual intervention.
 
+### October 27, 2025 - Empty Separator Column Detection Fix
 
+**Problem**: Tables with single-character separator columns (e.g., "S", "T") formatted with bold/emphasis were not being detected and removed, even though the data cells were empty or whitespace-only. This resulted in unnecessary empty columns in the converted manuals.
+
+**Root Cause**: The `remove-empty-table-columns.lua` filter had two limitations:
+1. Only checked for plain `Str` inline elements, missing formatted headers like `**S**` which create `Strong` → `Str` nested structures
+2. Didn't distinguish between truly empty cells and cells containing only whitespace (spaces)
+
+**Solution**: Enhanced the filter with three key improvements:
+1. **Recursive text extraction** (`get_inline_text()` helper) - Handles nested formatting elements (`Strong`, `Emph`) to extract actual text content
+2. **Whitespace detection** (`has_non_whitespace()` helper) - Distinguishes between empty cells and cells with only spaces
+3. **Smart separator detection** - Identifies columns where:
+   - Header is a single character (any formatting)
+   - ALL data cells contain only whitespace (no actual content)
+
+**Key Code Changes**:
+```lua
+-- Extract text from formatted elements
+local function get_inline_text(inline)
+    if inline.t == "Str" then
+        return inline.text
+    elseif inline.t == "Strong" or inline.t == "Emph" then
+        local text = ""
+        for _, inner in ipairs(inline.content) do
+            text = text .. get_inline_text(inner)
+        end
+        return text
+    end
+    return ""
+end
+
+-- Check for actual content vs whitespace
+local function has_non_whitespace(cell)
+    for _, block in ipairs(contents) do
+        if block.t == "Plain" or block.t == "Para" then
+            for _, inline in ipairs(block.content) do
+                local text = get_inline_text(inline)
+                if text:match("%S") then  -- Has non-whitespace
+                    return true
+                end
+            end
+        end
+    end
+    return false
+end
+```
+
+**Result**:
+- ✅ Formatted separator columns (`**S**`, `*T*`) now detected automatically
+- ✅ Whitespace-only cells correctly identified as empty
+- ✅ VISTA 48 table: Reduced from 7 columns to 6 (removed "S" separator)
+- ✅ No manual intervention needed for future conversions
+- ✅ Print message: "Column X has single-char header 'S' with only whitespace in data - treating as separator"
+
+**Tested With**: GT manual VISTA 48 table - "S" separator column automatically removed during reconversion.
 
 ### October 23, 2025 - GSM to Cellular Terminology Replacement
 
