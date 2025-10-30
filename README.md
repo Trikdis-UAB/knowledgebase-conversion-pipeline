@@ -525,26 +525,30 @@ python3 smart-split-schematics.py path/to/image.png
 
 The pipeline automatically adds clickable Protegus2 app download buttons for manuals that include mobile app integration. This is a **fully automatic** system that requires zero manual intervention.
 
-### How It Works
+### How It Works (Updated October 30, 2025)
 
-**Pattern Detection:**
-The system searches for the text pattern: "Download and launch the Protegus2 app" in the converted markdown.
+**Language-Specific Pattern Detection:**
+The system uses language-specific patterns to detect download instructions. Currently supports:
+- **English**: "Download and launch the Protegus2 app" OR "Download and install Protegus2 mobile app"
 
 **Intelligent Button Handling:**
 
-1. **Try to extract from DOCX** (if buttons are present):
-   - Searches for button images between "Download...Protegus" and "Log in/Launch" text markers
-   - Uses document structure analysis (Pandoc AST) to find images in the correct location
-   - Validates images are actually app store buttons (< 15KB size check)
-   - Rejects large manual images that happen to have similar filenames
-
-2. **Fall back to standard buttons** (if DOCX doesn't contain buttons):
+1. **Always uses standard buttons**:
    - Automatically copies standard button images from `app-store-buttons/` directory
-   - Uses unique filenames (`protegus-*.png`) to avoid overwriting manual images
-   - Ensures consistent appearance across all manuals
+   - Uses consistent filenames (`protegus-android.png`, `protegus-ios.png`, `protegus-web.png`)
+   - All three buttons (Android, iOS, Web) are always included
+
+2. **Two replacement strategies**:
+   - **With placeholder image** (e.g., SP3 manual): Replaces the placeholder image after download instruction with clickable buttons
+   - **Without placeholder image** (e.g., GATOR manual): Inserts clickable buttons after download instruction
+
+**Pattern Matching:**
+- Matches only complete download sentences ending with period or parenthesis
+- Prevents false matches to other Protegus2 mentions in the document
+- Only processes first occurrence to avoid duplicates
 
 **Button HTML Generation:**
-Creates clickable HTML after the download instruction:
+Creates clickable HTML with all three app store buttons:
 
 ```html
 <div style="margin: 20px 0; text-align: left;">
@@ -567,33 +571,62 @@ Located in `app-store-buttons/` directory:
 - **protegus-ios.png** (1.5 KB) - Apple App Store button
 - **protegus-web.png** (3.4 KB) - Web app button
 
-These buttons are sourced from the GATOR WiFi manual and serve as fallbacks for all manuals.
+These buttons are used for all manuals consistently.
 
 ### Key Features
 
 ✅ **Zero manual work** - Writers just convert the DOCX, buttons added automatically
-✅ **Intelligent detection** - Only adds buttons if Protegus2 download section exists
-✅ **Safe filename handling** - Uses unique `protegus-*.png` names to preserve manual images
+✅ **Language-specific patterns** - Easy to add support for new languages
+✅ **Precise matching** - Only matches complete download sentences to avoid duplicates
 ✅ **Consistent URLs** - All buttons link to correct app stores
-✅ **Works for all formats** - Handles buttons in tables, standalone, or missing entirely
+✅ **Works for all formats** - Handles with/without placeholder images
+
+### Adding Support for New Languages
+
+When converting manuals in other languages, update `add-app-store-buttons.py`:
+
+1. Open the script and locate the `patterns` list (around line 110)
+2. Uncomment the language you need and add the correct translation pattern
+3. Pattern must match the complete download instruction sentence
+
+**Example for Lithuanian:**
+```python
+patterns = [
+    # English variations
+    r'(Download and launch the Protegus2 app[^\n]*\)\.)',
+    r'(Download and install Protegus2 mobile app[^\n]*\.)',
+
+    # Lithuanian
+    r'(Atsisiųskite ir paleiskite Protegus2 programėlę[^\n]*\)\.)',
+]
+```
+
+**Pattern Guidelines:**
+- Must capture complete sentence in parentheses `()`
+- Use `[^\n]*` to match within single line
+- End with `\)\.` or `\.` to match sentence ending
+- Test with actual manual text to ensure correct matching
+
+**Supported Languages (Add as needed):**
+- ✅ English (2 variations)
+- ⏳ Lithuanian (pattern ready, uncomment when needed)
+- ⏳ Spanish (pattern ready, uncomment when needed)
+- ⏳ Russian (pattern ready, uncomment when needed)
 
 ### Files Involved
 
-- **extract-protegus-buttons.py**: Extracts buttons from DOCX by document position
-- **add-app-store-buttons.py**: Adds clickable HTML with intelligent fallback logic
-- **app-store-buttons/**: Standard button image library
+- **add-app-store-buttons.py**: Language-aware button insertion script
+- **app-store-buttons/**: Standard button image library (copied to each manual)
 
 ### Example Output
 
-**GATOR Cellular** (no buttons in DOCX):
+**GATOR Cellular** (English, no placeholder image):
+- Buttons inserted after: "Download and launch the Protegus2 app..."
 - Uses standard buttons: `protegus-android.png`, `protegus-ios.png`, `protegus-web.png`
-- Original wiring diagrams preserved: `image16-21.png`
 
-**GATOR WiFi** (buttons in DOCX):
-- Uses extracted buttons: `image16-18.png` (validated as buttons by size)
-
-**SP3 Control Panel** (no Protegus2 section):
-- No buttons added (script detects absence of download instruction)
+**SP3 Control Panel** (English, with placeholder image):
+- Placeholder image replaced with clickable buttons
+- Original image39.png removed, standard buttons used instead
 
 ---
 

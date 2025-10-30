@@ -78,51 +78,77 @@ def copy_standard_buttons(directory, script_dir):
     return buttons
 
 def add_app_store_buttons(content, directory, script_dir):
-    """Add clickable app store buttons after Protegus2 app download instruction."""
+    """Add clickable app store buttons after Protegus2 app download instruction.
 
-    # First, find which button images are already available
-    buttons = find_app_store_buttons(directory)
+    Always uses standard protegus-*.png buttons with clickable links.
+    Replaces any existing placeholder images.
+    """
 
-    # If no buttons found, copy standard buttons
+    # Always copy/ensure standard buttons are available
+    buttons = copy_standard_buttons(directory, script_dir)
+
     if not buttons:
-        buttons = copy_standard_buttons(directory, script_dir)
+        return content  # No standard buttons available
 
-    if not buttons:
-        return content  # No button images found and no standard buttons available
+    # Build HTML for clickable buttons (always all three)
+    buttons_html = '''
+<div style="margin: 20px 0; text-align: left;">
+  <a href="https://play.google.com/store/apps/details?id=lt.apps.protegus2" target="_blank" style="display: inline-block; margin-right: 10px;">
+    <img src="./protegus-android.png" alt="Get it on Google Play" style="height:50px;">
+  </a>
+  <a href="https://www.protegus.app" target="_blank" style="display: inline-block; margin-right: 10px;">
+    <img src="./protegus-web.png" alt="Open Web App" style="height:50px;">
+  </a>
+  <a href="https://apps.apple.com/us/app/protegus-2/id1555450252" target="_blank" style="display: inline-block;">
+    <img src="./protegus-ios.png" alt="Download on the App Store" style="height:50px;">
+  </a>
+</div>'''
 
-    # Build HTML for available buttons
-    button_links = []
+    # Language-specific patterns for download instructions
+    # Add more languages here as needed
+    # Patterns must end with a period or bracket to ensure we match only the download line
+    patterns = [
+        # English variations - match the complete sentence ending with period or parenthesis
+        r'(Download and launch the Protegus2 app[^\n]*\)\.)',
+        r'(Download and install Protegus2 mobile app[^\n]*\.)',
 
-    if 'android' in buttons:
-        button_links.append(f'''  <a href="https://play.google.com/store/apps/details?id=lt.apps.protegus2" target="_blank" style="display: inline-block; margin-right: 10px;">
-    <img src="./{buttons['android']}" alt="Get it on Google Play" style="height:50px;">
-  </a>''')
+        # Lithuanian (add when converting LT manuals)
+        # r'(Atsisiųskite.*?Protegus2.*?\)\.)',
 
-    if 'web' in buttons:
-        button_links.append(f'''  <a href="https://www.protegus.app" target="_blank" style="display: inline-block; margin-right: 10px;">
-    <img src="./{buttons['web']}" alt="Open Web App" style="height:50px;">
-  </a>''')
+        # Spanish (add when converting ES manuals)
+        # r'(Descargue.*?Protegus2.*?\)\.)',
 
-    if 'ios' in buttons:
-        button_links.append(f'''  <a href="https://apps.apple.com/us/app/protegus-2/id1555450252" target="_blank" style="display: inline-block;">
-    <img src="./{buttons['ios']}" alt="Download on the App Store" style="height:50px;">
-  </a>''')
+        # Russian (add when converting RU manuals)
+        # r'(Загрузите.*?Protegus2.*?\)\.)',
+    ]
 
-    if not button_links:
-        return content
+    # Try each pattern
+    for pattern in patterns:
+        # Strategy 1: Look for download sentence + image (e.g., SP3 manual)
+        pattern_with_image = pattern + r'\n\n<img[^>]+src="[^"]*"[^>]*>'
 
-    buttons_html = '\n<div style="margin: 20px 0; text-align: left;">\n' + '\n'.join(button_links) + '\n</div>\n'
+        if re.search(pattern_with_image, content, re.IGNORECASE):
+            # Replace: keep the text, replace the image with clickable buttons
+            content = re.sub(
+                pattern_with_image,
+                r'\1' + buttons_html,
+                content,
+                count=1,  # Only first occurrence
+                flags=re.IGNORECASE
+            )
+            return content
 
-    # Pattern to match the download instruction line
-    pattern = r'(1\.\s+Download and launch.*?protegus\.app.*?\)\.)'
-
-    # Add buttons after the download instruction
-    content = re.sub(
-        pattern,
-        r'\1\n' + buttons_html,
-        content,
-        flags=re.DOTALL
-    )
+        # Strategy 2: Look for download sentence without image (e.g., GATOR manual)
+        # Insert buttons after the sentence
+        if re.search(pattern, content, re.IGNORECASE):
+            content = re.sub(
+                pattern,
+                r'\1' + buttons_html,
+                content,
+                count=1,  # Only first occurrence
+                flags=re.IGNORECASE
+            )
+            return content
 
     return content
 

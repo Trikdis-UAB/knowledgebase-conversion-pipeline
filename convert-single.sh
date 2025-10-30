@@ -47,9 +47,12 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/fix-numbered-heading-levels.lua" \
   --lua-filter="$SCRIPT_DIR/promote-strong-top.lua" \
   --lua-filter="$SCRIPT_DIR/demote-extra-h1.lua" \
-  --lua-filter="$SCRIPT_DIR/filters/flatten-two-cell-tables.lua" \
   --lua-filter="$SCRIPT_DIR/remove-table-widths.lua" \
+  # CRITICAL ORDER: convert-legend-tables-ordered-lists MUST run BEFORE flatten-two-cell-tables
+  # Legend tables are 2-column tables with ordered lists (e.g., SP3 section 1.4)
+  # If flatten-two-cell-tables runs first, the legend table structure is lost
   --lua-filter="$SCRIPT_DIR/filters/convert-legend-tables-ordered-lists.lua" \
+  --lua-filter="$SCRIPT_DIR/filters/flatten-two-cell-tables.lua" \
   --lua-filter="$SCRIPT_DIR/flatten-instruction-tables.lua" \
   --lua-filter="$SCRIPT_DIR/unwrap-table-blockquotes.lua" \
   --lua-filter="$SCRIPT_DIR/convert-image-tables.lua" \
