@@ -120,11 +120,8 @@ def fix_admonitions(content):
             i += 1
             content_lines = []
 
-            # Check if next line is an indented quoted title (e.g., '    "Important"')
-            if i < len(lines) and re.match(r'^\s{4}"([^"]+)"\s*$', lines[i]):
-                quoted_title = lines[i].strip()
-                admonition_line = f"{admonition_line} {quoted_title}"
-                i += 1  # Skip the quoted title line
+            # REMOVED: Don't check for indented quoted title here
+            # If there was a title, it should have matched pattern_only_title instead
 
             # Now collect content lines (may have blockquote markers)
             while i < len(lines) and (lines[i].startswith('>') or lines[i].startswith('    >') or lines[i].strip() == ''):
