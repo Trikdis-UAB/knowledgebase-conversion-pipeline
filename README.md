@@ -61,7 +61,7 @@ The pipeline applies 36 Lua filters to clean and normalize Word documents:
 21. **mark-two-col.lua**: Marks two-column tables for processing
 22. **convert-underline.lua**: Converts underline formatting
 23. **convert-blockquote-headings.lua**: Converts blockquote-wrapped headings (e.g., `> **Title**`) to proper markdown headings
-24. **remove-unwanted-blockquotes.lua**: Removes spurious blockquotes and feature descriptions incorrectly wrapped as blockquotes
+24. **remove-unwanted-blockquotes.lua**: Removes spurious blockquotes and feature descriptions incorrectly wrapped as blockquotes (includes waste disposal text pattern)
 25. **unwrap-post-image-blockquotes.lua**: Unwraps blockquotes that appear after blocks containing images (paragraphs or tables)
 26. **maintain-list-continuity.lua**: Ensures numbered lists continue correctly across interruptions
 27. **strip-classes.lua**: Removes Word styling classes like `{.underline}`

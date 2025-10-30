@@ -45,6 +45,12 @@ function BlockQuote(blockquote)
     return blockquote.content
   end
 
+  -- Pattern 6: Waste disposal and environmental information
+  if content:match("Please adhere to your local waste sorting") or
+     content:match("do not dispose of this equipment") then
+    return blockquote.content
+  end
+
   -- For other blockquotes, keep them as-is (they might be actual citations)
   return blockquote
 end
