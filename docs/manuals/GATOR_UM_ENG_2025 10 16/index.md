@@ -199,15 +199,9 @@ Above is the schematic for connecting the relay when the controller is connected
 
 ### Schematic for connecting an automatic gate opener to the controller 
 
-**All wiring should be done with the power supply disconnected.**
-
-The purposes and voltages of the automatic gate opener‘s terminals are described in detail in the automatic gate‘s manual.
-
-The automatic gate‘s IN, COM terminals are used for controlling the gates.
-
 <img alt="" src="./image10.png" style="width:3.8858267716535435in;height:2.6692913385826773in" />
 
-The automatic gate has a gate state output (OUT) that shows when the gates are closed and when they are open. The gate‘s state output can be a voltage output or a relay output. In the schematic, relay K1 is connected to a voltage automated gate output. There is voltage (~230V) between the voltage outputs OUT and N of the automated gates when the gates are open. The intermediate relay K1 is turned on when the gates are open and it activates the controller‘s 1IN input. The state of the controller‘s 1IN input gives precise information about the state of the gates (when the gates are closed and when they are open).
+All wiring should be done with the power supply disconnected. / The purposes and voltages of the automatic gate opener‘s terminals are described in detail in the automatic gate‘s manual. / The automatic gate‘s IN, COM terminals are used for controlling the gates. / The automatic gate has a gate state output (OUT) that shows when the gates are closed and when they are open. The gate‘s state output can be a voltage output or a relay output. In the schematic, relay K1 is connected to a voltage automated gate output. There is voltage (~230V) between the voltage outputs OUT and N of the automated gates when the gates are open. The intermediate relay K1 is turned on when the gates are open and it activates the controller‘s 1IN input. The state of the controller‘s 1IN input gives precise information about the state of the gates (when the gates are closed and when they are open).
 
 ### Schematic for connecting for RFID reader (Wiegand 26/34) 
 
@@ -231,25 +225,13 @@ When connecting two RFID readers to the controller, it should be noted in the Tr
 
 ### Schematic for connecting the W485 WiFi module 
 
-Controller firmware version from 1.06.
-
-The *W485* module sends messages to the CMS (Central Monitoring Station) and to *Protegus2* apps using a WiFi internet router. When WiFi connectivity is available, the controller sends event messages via the *W485* module. When WiFi connectivity is disrupted, the controller sends messages via GPRS. When WiFi connectivity is re-established, the controller returns to sending messages via *W485*.
-
-Configuration of the *W485* WiFi module to work with the controller is described in chapter 5.4. „„Modules” window”.
-
-You do not need a SIM card, when using the *W485* with the controller*.*
+Controller firmware version from 1.06. / The *W485* module sends messages to the CMS (Central Monitoring Station) and to *Protegus2* apps using a WiFi internet router. When WiFi connectivity is available, the controller sends event messages via the *W485* module. When WiFi connectivity is disrupted, the controller sends messages via GPRS. When WiFi connectivity is re-established, the controller returns to sending messages via *W485*. / Configuration of the *W485* WiFi module to work with the controller is described in chapter 5.4. „„Modules” window”. / You do not need a SIM card, when using the *W485* with the controller*.*
 
 <img alt="" src="./image15.png" style="width:3.141732283464567in;height:2.1496062992125986in" />
 
 ### Schematic for connecting the E485 “Ethernet” module 
 
-Controller firmware version from 1.06.
-
-The *E485* sends messages to the CMS (Central Monitoring Station) and to *Protegus2* apps using a wired internet connection. Using the *E485* with controller, CMS and *GATOR* messages are sent over wired Internet and mobile Internet is not used. If a wired internet connectivity is disrupted, the controller sends messages via the mobile Internet. When the wired Internet connectivity is re-established, controller starts sending messages via *E485*.
-
-Configuration of the *E485* module to work with the controller is described in chapter 5.4. „„Modules” window”.
-
-You do not need a SIM card, when using the *E485* with the controller*.*
+Controller firmware version from 1.06. / The *E485* sends messages to the CMS (Central Monitoring Station) and to *Protegus2* apps using a wired internet connection. Using the *E485* with controller, CMS and *GATOR* messages are sent over wired Internet and mobile Internet is not used. If a wired internet connectivity is disrupted, the controller sends messages via the mobile Internet. When the wired Internet connectivity is re-established, controller starts sending messages via *E485*. / Configuration of the *E485* module to work with the controller is described in chapter 5.4. „„Modules” window”. / You do not need a SIM card, when using the *E485* with the controller*.*
 
 <img alt="" src="./image16.png" style="width:3.141732283464567in;height:2.1496062992125986in" />
 
@@ -277,9 +259,7 @@ Activate PGM output with RFID card/code. Press the "**Exit**" button (the PGM ou
 
 ### Schematic for connecting of the iO8, iO8-LORA expander 
 
-The *GATOR* controller can be connected to an *iO8* or *iO8-LORA* expander to increase the number of inputs (IN) and outputs (OUT). One *iO8* or *iO8-LORA* expansion module can be connected to the controller.
-
-*iO8* expander connection diagram.
+The *GATOR* controller can be connected to an *iO8* or *iO8-LORA* expander to increase the number of inputs (IN) and outputs (OUT). One *iO8* or *iO8-LORA* expansion module can be connected to the controller. / *iO8* expander connection diagram.
 
 <img alt="" src="./image21.png" style="width:3.346673228346457in;height:2.1333377077865268in" />
 
@@ -343,17 +323,28 @@ With Protegus2 cloud users will be able to control controller remotely. They wil
 
 1.  Download and launch the Protegus2 app or use the browser version of Protegus2 at [www.protegus.app](http://www.protegus.app).
 
+    <div style="margin: 20px 0; text-align: left;">
+      <a href="https://play.google.com/store/apps/details?id=lt.apps.protegus2" target="_blank" style="display: inline-block; margin-right: 10px;">
+        <img src="./protegus-android.png" alt="Get it on Google Play" style="height:50px;">
+      </a>
+      <a href="https://www.protegus.app" target="_blank" style="display: inline-block; margin-right: 10px;">
+        <img src="./protegus-web.png" alt="Open Web App" style="height:50px;">
+      </a>
+      <a href="https://apps.apple.com/us/app/protegus-2/id1555450252" target="_blank" style="display: inline-block;">
+        <img src="./protegus-ios.png" alt="Download on the App Store" style="height:50px;">
+      </a>
+    </div>
+
 2.  Log in with your user name and password or register and create a new account.
 
-!!! warning
-    "Important"
-    > When adding the controller to Protegus2 app:
-    
+!!! warning "Important"
+    When adding the controller to Protegus2 app:
+
     1.  The Protegus service must be turned on. Turning on the
         service is described in chapter 5.5 ""IP reporting" window";
-    
+
     2.  The power supply must be turned on („POWER" LED must blink green);
-    
+
     3.  Must be registered in to network („NETWORK" LED must be green solid
         and blink yellow).
 3. Choose “**Add new system”**.
@@ -551,20 +542,14 @@ With TrikdisConfig you can change the controller’s settings (if default settin
 
 !!! note
     The button **Read [F4]** will make the program read and show the
-    settings currently saved on the device.
-    
-    The button **Write [F5]** will save the settings made in the program
-    to the device.
-    
-    The button **Save [F9]** will save the settings into a configuration
-    file. You can upload the saved settings to other devices later. This
-    allows to quickly configure multiple devices with the same settings.
-    
-    The button **Open [F8]** will allow to choose a configuration file and
-    open saved settings.
-    
-    If you want to revert to default settings, click on the "**Restore**"
-    button at the bottom left of the window.
+    settings currently saved on the device. / The button **Write [F5]**
+    will save the settings made in the program to the device. / The button
+    **Save [F9]** will save the settings into a configuration file. You
+    can upload the saved settings to other devices later. This allows to
+    quickly configure multiple devices with the same settings. / The button
+    **Open [F8]** will allow to choose a configuration file and open saved
+    settings. / If you want to revert to default settings, click on the
+    "**Restore**" button at the bottom left of the window.
 ### TrikdisConfig status bar 
 
 After connecting the controller to the TrikdisConfig software, the software will show information about the connected device in the status bar:
@@ -1061,15 +1046,14 @@ In the “User settings” window, tick the IN1 box if you want the user to rece
 
 ## Setting parameters remotely 
 
-!!! warning
-    "Important"
+!!! warning "Important"
     Remote configuration will only work when:
-    
+
     1.  Protegus service is enabed. Enabling the service is
         described in chapter 5.5 ""IP reporting" window";
-    
+
     2.  Power is on („POWER" LED is blinking green);
-    
+
     3.  Connected to network („NETWORK" LED is green solid and yellow
         blinking).
 1.  Download the program TrikdisConfig from [www.trikdis.com](http://www.trikdis.com).
@@ -1103,11 +1087,10 @@ When configuration and installation are finished, test the system:
 !!! note
     When the controller is connected to TrikdisConfig, the program
     will offer to update the device's firmware if updates are available.
-    Updates require an internet connection.
-    
-    If antivirus software is installed in your computer, it might block the
-    automatic firmware update function. In this case you will have to
-    reconfigure your antivirus software.
+    Updates require an internet connection. / If antivirus software is
+    installed in your computer, it might block the automatic firmware update
+    function. In this case you will have to reconfigure your antivirus
+    software.
 The controller’s firmware can also be updated and changed manually. All prior controller parameters remain after update. When writing manually, the firmware can be changed to an older or a newer version. Follow these steps:
 
 1.  Launch ***TrikdisConfig**.*
@@ -1134,4 +1117,4 @@ Always disconnect the power supply before making any electrical connections.
 
 Any changes, modifications or repairs not authorized by the manufacturer shall render the warranty void.
 
-> <img alt="" src="./image2.png" style="width:0.3937007874015748in;height:0.4448818897637795in" />Please adhere to your local waste sorting regulations and do not dispose of this equipment or its components with other household waste.
+<img alt="" src="./image2.png" style="width:0.3937007874015748in;height:0.4448818897637795in" />Please adhere to your local waste sorting regulations and do not dispose of this equipment or its components with other household waste.

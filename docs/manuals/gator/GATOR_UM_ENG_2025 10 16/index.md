@@ -1,5 +1,9 @@
 # GATOR Gate Controller
 
+<div style="text-align: center;">
+  <img src="./image1.png" alt="GATOR Gate Controller" width="400" />
+</div>
+
 ##  Description 
 
 GSM gate controller can remotely control automatic gates and other equipment.
@@ -31,8 +35,6 @@ Messages for the safety company
 Inputs and outputs
 
 - 2 inputs (IN), of selectable type: NO; NC; EOL.
-
-<img alt="" src="./image3.png" style="width:2.3622047244094486in;height:3.47244094488189in" />
 
 - 2 universal inputs/outputs. Mode of operation is set as either input or output.
 
@@ -75,6 +77,10 @@ Inputs and outputs
 
 ### Controller elements
 
+<div style="margin-bottom: 2rem;">
+  <img src="./image4.png" alt="GATOR Controller Internal View" style="display: block; max-width: 600px; margin: 0 auto;" />
+</div>
+
 1.  Light indicators.
 
 2.  Frontal case opening slot.
@@ -86,8 +92,6 @@ Inputs and outputs
 5.  Nano-SIM card slot.
 
 6.  GSM antenna SMA connector.
-
-<img alt="" src="./image4.png" style="width:4.606299212598425in;height:2.7874015748031495in" />
 
 ### Purpose of terminals 
 
