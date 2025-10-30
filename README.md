@@ -576,47 +576,50 @@ These buttons are used for all manuals consistently.
 ### Key Features
 
 ✅ **Zero manual work** - Writers just convert the DOCX, buttons added automatically
-✅ **Language-specific patterns** - Easy to add support for new languages
+✅ **Language-specific patterns** - English, Lithuanian, and Spanish live; easy to add more languages
 ✅ **Precise matching** - Only matches complete download sentences to avoid duplicates
 ✅ **Consistent URLs** - All buttons link to correct app stores
 ✅ **Works for all formats** - Handles with/without placeholder images
 
 ### Adding Support for New Languages
 
-When converting manuals in other languages, update `add-app-store-buttons.py`:
+When converting manuals in other languages, update `insert-protegus-buttons.lua`:
 
-1. Open the script and locate the `patterns` list (around line 110)
-2. Uncomment the language you need and add the correct translation pattern
-3. Pattern must match the complete download instruction sentence
+1. Edit the `patterns` table (top of file) and add the localized phrasing around Protegus downloads
+2. Include the distinctive URLs/phrases (e.g., `web.protegus.app`, `aplicación Protegus2`) to avoid false matches
+3. Run one test conversion to ensure the buttons land in the right list item without breaking numbering
 
-**Example for Lithuanian:**
-```python
-patterns = [
-    # English variations
-    r'(Download and launch the Protegus2 app[^\n]*\)\.)',
-    r'(Download and install Protegus2 mobile app[^\n]*\.)',
-
-    # Lithuanian
-    r'(Atsisiųskite ir paleiskite Protegus2 programėlę[^\n]*\)\.)',
-]
+**Examples:**
+```lua
+local patterns = {
+  "download.-protegus2",
+  "instal.-protegus2",
+  "atsisi.-protegus2",
+  "parsisi.-protegus2",
+  "aplicaci[óo]n.-protegus2",
+  "web%.protegus%.app",
+  "www%.protegus%.app",
+  "www%.protegus%.eu/login"
+}
 ```
 
 **Pattern Guidelines:**
-- Must capture complete sentence in parentheses `()`
-- Use `[^\n]*` to match within single line
-- End with `\)\.` or `\.` to match sentence ending
-- Test with actual manual text to ensure correct matching
+- Capture the full download instruction (sentence or colon-terminated clause)
+- Cover localized spellings/translations around “Protegus2” and the official download links
+- Test with real manual text before batch runs
 
-**Supported Languages (Add as needed):**
+**Supported Languages:**
 - ✅ English (2 variations)
-- ⏳ Lithuanian (pattern ready, uncomment when needed)
-- ⏳ Spanish (pattern ready, uncomment when needed)
-- ⏳ Russian (pattern ready, uncomment when needed)
+- ✅ Lithuanian (Protegus2 download sentence + link)
+- ✅ Spanish (Protegus2 download sentence with link or “aplicación Protegus2” statement)
+- ⏳ Russian (pattern ready, test pending)
 
 ### Files Involved
 
-- **add-app-store-buttons.py**: Language-aware button insertion script
+- **insert-protegus-buttons.lua**: AST filter that injects Protegus buttons into matched list items
+- **add-app-store-buttons.py**: Copies Protegus button assets alongside the converted manual
 - **app-store-buttons/**: Standard button image library (copied to each manual)
+- **normalize-lt-terminology.py**: Rewrites Lithuanian "Ląstelinio ryšio" phrasing to "Mobiliojo ryšio"
 
 ### Example Output
 

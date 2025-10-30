@@ -75,6 +75,8 @@ image25.png:
    - Update filter count from 39 to 43
    - Add gate controller support to documentation
    - Document image split validation system
+   - Note Protegus button injection handled by `insert-protegus-buttons.lua`
+   - Document Lithuanian/Spanish coverage in the Protegus button filter
 
 3. **Test Filters with Other Products**
    - Verify generic compatibility with different DOCX formats

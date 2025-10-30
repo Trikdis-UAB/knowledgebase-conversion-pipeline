@@ -25,6 +25,7 @@ local warranty_patterns = {
   "^garantija ir atsakomybės apribojimas$",
   -- Spanish
   "^requisitos de seguridad$",
+  "^requerimientos de seguridad$",
   "^precauciones de seguridad$",
   "^garantía y limitación de responsabilidad$",
   -- Russian

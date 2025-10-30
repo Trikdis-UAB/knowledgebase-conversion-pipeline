@@ -25,7 +25,9 @@ function Pandoc(doc)
         local txt = S(b.c[1])
 
         -- Check for various product type patterns
-        if txt:match("[Cc]ommunicator") or txt:match("[Cc]ontroller") or txt:match("[Pp]anel") then
+        local lower_txt = txt:lower()
+        if lower_txt:match("communicator") or lower_txt:match("comunicador") or lower_txt:match("komunikatorius")
+            or lower_txt:match("controller") or lower_txt:match("panel") then
           table.insert(out, b)
           product_name_saved = true
         end

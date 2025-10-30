@@ -105,21 +105,66 @@ function Pandoc(doc)
         end
       end
 
+      -- Pattern 8: "Comunicador [MODEL]" (Spanish manuals)
+      if not model then
+        model = txt:match("^Comunicador%s+(.+)$")
+        if model then
+          product_type = "Comunicador"
+        end
+      end
+
+      -- Pattern 9: "[MODEL] Comunicador" (Spanish alternate order)
+      if not model then
+        local lead, tail = txt:match("^([A-Z0-9%+%-]+)%s+Comunicador%s*(.*)$")
+        if lead then
+          model = lead
+          if tail ~= "" then
+            product_type = "Comunicador " .. tail
+          else
+            product_type = "Comunicador"
+          end
+        end
+      end
+
+      -- Pattern 10: "GSM komunikatorius [MODEL]" (Lithuanian manuals)
+      if not model then
+        model = txt:match("^GSM%s+komunikatorius%s+(.+)$")
+        if model then
+          product_type = "GSM komunikatorius"
+        end
+      end
+
+      -- Pattern 11: "Komunikatorius [MODEL]" (generic Lithuanian)
+      if not model then
+        model = txt:match("^Komunikatorius%s+(.+)$")
+        if model then
+          product_type = "Komunikatorius"
+        end
+      end
+
       if model then
         -- Found product name - create H1 title: "[MODEL] Product Type"
         model = model:gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")  -- Trim whitespace
         local title = model .. " " .. product_type
         table.insert(out, pandoc.Header(1, {pandoc.Str(title)}))
         first_strong_found = true
-        -- Skip this block (don't add the original bold text)
+        goto continue
       else
-        -- Not a recognized product name pattern
-        -- Treat as regular bold heading if it's substantive
-        if #txt >= 3 and not txt:match(':%s*$') then
-          table.insert(out, pandoc.Header(2, b.c[1]))
-        else
-          table.insert(out, b)
+        -- Not a recognized product name pattern - promote to H1 using the original text
+        local header_content = {}
+        if b.c[1] and b.c[1].content then
+          for _, inline in ipairs(b.c[1].content) do
+            if inline.t ~= 'LineBreak' then
+              table.insert(header_content, inline)
+            end
+          end
         end
+        if #header_content == 0 then
+          header_content = {pandoc.Str(txt)}
+        end
+        table.insert(out, pandoc.Header(1, header_content))
+        first_strong_found = true
+        goto continue
       end
     else
       table.insert(out, b)

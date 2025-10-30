@@ -14,7 +14,10 @@ function Pandoc(doc)
     "Cellular Communicator",
     "Ethernet Communicator",
     "Gate Controller",
-    "Communicator"
+    "Communicator",
+    "Comunicador",
+    "komunikatorius",
+    "Komunikatorius"
   }
 
   -- Helper: Check if text matches any product pattern

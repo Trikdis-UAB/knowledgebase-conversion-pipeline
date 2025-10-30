@@ -76,7 +76,7 @@ return {
           local text = S(b.content):lower():gsub('%s+', ' ')
 
           -- Look for "Contents" or "Table of Contents" at any level
-          if text:match('contents') or text:match('table of contents') then
+          if text:match('contents') or text:match('table of contents') or text:match('contenido') then
             skipping = true
             consecutive_link_paras = 0
             -- Don't add this header

@@ -48,4 +48,5 @@ nav:
       - Control Panels:
           - SP3 FLEXi Control Panel: manuals/SP3_TAIM_EN_2025 09 12/index.md
       - Gate Controllers:
-          - GATOR Gate Controller: manuals/GATOR_UM_ENG_2025 10 16/index.md
+          - GATOR Cellular Gate Controller: manuals/GATOR_UM_ENG_2025 10 16/index.md
+          - GATOR WiFi Gate Controller: en/gate-controllers/gator-wifi/index.md

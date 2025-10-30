@@ -48,9 +48,6 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/promote-strong-top.lua" \
   --lua-filter="$SCRIPT_DIR/demote-extra-h1.lua" \
   --lua-filter="$SCRIPT_DIR/remove-table-widths.lua" \
-  # CRITICAL ORDER: convert-legend-tables-ordered-lists MUST run BEFORE flatten-two-cell-tables
-  # Legend tables are 2-column tables with ordered lists (e.g., SP3 section 1.4)
-  # If flatten-two-cell-tables runs first, the legend table structure is lost
   --lua-filter="$SCRIPT_DIR/filters/convert-legend-tables-ordered-lists.lua" \
   --lua-filter="$SCRIPT_DIR/filters/flatten-two-cell-tables.lua" \
   --lua-filter="$SCRIPT_DIR/flatten-instruction-tables.lua" \
@@ -71,6 +68,7 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/convert-blockquote-headings.lua" \
   --lua-filter="$SCRIPT_DIR/remove-unwanted-blockquotes.lua" \
   --lua-filter="$SCRIPT_DIR/unwrap-post-image-blockquotes.lua" \
+  --lua-filter="$SCRIPT_DIR/insert-protegus-buttons.lua" \
   --lua-filter="$SCRIPT_DIR/maintain-list-continuity.lua" \
   --lua-filter="$SCRIPT_DIR/strip-classes.lua" \
   --lua-filter="$SCRIPT_DIR/fix-typography.lua" \
@@ -264,6 +262,7 @@ sed -i '' '/src="\.\/image3\.png"/d' index.md
 
 # Replace GSM with Cellular in gate controller manuals
 python3 "$SCRIPT_DIR/replace-gsm-with-cellular.py" index.md
+python3 "$SCRIPT_DIR/normalize-lt-terminology.py" index.md
 
 # Add app store buttons (auto-detects if button images exist)
 python3 "$SCRIPT_DIR/add-app-store-buttons.py" index.md
