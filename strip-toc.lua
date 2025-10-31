@@ -9,6 +9,19 @@ local S = pandoc.utils.stringify
 local skipping = false
 local consecutive_link_paras = 0
 
+local function normalize(text)
+  return (text or ""):lower():gsub('%s+', ' ')
+end
+
+local function is_toc_heading(text)
+  local normalized = normalize(text)
+  return normalized:match('table of contents')
+      or normalized:match('tabla de contenido')
+      or normalized:match('contenidos?')
+      or normalized == 'contenido'
+      or normalized == 'contents'
+end
+
 -- Helper: Check if paragraph contains internal document links
 local function has_internal_links(para)
   if para.t ~= 'Para' then return false end
@@ -76,7 +89,7 @@ return {
           local text = S(b.content):lower():gsub('%s+', ' ')
 
           -- Look for "Contents" or "Table of Contents" at any level
-          if text:match('contents') or text:match('table of contents') or text:match('contenido') then
+          if is_toc_heading(text) then
             skipping = true
             consecutive_link_paras = 0
             -- Don't add this header
@@ -111,11 +124,17 @@ return {
 
       else
         -- While skipping TOC
-        if is_real_header(b) then
+        if b.t == 'Header' and is_real_header(b) and not is_toc_heading(S(b.content)) then
           -- Found real content section, stop skipping
           skipping = false
           consecutive_link_paras = 0
           table.insert(out, b)
+        elseif b.t == 'Para' and not has_internal_links(b) then
+          local text = normalize(S(b.content))
+          if text ~= '' then
+            skipping = false
+            table.insert(out, b)
+          end
         end
         -- All other blocks dropped while skipping
       end

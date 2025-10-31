@@ -17,9 +17,6 @@ function Header(header)
     local cleaned = text:gsub(MANUAL_NUMBER_PATTERN, "")
 
     if cleaned ~= text then
-        -- Found and removed manual numbering
-        print("Cleaned heading: '" .. text .. "' -> '" .. cleaned .. "'")
-        -- Replace the entire content with cleaned text
         header.content = {pandoc.Str(cleaned)}
     end
 

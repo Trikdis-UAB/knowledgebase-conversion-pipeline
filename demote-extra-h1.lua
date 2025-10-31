@@ -10,6 +10,7 @@ function Pandoc(doc)
   local product_patterns = {
     "Alarm Panel",
     "Control Panel",
+    "Panel de control",
     "control panel",  -- Matches "Security control panel"
     "Cellular Communicator",
     "Ethernet Communicator",
@@ -17,7 +18,10 @@ function Pandoc(doc)
     "Communicator",
     "Comunicador",
     "komunikatorius",
-    "Komunikatorius"
+    "Komunikatorius",
+    "centralė",
+    "Centralė",
+    "Apsaugos centralė"
   }
 
   -- Helper: Check if text matches any product pattern

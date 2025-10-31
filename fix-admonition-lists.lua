@@ -67,3 +67,44 @@ function OrderedList(ol)
 
   return ol
 end
+
+function Para(p)
+  if not p.content or #p.content == 0 then
+    return nil
+  end
+
+  local new_content = pandoc.List()
+  local changed = false
+  local previous = nil
+
+  for _, inline in ipairs(p.content) do
+    local strip = false
+
+    if inline.t == 'Str' and (inline.text == '>' or inline.c == '>') then
+      if previous and (previous.t == 'SoftBreak' or (previous.t == 'Str' and previous.text == '!!!')) then
+        strip = true
+      end
+    end
+
+    if strip then
+      changed = true
+    else
+      new_content:insert(inline)
+    end
+
+    if not strip then
+      previous = inline
+    end
+  end
+
+  if changed then
+    p.content = new_content
+    return p
+  end
+
+  return nil
+end
+
+return {
+  {Div = Div, OrderedList = OrderedList, Para = Para}
+}

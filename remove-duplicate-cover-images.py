@@ -26,6 +26,7 @@ def remove_duplicate_cover_images(file_path):
     seen_first_centered_image = False
     in_centered_image_div = False
     current_div_lines = []
+    before_first_heading = True
 
     while i < len(lines):
         line = lines[i]
@@ -65,7 +66,16 @@ def remove_duplicate_cover_images(file_path):
 
                 i += 1
         else:
-            # Not a centered div start, just keep the line
+            # Track when we hit the first non-title heading (## ...)
+            if line.lstrip().startswith('## '):
+                before_first_heading = False
+
+            # Drop stray duplicate image lines before the first heading
+            if (seen_first_centered_image and before_first_heading and 'image1.png' in line and '<img' in line):
+                i += 1
+                continue
+
+            # Not a centered div start, keep the line as-is
             result.append(line)
             i += 1
 

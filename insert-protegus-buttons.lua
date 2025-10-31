@@ -2,7 +2,7 @@
 -- Inject Protegus button HTML into numbered steps that reference the app download.
 
 local html_buttons = table.concat({
-  '<div style="margin: 20px 0; text-align: left;">',
+  '<div style="margin: 20px 0; text-align: center;">',
   '  <a href="https://play.google.com/store/apps/details?id=lt.apps.protegus2" target="_blank" style="display: inline-block; margin-right: 10px;">',
   '    <img src="./protegus-android.png" alt="Get it on Google Play" style="height:50px;">',
   '  </a>',
@@ -14,6 +14,8 @@ local html_buttons = table.concat({
   '  </a>',
   '</div>'
 }, '\n')
+
+local inserted_anywhere = false
 
 local patterns = {
   "download.-protegus2",
@@ -78,20 +80,31 @@ local function strip_leading_number(para)
 end
 
 function OrderedList(list)
+  if inserted_anywhere then
+    return list
+  end
+
   local changed = false
+  local inserted = false
   for _, item in ipairs(list.content) do
-    if not has_buttons(item) and matches(item) then
+    if not inserted and not has_buttons(item) and matches(item) then
       if item[1] and item[1].t == 'Para' then
         strip_leading_number(item[1])
       end
       table.insert(item, pandoc.RawBlock('html', html_buttons))
       changed = true
+      inserted = true
+      inserted_anywhere = true
     end
   end
   return list
 end
 
 function BlockQuote(el)
+  if inserted_anywhere then
+    return el
+  end
+
   if #el.content == 1 and el.content[1].t == 'Para' then
     local para = el.content[1]
     local para_blocks = {para}

@@ -11,8 +11,7 @@ local first_image = nil
 local first_image_index = nil
 local h1_index = nil
 local description_index = nil
-local blocks = {}
-local image_indices = {}  -- Track ALL image indices to remove
+local blocks = pandoc.List()
 local description_titles = {
   ["description"] = true,
   ["descripción"] = true,
@@ -27,11 +26,9 @@ function Pandoc(doc)
   first_image_index = nil
   h1_index = nil
   description_index = nil
-  image_indices = {}
-  blocks = {}
+  blocks = pandoc.List(doc.blocks)
 
-  for i, block in ipairs(doc.blocks) do
-    blocks[i] = block
+  for i, block in ipairs(blocks) do
   end
 
   for i, block in ipairs(blocks) do
@@ -66,7 +63,6 @@ function Pandoc(doc)
 
     -- Track this image index for removal
     if is_image then
-      table.insert(image_indices, i)
       -- Try to get image src for debugging
       if block.t == "Para" and #block.content == 1 and block.content[1].t == "Image" then
         debug_log("Found image at index " .. i .. ": " .. block.content[1].src)
@@ -144,14 +140,14 @@ function Pandoc(doc)
         table.remove(blocks, first_image_index)
         description_index = description_index - 1
       end
-      table.insert(blocks, description_index, centered_image)
+      blocks:insert(description_index, centered_image)
       inserted = true
     elseif h1_index then
       if first_image_index <= h1_index then
-        table.remove(blocks, first_image_index)
+        blocks:remove(first_image_index)
         h1_index = h1_index - 1
       end
-      table.insert(blocks, h1_index + 1, centered_image)
+      blocks:insert(h1_index + 1, centered_image)
       inserted = true
     end
 
@@ -160,6 +156,6 @@ function Pandoc(doc)
     end
   end
 
-  doc.blocks = pandoc.Blocks(blocks)
+  doc.blocks = blocks
   return doc
 end

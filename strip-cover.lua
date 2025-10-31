@@ -26,8 +26,14 @@ function Pandoc(doc)
 
         -- Check for various product type patterns
         local lower_txt = txt:lower()
-        if lower_txt:match("communicator") or lower_txt:match("comunicador") or lower_txt:match("komunikatorius")
-            or lower_txt:match("controller") or lower_txt:match("panel") then
+        if lower_txt:match("communicator")
+            or lower_txt:match("comunicador")
+            or lower_txt:match("komunikatorius")
+            or lower_txt:match("controller")
+            or lower_txt:match("panel")
+            or lower_txt:match("centrale")
+            or txt:match("centralė")
+            or txt:match("centralĖ") then
           table.insert(out, b)
           product_name_saved = true
         end

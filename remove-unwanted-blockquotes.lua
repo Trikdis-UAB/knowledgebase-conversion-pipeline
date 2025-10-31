@@ -51,6 +51,19 @@ function BlockQuote(blockquote)
     return blockquote.content
   end
 
+  -- Generic rule: unwrap simple one-paragraph blockquotes that aren't real quotations
+  local all_plain = true
+  for _, inner in ipairs(blockquote.content) do
+    if inner.t ~= 'Para' and inner.t ~= 'Plain' then
+      all_plain = false
+      break
+    end
+  end
+
+  if all_plain then
+    return blockquote.content
+  end
+
   -- For other blockquotes, keep them as-is (they might be actual citations)
   return blockquote
 end

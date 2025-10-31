@@ -40,7 +40,6 @@ pandoc "$inp" \
   --extract-media="." \
   --wrap=none \
   --markdown-headings=atx \
-  --lua-filter="$SCRIPT_DIR/relocate-warranty.lua" \
   --lua-filter="$SCRIPT_DIR/strip-cover.lua" \
   --lua-filter="$SCRIPT_DIR/strip-toc.lua" \
   --lua-filter="$SCRIPT_DIR/map-docx-heading-levels.lua" \
@@ -48,6 +47,7 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/promote-strong-top.lua" \
   --lua-filter="$SCRIPT_DIR/demote-extra-h1.lua" \
   --lua-filter="$SCRIPT_DIR/remove-table-widths.lua" \
+  --lua-filter="$SCRIPT_DIR/convert-warning-tables.lua" \
   --lua-filter="$SCRIPT_DIR/filters/convert-legend-tables-ordered-lists.lua" \
   --lua-filter="$SCRIPT_DIR/filters/flatten-two-cell-tables.lua" \
   --lua-filter="$SCRIPT_DIR/flatten-instruction-tables.lua" \
@@ -56,6 +56,7 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/normalize-headings.lua" \
   --lua-filter="$SCRIPT_DIR/strip-manual-heading-numbers.lua" \
   --lua-filter="$SCRIPT_DIR/promote-centered-bold.lua" \
+  --lua-filter="$SCRIPT_DIR/normalize-sp3-title.lua" \
   --lua-filter="$SCRIPT_DIR/move-first-image-to-description.lua" \
   --lua-filter="$SCRIPT_DIR/split-inline-images.lua" \
   --lua-filter="$SCRIPT_DIR/reposition-sentence-splitting-images.lua" \
@@ -69,6 +70,8 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/remove-unwanted-blockquotes.lua" \
   --lua-filter="$SCRIPT_DIR/unwrap-post-image-blockquotes.lua" \
   --lua-filter="$SCRIPT_DIR/insert-protegus-buttons.lua" \
+  --lua-filter="$SCRIPT_DIR/remove-download-banners.lua" \
+  --lua-filter="$SCRIPT_DIR/rewrite-protegus-links.lua" \
   --lua-filter="$SCRIPT_DIR/maintain-list-continuity.lua" \
   --lua-filter="$SCRIPT_DIR/strip-classes.lua" \
   --lua-filter="$SCRIPT_DIR/fix-typography.lua" \
@@ -77,6 +80,11 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/fix-crossrefs.lua" \
   --lua-filter="$SCRIPT_DIR/remove-standalone-asterisks.lua" \
   --lua-filter="$SCRIPT_DIR/fix-admonition-lists.lua" \
+  --lua-filter="$SCRIPT_DIR/strip-admonition-quotes.lua" \
+  --lua-filter="$SCRIPT_DIR/reduce-excess-strong.lua" \
+  --lua-filter="$SCRIPT_DIR/unwrap-paragraph-strong.lua" \
+  --lua-filter="$SCRIPT_DIR/relocate-warranty.lua" \
+  --lua-filter="$SCRIPT_DIR/add-heading-numbers.lua" \
   --lua-filter="$SCRIPT_DIR/clean-html-blocks.lua"
 
 # If Pandoc made ./media/, flatten to current folder and fix links
@@ -113,6 +121,16 @@ sed -i '' 's/<blockquote>//g; s/<\/blockquote>//g' index.md
 # Fix HTML blocks with {=html} tags that prevent proper rendering in MkDocs
 sed -i '' 's/`<img \([^`]*\)>`{=html}/<img \1>/g' index.md
 
+python3 <<'PY'
+import re
+from pathlib import Path
+index = Path('index.md')
+text = index.read_text()
+updated, count = re.subn(r'`(<img[^`]+>)`\{=html\}', r'\1', text)
+if count:
+    index.write_text(updated)
+PY
+
 # Fix underlined text with HTML tags to proper markdown underline
 sed -i '' 's/`<u>`{=html}\([^`]*\)`<\/u>`{=html}/<u>\1<\/u>/g' index.md
 
@@ -145,10 +163,79 @@ sed -i '' -E 's/\{#([^}]+)\} \{#[^}]+\}/{#\1}/g' index.md
 # Remove HTML comment artifacts (<!-- -->)
 sed -i '' 's/<!-- -->//g' index.md
 
+# Remove orphaned blockquote markers left inside admonition blocks
+sed -i '' 's/^    > /    /' index.md
+
+python3 <<'PY'
+from pathlib import Path
+index = Path('index.md')
+text = index.read_text()
+updated = text.replace('\n    > ', '\n    ')
+updated = updated.replace('\n    >', '\n    ')
+if updated != text:
+    index.write_text(updated)
+PY
+
+python3 <<'PY'
+import re
+from pathlib import Path
+index = Path('index.md')
+lines = index.read_text().splitlines()
+for i, line in enumerate(lines):
+    if line.startswith('    >'):
+        if line.startswith('    > '):
+            lines[i] = '    ' + line[6:]
+        else:
+            lines[i] = '    ' + line[4:].lstrip('>')
+    if 'El **' in line:
+        lines[i] = re.sub(r'El \*\*(.+?)\*\*', r'El \1', lines[i], count=1)
+index.write_text('\n'.join(lines) + '\n')
+PY
+
+python3 <<'PY'
+from pathlib import Path
+index = Path('index.md')
+lines = index.read_text().splitlines()
+changed = False
+for i, line in enumerate(lines):
+    if line.startswith('    >'):
+        if line.startswith('    > '):
+            lines[i] = '    ' + line[6:]
+        else:
+            lines[i] = '    ' + line[4:].lstrip('>')
+        changed = True
+if changed:
+    index.write_text('\n'.join(lines) + '\n')
+PY
+
+python3 <<'PY'
+from pathlib import Path
+index = Path('index.md')
+lines = index.read_text().splitlines()
+def has_cover_tail(seq):
+    if len(seq) < 3:
+        return False
+    return (seq[-3].strip().startswith('<div') and 'text-align: center' in seq[-3]
+            and 'image1.png' in seq[-2] and seq[-1].strip() == '</div>')
+while has_cover_tail(lines):
+    lines = lines[:-3]
+if lines:
+    index.write_text('\n'.join(lines) + '\n')
+PY
+
 # Remove duplicate product images wrapped in <div> tags (keeps only the one after H1 title)
 # This removes standalone <div><img src="imageN.png" ... width="400"></div> blocks (before ./ is added)
 # The H1 image is added later by sed, so this safely removes all duplicates
 perl -i -0777 -pe 's/<div>[\s\n]*<img\s+src="(?:\.\/)?(image[1-5]\.png)"[^>]*width="400"[^>]*>[\s\n]*<\/div>[\s\n]*/\n/g' index.md
+
+python3 <<'PY'
+from pathlib import Path
+index = Path('index.md')
+text = index.read_text()
+updated = text.replace('\n    > ', '\n    ').replace('\n    >', '\n    ')
+if updated != text:
+    index.write_text(updated)
+PY
 
 # Fix title formatting - make "Works with Protegus2 app:" bold like other titles
 sed -i '' 's/^Works with Protegus2 app:/**Works with Protegus2 app:**/g' index.md
@@ -246,6 +333,91 @@ python3 "$SCRIPT_DIR/reduce-spacing.py" index.md
 # Remove duplicate cover images (safety net for edge cases)
 python3 "$SCRIPT_DIR/remove-duplicate-cover-images.py" index.md
 
+python3 <<'PY'
+import json
+import subprocess
+from pathlib import Path
+
+index = Path('index.md')
+doc = json.loads(subprocess.run(['pandoc', str(index), '-t', 'json'], stdout=subprocess.PIPE, check=True).stdout)
+
+def stringify_node(node):
+    if isinstance(node, dict):
+        t = node.get('t')
+        if t == 'Str':
+            return node.get('c', '')
+        if t == 'Code':
+            c = node.get('c')
+            if isinstance(c, list) and len(c) >= 2:
+                return c[1]
+            return ''
+        if t in ('Space', 'SoftBreak'):
+            return ' '
+        c = node.get('c')
+        if isinstance(c, list):
+            return ''.join(stringify_node(child) for child in c)
+        return ''
+    if isinstance(node, list):
+        return ''.join(stringify_node(child) for child in node)
+    if isinstance(node, str):
+        return node
+    return ''
+
+def total_inline_length(inlines):
+    return len(stringify_node(inlines))
+
+def unwrap_full_strong(block):
+    content = block.get('c', [])
+    total = 0
+    has_strong = False
+    for inline in content:
+        if inline['t'] == 'Strong':
+            has_strong = True
+            total += total_inline_length(inline['c'])
+        elif inline['t'] not in ('Space', 'SoftBreak'):
+            return False
+    if not has_strong or total < 80:
+        return False
+
+    new_inlines = []
+    for inline in content:
+        if inline['t'] == 'Strong':
+            new_inlines.extend(inline['c'])
+        else:
+            new_inlines.append(inline)
+    block['c'] = new_inlines
+    return True
+
+def unwrap_leading_strong(block):
+    content = block.get('c', [])
+    if not content:
+        return False
+    first = content[0]
+    if first['t'] != 'Strong':
+        return False
+    if total_inline_length(first['c']) < 80:
+        return False
+    block['c'] = first['c'] + content[1:]
+    return True
+
+changed = False
+for block in doc['blocks']:
+    if block['t'] == 'Para':
+        if unwrap_full_strong(block) or unwrap_leading_strong(block):
+            changed = True
+
+if changed:
+    new_md = subprocess.run([
+        'pandoc',
+        '-f', 'json',
+        '-t', 'gfm',
+        '--wrap', 'none'
+    ],
+                             input=json.dumps(doc).encode(), stdout=subprocess.PIPE,
+                             check=True).stdout.decode()
+    index.write_text(new_md)
+PY
+
 # Remove empty headers (headers with only whitespace)
 python3 "$SCRIPT_DIR/remove-empty-headers.py" index.md
 
@@ -264,8 +436,30 @@ sed -i '' '/src="\.\/image3\.png"/d' index.md
 python3 "$SCRIPT_DIR/replace-gsm-with-cellular.py" index.md
 python3 "$SCRIPT_DIR/normalize-lt-terminology.py" index.md
 
+python3 <<'PY'
+from pathlib import Path
+index = Path('index.md')
+text = index.read_text()
+updated = text.replace('\n    > ', '\n    ').replace('\n    >', '\n    ')
+if updated != text:
+    index.write_text(updated)
+PY
+
 # Add app store buttons (auto-detects if button images exist)
 python3 "$SCRIPT_DIR/add-app-store-buttons.py" index.md
+
+python3 <<'PY'
+import re
+import sys
+from pathlib import Path
+index = Path('index.md')
+text = index.read_text()
+pattern = re.compile(r'`(<[^`>]+>)`\{=html\}')
+updated, count = pattern.subn(r'\1', text)
+if count:
+    index.write_text(updated)
+    print(f"[html-cleanup] replaced {count} raw HTML spans", file=sys.stderr)
+PY
 
 # Optimize images for web and print (max 1200px width, 85% quality)
 echo "Optimizing images..."

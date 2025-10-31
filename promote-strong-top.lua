@@ -14,7 +14,13 @@ function Pandoc(doc)
   local first_strong_found = false
   local processed_first_h2 = false
 
+  local skip_next = false
+
   for i, b in ipairs(doc.blocks) do
+    if skip_next then
+      skip_next = false
+      goto continue
+    end
     -- Track if we've seen any headers
     if b.t == 'Header' and b.level <= 2 then
       -- SP3-style: If this is the FIRST H2 we encounter, convert to H1 and remove bold
@@ -35,6 +41,40 @@ function Pandoc(doc)
           end
         end
         b.content = new_content
+
+        local heading_text = pandoc.utils.stringify(b.content):lower():gsub('%s+', ' ')
+        if heading_text:match('panel de control') then
+          local next_block = doc.blocks[i + 1]
+          local model = nil
+          if next_block and next_block.t == 'Para' then
+            local next_text = pandoc.utils.stringify(next_block)
+            model = next_text:match('FLEXi["”“„%s]*SP3')
+          end
+
+          local title = 'Panel de control'
+          if model then
+            model = model:gsub('["”“„]', ''):gsub('%s+', ' '):gsub('^%s+', '')
+            title = title .. ' ' .. model
+            skip_next = true
+          end
+
+          b.content = {
+            pandoc.Str('Panel'),
+            pandoc.Space(),
+            pandoc.Str('de'),
+            pandoc.Space(),
+            pandoc.Str('control')
+          }
+
+          if model then
+            table.insert(b.content, pandoc.Space())
+            for word in model:gmatch('%S+') do
+              table.insert(b.content, pandoc.Str(word))
+              table.insert(b.content, pandoc.Space())
+            end
+            b.content[#b.content] = nil -- remove trailing space
+          end
+        end
 
         table.insert(out, b)
         seen_header = true
@@ -154,7 +194,9 @@ function Pandoc(doc)
         local header_content = {}
         if b.c[1] and b.c[1].content then
           for _, inline in ipairs(b.c[1].content) do
-            if inline.t ~= 'LineBreak' then
+            if inline.t == 'LineBreak' then
+              table.insert(header_content, pandoc.Space())
+            else
               table.insert(header_content, inline)
             end
           end
