@@ -26,6 +26,16 @@ local function replace_domain(url)
   return url
 end
 
+local function replace_text(text)
+  local updated = text
+  updated = updated:gsub('web%.protegus%.app', 'www.protegus.app')
+  updated = updated:gsub('www%.protegus%.eu/login', 'www.protegus.app')
+  updated = updated:gsub('www%.protegus%.eu', 'www.protegus.app')
+  updated = updated:gsub('protegus%.eu', 'www.protegus.app')
+  updated = updated:gsub('https?://[^%s%(%)]*www%.protegus%.app', 'https://www.protegus.app')
+  return updated
+end
+
 local function rewrite_display(inlines)
   local updated = false
   local processed = {}
@@ -71,16 +81,6 @@ function Link(el)
     el.content = rewrite_display(el.content)
   end
   return el
-end
-
-local function replace_text(text)
-  local updated = text
-  updated = updated:gsub('web%.protegus%.app', 'www.protegus.app')
-  updated = updated:gsub('www%.protegus%.eu/login', 'www.protegus.app')
-  updated = updated:gsub('www%.protegus%.eu', 'www.protegus.app')
-  updated = updated:gsub('protegus%.eu', 'www.protegus.app')
-  updated = updated:gsub('https?://[^%s%(%)]*www%.protegus%.app', 'https://www.protegus.app')
-  return updated
 end
 
 function Str(el)
