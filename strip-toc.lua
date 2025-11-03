@@ -18,6 +18,7 @@ local function is_toc_heading(text)
   return normalized:match('table of contents')
       or normalized:match('tabla de contenido')
       or normalized:match('contenidos?')
+      or normalized:match('содержани[ея]')
       or normalized == 'contenido'
       or normalized == 'contents'
 end

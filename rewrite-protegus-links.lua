@@ -27,6 +27,33 @@ local function replace_domain(url)
 end
 
 local function rewrite_display(inlines)
+  local updated = false
+  local processed = {}
+
+  for _, inline in ipairs(inlines) do
+    if inline.t == 'Str' then
+      local replaced = replace_text(inline.text)
+      if replaced ~= inline.text then
+        inline.text = replaced
+        updated = true
+      end
+      table.insert(processed, inline)
+    elseif inline.t == 'RawInline' and inline.format == 'html' then
+      local replaced = replace_text(inline.text)
+      if replaced ~= inline.text then
+        inline.text = replaced
+        updated = true
+      end
+      table.insert(processed, inline)
+    else
+      table.insert(processed, inline)
+    end
+  end
+
+  if updated then
+    return processed
+  end
+
   local text = pandoc.utils.stringify(inlines):lower()
   if text:match('web%.protegus%.app')
       or text:match('www%.protegus%.eu/login')
