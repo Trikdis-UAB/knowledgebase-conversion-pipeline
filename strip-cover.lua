@@ -46,5 +46,9 @@ function Pandoc(doc)
     end
   end
 
+  if not started then
+    return doc
+  end
+
   return pandoc.Pandoc(out, doc.meta)
 end

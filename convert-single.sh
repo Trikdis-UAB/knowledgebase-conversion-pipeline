@@ -84,7 +84,6 @@ pandoc "$inp" \
   --lua-filter="$SCRIPT_DIR/reduce-excess-strong.lua" \
   --lua-filter="$SCRIPT_DIR/unwrap-paragraph-strong.lua" \
   --lua-filter="$SCRIPT_DIR/relocate-warranty.lua" \
-  --lua-filter="$SCRIPT_DIR/add-heading-numbers.lua" \
   --lua-filter="$SCRIPT_DIR/clean-html-blocks.lua"
 
 # If Pandoc made ./media/, flatten to current folder and fix links
@@ -259,6 +258,7 @@ sed -i '' 's/^Connects to the control panel'\''s serial or keyboard bus or telep
 # - Python script handles unnumbered headings with Word classes (.2-Po-Pag)
 # - Lua filter handles numbered headings in text (11.1 Title)
 python3 "$SCRIPT_DIR/fix-heading-hierarchy.py" index.md
+python3 "$SCRIPT_DIR/ensure-first-h1.py" index.md
 
 # Add centered product image after H1 title (must run AFTER heading normalization)
 # Works for all product types: Communicators, Alarm Panels, etc.
@@ -269,6 +269,18 @@ sed -i '' '/^# .*Alarm Panel$/a\
 </div>
 ' index.md
 sed -i '' '/^# .*Cellular Communicator$/a\
+\
+<div style="text-align: center;">\
+  <img src="./image1.png" alt="Product Image" width="400">\
+</div>
+' index.md
+sed -i '' '/^# .*Transmitter$/a\
+\
+<div style="text-align: center;">\
+  <img src="./image1.png" alt="Product Image" width="400">\
+</div>
+' index.md
+sed -i '' '/^# .*Si[uų]stuvas .*$/a\
 \
 <div style="text-align: center;">\
   <img src="./image1.png" alt="Product Image" width="400">\
@@ -306,6 +318,7 @@ sed -i '' 's/> \[!CAUTION\]/!!! warning "Caution"/g' index.md
 
 # Fix admonition formatting (proper indentation)
 python3 "$SCRIPT_DIR/fix_admonitions.py" index.md
+python3 "$SCRIPT_DIR/fix-inline-admonition-headings.py" index.md
 
 # Fix table structure issues (H1 in cells, empty rows, malformed headers)
 python3 "$SCRIPT_DIR/fix_table_structure.py" index.md
@@ -329,6 +342,7 @@ python3 "$SCRIPT_DIR/normalize-callouts.py" index.md
 python3 "$SCRIPT_DIR/fix-relative-images.py" index.md
 python3 "$SCRIPT_DIR/fix-list-continuity.py" index.md
 python3 "$SCRIPT_DIR/reduce-spacing.py" index.md
+python3 "$SCRIPT_DIR/fix-inline-admonition-headings.py" index.md
 
 # Remove duplicate cover images (safety net for edge cases)
 python3 "$SCRIPT_DIR/remove-duplicate-cover-images.py" index.md

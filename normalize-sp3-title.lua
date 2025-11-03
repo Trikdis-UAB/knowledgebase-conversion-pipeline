@@ -35,7 +35,10 @@ local function is_spanish_doc(blocks)
     local block = blocks[i]
     if block.t == 'Para' or block.t == 'Plain' or block.t == 'Header' then
       local text = pandoc.utils.stringify(block):lower()
-      if text:match('descripción') or text:match('características') or text:match('garantía') or text:match('¿') then
+      -- Match accent-insensitive substrings to tolerate encoding artifacts (descripci?n, garant?a, etc.)
+      if text:match('descripci[óo]n') or text:match('descripci%?n')
+         or text:match('caracter[íi]sticas') or text:match('tabla de contenido')
+         or text:match('¿') then
         return true
       end
     end

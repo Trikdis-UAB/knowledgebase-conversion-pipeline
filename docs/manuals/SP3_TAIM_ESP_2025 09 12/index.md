@@ -1,12 +1,14 @@
-<img alt="" src="./image1.png" style="width:4.724409448818897in;height:3.220472440944882in" />
+# Panel de control FLEXi SP3
 
-# Panel de Control
+<div style="text-align: center;">
 
-## **Tabla de contenido** 
+<img src="./image1.png" alt="" width="400">
+
+</div>
 
 ## Descripción
 
-El **panel de control *„FLEXi“ SP3 es el procesador de un sistema de alarma contra incendios y de allanamiento (a las instalaciones) con un módulo WiFi incorporado y un módem celular 2G o 4G. El panel de control permite agrupar 32 alámbricas e inalámbricas en un sistema de 8 particiones. Los usuarios pueden cambiar los modos de protección para estas áreas de forma remota (por ejemplo, a través de la aplicación móvil Protegus2, SMS, llamadas telefónicas) y mediante el uso de varios dispositivos que permiten la identificación personal (por ejemplo, teclados alámbricos e inalámbricos, llaves electrónicas, tarjetas RFID, etc.). Después de cualquier evento del sistema, se enviará un informe a la estación central de monitoreo (CRA) y/o al servidor en la nube de Protegus*** a través de redes de internet usando WiFi, y/o a través de redes móviles usando una tarjeta SIM.
+El panel de control *„FLEXi“ SP3* es el procesador de un sistema de alarma contra incendios y de allanamiento (a las instalaciones) con un módulo WiFi incorporado y un módem celular 2G o 4G. El panel de control permite agrupar 32 alámbricas e inalámbricas en un sistema de 8 particiones. Los usuarios pueden cambiar los modos de protección para estas áreas de forma remota (por ejemplo, a través de la aplicación móvil Protegus2, SMS, llamadas telefónicas) y mediante el uso de varios dispositivos que permiten la identificación personal (por ejemplo, teclados alámbricos e inalámbricos, llaves electrónicas, tarjetas RFID, etc.). Después de cualquier evento del sistema, se enviará un informe a la estación central de monitoreo (CRA) y/o al servidor en la nube de Protegus a través de redes de internet usando WiFi, y/o a través de redes móviles usando una tarjeta SIM.
 
 **¿Cuándo recomendamos implementar el panel de control „FLEXi“ SP3?**
 
@@ -16,7 +18,7 @@ El **panel de control *„FLEXi“ SP3 es el procesador de un sistema de alarma 
 
 - Cuando el sistema de alarma necesita realizar otras funciones además de la protección de las instalaciones, por ejemplo, abrir puertas y portones, regar el césped, iluminar, calentar, ventilar, enfriar, controlar otros sistemas de forma remota y funciones automáticas de arranque y finalización.
 
-- El „FLEXi“ SP3 es insuperable en el mercado cuando se trata de guardar los datos móviles de la tarjeta SIM sin reducir el nivel de protección proporcionado por la compañía de seguridad, y ofrece la oportunidad al propietario de las instalaciones de controlar el sistema a través aplicación móvil de Protegus2.
+- El *„FLEXi“ SP3* es insuperable en el mercado cuando se trata de guardar los datos móviles de la tarjeta SIM sin reducir el nivel de protección proporcionado por la compañía de seguridad, y ofrece la oportunidad al propietario de las instalaciones de controlar el sistema a través aplicación móvil de Protegus2.
 
 **Características**
 
@@ -90,14 +92,14 @@ Transmite informes a la estación central de monitoreo (CRA) de la compañía de
 ### Especificaciones técnicas
 
 | Parámetro | Descripción |
-|-----------|-------------|
-| Voltaje de alimentación [AC /​ DC] | 16 V AC o 16-24 V DC, 2,5 A |
+|----|----|
+| Voltaje de alimentación \[AC /​ DC\] | 16 V AC o 16-24 V DC, 2,5 A |
 | Consumo de corriente | Hasta 50 mA (en espera), /​ Hasta 200 mA (a corto plazo, mientras se envía) |
-| Fuente de energía de respaldo [BAT] | 12 V Batería de ácido - plomo, 4 Ah/​7 Ah |
+| Fuente de energía de respaldo \[BAT\] | 12 V Batería de ácido - plomo, 4 Ah/​7 Ah |
 | Corriente de carga de la batería | Hasta 500 mA |
-| Voltaje y corriente de alimentación para dispositivos externos [AUX] | 12 V DC, hasta 1 A |
-| Salida de sirena [BELL] | 1 A |
-| Salida [LED] | 0.1 A |
+| Voltaje y corriente de alimentación para dispositivos externos \[AUX\] | 12 V DC, hasta 1 A |
+| Salida de sirena \[BELL\] | 1 A |
+| Salida \[LED\] | 0.1 A |
 | Salida PGM | 0.1 A |
 | Módulo WiFi | Sí, incorporado |
 | Frecuencia WiFi, protocolo, tipo de cifrado | 2,4 GHz, 802.11 b/​g/​n, WPA, WPA2, WPA mixto |
@@ -117,17 +119,17 @@ Transmite informes a la estación central de monitoreo (CRA) de la compañía de
 | Memoria de registro de eventos | Hasta 1000 eventos. Las entradas más antiguas se eliminan automáticamente. |
 | Códigos de usuario | 40 |
 | Código de coacción | Se pueden elegir dos métodos de entrada de código durante la programación |
-| Terminales de doble propósito [I/​O] | 10;​ Función IN o OUT seleccionada durante la programación. Si se selecciona IN, tipos disponibles: NC, NO, EOL, EOL_T, 3EOL, ATZ, ATZ_T. Si se selecciona OUT, la terminal se convierte en colector abierto (OC) con una corriente de hasta 100 mA |
+| Terminales de doble propósito \[I/​O\] | 10;​ Función IN o OUT seleccionada durante la programación. Si se selecciona IN, tipos disponibles: NC, NO, EOL, EOL_T, 3EOL, ATZ, ATZ_T. Si se selecciona OUT, la terminal se convierte en colector abierto (OC) con una corriente de hasta 100 mA |
 | Número de particiones | 8 |
 | Número de zonas | 10 (20 zonas si se usa ATZ), (se puede ampliar a 32 zonas con expansores) |
 | Número de salidas PGM | 2 (puede alcanzar a 12 si los terminales IO se configuran como salidas. Puede expandirse a 16 salidas con expansores) |
 | Cantidad máxima de teclados conectados | 8 |
 | Teclados compatibles | SK-LED TouchPad (Protegus SK232 LED W) /​ SK-LCD TouchPad (FLEXi SK232 LCD) /​ Paradox K636 /​ Paradox K10H(V) /​ Paradox K32 LED /​ Paradox K32+ LED /​ Paradox K32LCD+ /​ Paradox K35 /​ Paradox TM50 /​ Paradox TM70 /​ Crow CR16 /​ Crow CR-LCD |
 | Máximo de lectores RFID (Wiegand 26/​34) | 2 |
-| Longitud del bus de datos de 1-Wire [1 WIRE] | Hasta 30 m |
+| Longitud del bus de datos de 1-Wire \[1 WIRE\] | Hasta 30 m |
 | Sensores de temperatura compatibles | Maxim®/​Dallas® DS18S20, DS18B20;​ Serie AM2301 |
 | Máximo de sensores de temperatura conectados al bus de datos de 1-Wire | 8 (Dallas) o 1 (si se usa un sensor de la serie AM2301) |
-| Teclas electrónicas compatibles (iButton) [1 WIRE] | Maxim®/​Dallas® DS1990A |
+| Teclas electrónicas compatibles (iButton) \[1 WIRE\] | Maxim®/​Dallas® DS1990A |
 | Máximo de teclas electrónicas (iButton) | 40 |
 | Longitud del bus de datos RS485 | Hasta 100 m |
 | Maximo de dispositivos conectados al bus de datos RS485 | 8 |
@@ -136,7 +138,7 @@ Transmite informes a la estación central de monitoreo (CRA) de la compañía de
 | Dimensiones del panel de control | 117x79x25 mm |
 | Peso | 0.1 kg |
 
-### Lista de módulos compatibles 
+### Lista de módulos compatibles
 
 | Nombre del módulo | Corriente |
 |----|----|
@@ -165,7 +167,7 @@ Transmite informes a la estación central de monitoreo (CRA) de la compañía de
 | iO-LORA módulo expansor | Max 50 mA |
 | iO8-LORA módulo expansor | Max 50 mA |
 
-### Uso de terminales externos 
+### Uso de terminales externos
 
 <img alt="" src="./image4.png" style="width:5.480010936132984in;height:3.806674321959755in" />
 
@@ -202,7 +204,7 @@ Transmite informes a la estación central de monitoreo (CRA) de la compañía de
 ### Indicador LED de operación
 
 | Indicador LED | Light status | Descripción |
-|---------------|--------------|-------------|
+|----|----|----|
 | NET | Verde parpadeante | La tarjeta SIM se está registrando en la red GSM. |
 | NET | Verde solido | Tarjeta SIM registrada en la red GSM. |
 | NET | Amarillo parpadeante | Indica que la intensidad de la señal GSM de 0 a 5. 3 es suficiente. |
@@ -222,30 +224,30 @@ Transmite informes a la estación central de monitoreo (CRA) de la compañía de
 | PWR | 8 destellos rojos | Sin corriente alterna |
 | PWR | 9 destellos rojos | No es posible conectarse a la red WiFi |
 
-## Alimentacion panel de control 
+## Alimentacion panel de control
 
-### Fuente de alimentación principal 
+### Fuente de alimentación principal
 
-El panel de control y el sistema de alarma en su totalidad pueden alimentarse desde una fuente de corriente alterna o continua. En ambos casos, se debe conectar una fuente de alimentación auxiliar (una batería de 12 V) al sistema para garantizar que la fuente de alimentación no se interrumpa. Para cumplir con los requerimientos del estándar EN50131, la batería de respaldo debe ser capaz de funcionar durante 12 horas para una seguridad Grado II o 60 horas para seguridad Grado III después de interrumpirse la energía de la fuente de alimentación principal. Tenga en cuenta el consumo de corriente total de los módulos conectados adicionales, el consumo de corriente de los módulos individuales se muestra en el capítulo 1.2 "Lista de módulos compatibles".
+El panel de control y el sistema de alarma en su totalidad pueden alimentarse desde una fuente de corriente alterna o continua. En ambos casos, se debe conectar una fuente de alimentación auxiliar (una batería de 12 V) al sistema para garantizar que la fuente de alimentación no se interrumpa. Para cumplir con los requerimientos del estándar EN50131, la batería de respaldo debe ser capaz de funcionar durante 12 horas para una seguridad Grado II o 60 horas para seguridad Grado III después de interrumpirse la energía de la fuente de alimentación principal. Tenga en cuenta el consumo de corriente total de los módulos conectados adicionales, el consumo de corriente de los módulos individuales se muestra en el capítulo 1.2 “Lista de módulos compatibles”.
 
-### Fuente de alimentación de respaldo 
+### Fuente de alimentación de respaldo
 
 Si ocurriesen problemas con la alimentación del sistema desde la fuente de alimentación principal, se generará un informe de evento de *AC Fault* y el panel cambiará automáticamente a la batería de respaldo de 12 V. Si el voltaje de la batería cae a 11.5 V, se generará un informe de evento de *Batería Baja (Low Battery)*. La batería se desconectará si el voltaje cae por debajo de 9.5 V. Si se restablece el voltaje de la red AC, se generará un informe de *Restablecimiento de AC (AC Restore)* y el proceso de carga de la batería comenzará automáticamente. Cuando el voltaje de la batería aumente a 12.6 V, se generará un informe de evento de *Restauración De Batería (Battery Restore)*.
 
-### Kits de panel de control 
+### Kits de panel de control
 
-#### Panel de control *„FLEXi“ SP3* 
+#### Panel de control *„FLEXi“ SP3*
 
-| Nombre                                      | Cantidad |
-|:--------------------------------------------|:---------|
-| Placa de Panel de control „FLEXi“ SP3 | 1 pza.   |
-| Cable para conectar batería                 | 1 pza.   |
-| Resistencia 2.2 kΩ                          | 20 pzas. |
-| Resistencia 4.7 kΩ                          | 10 pzas. |
-| Separador de plástico (piezas de montaje)   | 4 pzas.  |
-| Antena ME301M con cable de 2.5 m de largo   | 2 pzas.  |
+| Nombre                                    | Cantidad |
+|:------------------------------------------|:---------|
+| Placa de Panel de control „FLEXi“ SP3     | 1 pza.   |
+| Cable para conectar batería               | 1 pza.   |
+| Resistencia 2.2 kΩ                        | 20 pzas. |
+| Resistencia 4.7 kΩ                        | 10 pzas. |
+| Separador de plástico (piezas de montaje) | 4 pzas.  |
+| Antena ME301M con cable de 2.5 m de largo | 2 pzas.  |
 
-#### KIT Panel de control *„FLEXi“ SP3* 
+#### KIT Panel de control *„FLEXi“ SP3*
 
 | Nombre | Cantidad |
 |:---|:---|
@@ -258,7 +260,7 @@ Si ocurriesen problemas con la alimentación del sistema desde la fuente de alim
 | Sensor de manipulación | 1 pza. |
 | Bloque de terminales con fusible de 0.5 A | 1 pza. |
 
-#### KITi Panel de control *„FLEXi“ SP3* 
+#### KITi Panel de control *„FLEXi“ SP3*
 
 | Nombre | Cantidad |
 |:---|:---|
@@ -272,11 +274,11 @@ Si ocurriesen problemas con la alimentación del sistema desde la fuente de alim
 | Bloque de terminales con fusible de 3.15 A | 1 pza. |
 
 !!! note
-    El cable USB (tipo Mini-B) para programar el panel de control se vende
-    por separado.
-## Instalación del sistema 
+    El cable USB (tipo Mini-B) para programar el panel de control se vende por separado.
 
-### Orden de instalación recomendada 
+## Instalación del sistema
+
+### Orden de instalación recomendada
 
 **Planeación del sistema:**
 
@@ -284,7 +286,7 @@ Si ocurriesen problemas con la alimentación del sistema desde la fuente de alim
 
 - Después de evaluar las instalaciones, los requerimientos planteados para su protección y las características de los posibles sensores, elige la cantidad de sensores a utilizar, sus tipos y las ubicaciones para instalarlos.
 
-#### Instalación del panel de control en el marco de montaje 
+#### Instalación del panel de control en el marco de montaje
 
 La placa del panel de control se puede instalar en un marco de montaje que ya cuenta con un transformador reductor con un fusible de 500 mA instalado y espacio destinado a una batería de respaldo. / Instala el panel de control en el marco de plástico o metálico elegido usando separadores de plástico. Si eliges un marco de metal, no olvides colocarla a tierra durante la instalación. El marco elegido debe cumplir con los requerimientos descritas en las normas EN 60950 y EN 50131.
 
@@ -296,7 +298,7 @@ La siguiente imagen muestra las dimensiones de la placa y sus orificios de monta
 
 <img alt="" src="./image6.png" style="width:5.223344269466317in;height:3.9800076552930883in" />
 
-#### Orden de conexión de dispositivos 
+#### Orden de conexión de dispositivos
 
 <img alt="" src="./image7.png" style="width:7.086805555555555in;height:3.286111111111111in" />
 
@@ -306,45 +308,44 @@ La siguiente imagen muestra las dimensiones de la placa y sus orificios de monta
 
 3.  Usando los diagramas de conexión entregados y los diagramas de conexión de cada dispositivo a conectar, conecta los contactos magnéticos de puertas y ventanas, sensores de movimiento, fuego y otros sensores, señalizadores, teclados y dispositivos controlados. Conecta los sensores de manipulación del marco y de montaje en pared a los terminales del panel.
 
-4.  Conecta los cables de la fuente de alimentación principal a las terminales AC/DC del panel de control. Enciende la fuente de alimentación principal. El „FLEXi“ SP3 reconocerá los teclados, expansores e interfaces que estén conectados correctamente utilizando buses de datos 1-WIRE y YEL/GRN.
+4.  Conecta los cables de la fuente de alimentación principal a las terminales AC/DC del panel de control. Enciende la fuente de alimentación principal. El *„FLEXi“ SP3* reconocerá los teclados, expansores e interfaces que estén conectados correctamente utilizando buses de datos 1-WIRE y YEL/GRN.
 
 5.  Inserta la batería de respaldo en el marco de montaje. Conecta las terminales de la batería a las terminales BAT + / BAT– del panel de control.
 
 !!! note
-    La batería debe recargarse en menos de 72 horas para que el sistema de
-    alarma cumpla con Seguridad Clase II o 24 horas para cumplir con la
-    Seguridad Clase III.
+    La batería debe recargarse en menos de 72 horas para que el sistema de alarma cumpla con Seguridad Clase II o 24 horas para cumplir con la Seguridad Clase III.
+
 #### Recomendaciones para configurar los parámetros del panel de control
 
-1.  Consulta el capítulo 5 "Configuración de parámetros en TrikdisConfig" para información sobre cómo conectarse al panel para configurarlo.
+1.  Consulta el capítulo 5 “Configuración de parámetros en TrikdisConfig” para información sobre cómo conectarse al panel para configurarlo.
 
 2.  Configuración del sistema:
 
-    1.  **Particiones**. Si deseas activar la protección para grupos de zonas específicos por separado, el sistema de alarma se puede dividir en particiones. Consulta el capítulo 5.2 Ventana "Opciones del sistema" sobre cómo dividir el sistema y establecer los atributos necesarios para la partición.
+    1.  **Particiones**. Si deseas activar la protección para grupos de zonas específicos por separado, el sistema de alarma se puede dividir en particiones. Consulta el capítulo 5.2 Ventana “Opciones del sistema” sobre cómo dividir el sistema y establecer los atributos necesarios para la partición.
 
-    2.  **Zonas.** Consulta el capítulo 5.7 Ventana "Zonas" para configurar cada zona de acuerdo con las características de los sensores y la operación deseada de la alarma cuando ocurra un evento en esa zona. Si el sistema de alarma se divide en particiones, cada zona se puede asignar a un área deseada.
+    2.  **Zonas.** Consulta el capítulo 5.7 Ventana “Zonas” para configurar cada zona de acuerdo con las características de los sensores y la operación deseada de la alarma cuando ocurra un evento en esa zona. Si el sistema de alarma se divide en particiones, cada zona se puede asignar a un área deseada.
 
-    3.  **Usuarios.** Los *usuarios* del sistema deben ser creados para controlar el sistema de alarma a través del teclado, la llave iButton o una llamada telefónica (mensaje SMS). Consulta el capítulo 5.4 Ventana "Usuarios e Informes" sobre cómo crear usuarios y asignarles permisos.
+    3.  **Usuarios.** Los *usuarios* del sistema deben ser creados para controlar el sistema de alarma a través del teclado, la llave iButton o una llamada telefónica (mensaje SMS). Consulta el capítulo 5.4 Ventana “Usuarios e Informes” sobre cómo crear usuarios y asignarles permisos.
 
 3.  Envío de mensajes:
 
-    1.  **Configuración de hora.** La hora del panel de control debe establecerse para recibir mensajes con marcas de tiempo exactas. Consulta el capítulo 5.2 Ventana "Opciones del sistema".
+    1.  **Configuración de hora.** La hora del panel de control debe establecerse para recibir mensajes con marcas de tiempo exactas. Consulta el capítulo 5.2 Ventana “Opciones del sistema”.
 
-    2.  **Habilitar envío de informes.** La configuración predeterminada habilita la función del envío de informes para todos los eventos. Si se produce algún evento, su informe se enviará a los destinatarios establecidos mediante los canales establecidos. Consulta el capítulo 5.10 Ventana "Eventos del sistema" sobre cómo deshabilitar la notificación de eventos específicos.
+    2.  **Habilitar envío de informes.** La configuración predeterminada habilita la función del envío de informes para todos los eventos. Si se produce algún evento, su informe se enviará a los destinatarios establecidos mediante los canales establecidos. Consulta el capítulo 5.10 Ventana “Eventos del sistema” sobre cómo deshabilitar la notificación de eventos específicos.
 
-    3.  **Parámetros de la tarjeta SIM.** Si los mensajes deben enviarse a través de redes móviles, se deben establecer los parámetros para la tarjeta SIM que se está utilizando (consulta el capítulo 5.2 Ventana "Opciones del sistema").
+    3.  **Parámetros de la tarjeta SIM.** Si los mensajes deben enviarse a través de redes móviles, se deben establecer los parámetros para la tarjeta SIM que se está utilizando (consulta el capítulo 5.2 Ventana “Opciones del sistema”).
 
     4.  **Informes a la estación central de monitoreo.** El envío de informes a la estación central de monitoreo está deshabilitado en la configuración predeterminada. Consulta el capítulo 5.3 Ventana “Informes al CRA” sobre cómo configurar los parámetros para enviar mensajes al CRA.
 
-    5.  **Informes al usuario.** La comunicación con el servidor en la nube de Protegus está habilitada de forma predeterminada, y el envío de informes mediante mensajes SMS y llamadas telefónicas está desactivado. Consulta el capítulo 5.10 Ventana "Eventos del sistema" sobre cómo configurar los parámetros para enviar informes al teléfono móvil del usuario.
+    5.  **Informes al usuario.** La comunicación con el servidor en la nube de Protegus está habilitada de forma predeterminada, y el envío de informes mediante mensajes SMS y llamadas telefónicas está desactivado. Consulta el capítulo 5.10 Ventana “Eventos del sistema” sobre cómo configurar los parámetros para enviar informes al teléfono móvil del usuario.
 
 4.  Control remoto del sistema:
 
-    1.  **Acceso de usuario.** El sistema de alarma puede ser controlado de forma remota (llamada telefónica y/o mensajes SMS) por los usuarios cuyos números de teléfono se ingresen en la lista de usuarios. Consulta el capítulo 5.4 Ventana "Usuarios e Informes" sobre cómo ingresar números de teléfono.
+    1.  **Acceso de usuario.** El sistema de alarma puede ser controlado de forma remota (llamada telefónica y/o mensajes SMS) por los usuarios cuyos números de teléfono se ingresen en la lista de usuarios. Consulta el capítulo 5.4 Ventana “Usuarios e Informes” sobre cómo ingresar números de teléfono.
 
     2.  **Control vía llamada telefónica.** Las llamadas telefónicas permiten activar o desactivar todo o parte del sistema de seguridad, controlar (encender o apagar) los equipos conectados a las salidas PGM. Consulta el capítulo 4.4 “Control vía llamada telefónica” sobre qué parámetros cambiar para permitir que las llamadas telefónicas modifiquen el estado de una salida PGM seleccionada que tiene un circuito de control conectado.
 
-    3.  **Control vía mensajes SMS.** Con los mensajes SMS, es posible modificar algunos de los parámetros operativos del panel de control, activar o desactivar todo o parte de las instalaciones, controlar (encender o apagar) el equipo conectado a las salidas PGM. Consulta la lista de comandos SMS en el capítulo 4.3 "Configuración y control vía mensajes SMS".
+    3.  **Control vía mensajes SMS.** Con los mensajes SMS, es posible modificar algunos de los parámetros operativos del panel de control, activar o desactivar todo o parte de las instalaciones, controlar (encender o apagar) el equipo conectado a las salidas PGM. Consulta la lista de comandos SMS en el capítulo 4.3 “Configuración y control vía mensajes SMS”.
 
 5.  Adicionalmente:
 
@@ -358,60 +359,82 @@ La siguiente imagen muestra las dimensiones de la placa y sus orificios de monta
 
 ### Conexión de sensores
 
-Hay 10 terminales IO1 – IO10 (entradas) en la placa del panel de control para conectar circuitos de sensores. El número de entradas se puede ampliar a 32 utilizando expansores de entrada (iO, iO8, iO-WL, RF-SH, iO-LORA, iO8-LORA). Cualquier terminal puede configurarse como entrada y asignarse atributos de zona: tipo de circuito (NO, NC, EOL, EOL_T, 3EOL , ATZ, ATZ_T); sensibilidad a eventos temporales del circuito; función de zona (Delay, Instant, Instant Stay, Interior, Interior Stay, Fire, Keyswitch, 24_hour, Silent, Silent 24h), consulta el capítulo 5.7 Ventana "Zonas". Los expansores iO8 e iO8-LORA admiten todos los tipos de resistencia de zona (tipos EOL) del panel de control.
+Hay 10 terminales IO1 – IO10 (entradas) en la placa del panel de control para conectar circuitos de sensores. El número de entradas se puede ampliar a 32 utilizando expansores de entrada (iO, iO8, iO-WL, RF-SH, iO-LORA, iO8-LORA). Cualquier terminal puede configurarse como entrada y asignarse atributos de zona: tipo de circuito (NO, NC, EOL, EOL_T, 3EOL , ATZ, ATZ_T); sensibilidad a eventos temporales del circuito; función de zona (Delay, Instant, Instant Stay, Interior, Interior Stay, Fire, Keyswitch, 24_hour, Silent, Silent 24h), consulta el capítulo 5.7 Ventana “Zonas”. Los expansores iO8 e iO8-LORA admiten todos los tipos de resistencia de zona (tipos EOL) del panel de control.
 
 #### Diagrama para conectar sensores.
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0;">
-  <figure style="margin: 0;">
-    <img src="./image8.png" alt="" style="width: 100%; height: auto;" />
-  </figure>
-  <figure style="margin: 0;">
-    <img src="./image9.png" alt="" style="width: 100%; height: auto;" />
-  </figure>
-  <figure style="margin: 0;">
-    <img src="./image10.png" alt="" style="width: 100%; height: auto;" />
-  </figure>
+
+<figure style="margin: 0;">
+
+<img src="./image8.png" alt="" style="width: 100%; height: auto;" />
+</figure>
+
+<figure style="margin: 0;">
+
+<img src="./image9.png" alt="" style="width: 100%; height: auto;" />
+</figure>
+
+<figure style="margin: 0;">
+
+<img src="./image10.png" alt="" style="width: 100%; height: auto;" />
+</figure>
+
 </div>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0;">
-  <figure style="margin: 0;">
-    <img src="./image11.png" alt="" style="width: 100%; height: auto;" />
-  </figure>
-  <figure style="margin: 0;">
-    <img src="./image12.png" alt="" style="width: 100%; height: auto;" />
-  </figure>
-  <figure style="margin: 0;">
-    <img src="./image13.png" alt="" style="width: 100%; height: auto;" />
-  </figure>
+
+<figure style="margin: 0;">
+
+<img src="./image11.png" alt="" style="width: 100%; height: auto;" />
+</figure>
+
+<figure style="margin: 0;">
+
+<img src="./image12.png" alt="" style="width: 100%; height: auto;" />
+</figure>
+
+<figure style="margin: 0;">
+
+<img src="./image13.png" alt="" style="width: 100%; height: auto;" />
+</figure>
+
 </div>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0;">
-  <figure style="margin: 0;">
-    <img src="./image14.png" alt="" style="width: 100%; height: auto;" />
-  </figure>
-  <figure style="margin: 0;">
-    <img src="./image15.png" alt="" style="width: 100%; height: auto;" />
-  </figure>
+
+<figure style="margin: 0;">
+
+<img src="./image14.png" alt="" style="width: 100%; height: auto;" />
+</figure>
+
+<figure style="margin: 0;">
+
+<img src="./image15.png" alt="" style="width: 100%; height: auto;" />
+</figure>
+
 </div>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0;">
-  <figure style="margin: 0;">
-    <img src="./image16.png" alt="" style="width: 100%; height: auto;" />
-  </figure>
+
+<figure style="margin: 0;">
+
+<img src="./image16.png" alt="" style="width: 100%; height: auto;" />
+</figure>
+
 </div>
 
 ### Conexión de detectores de humo
 
 Diagrama para conectar detectores de humo de dos cables.
 
-Diagrama de cableado para detectores de humo de dos cables a salida PGM (LED). Al utilizar este esquema para conectar detectores de incendios, es necesario marcar el campo " **LED out for 2Wire fire sensor**" con una marca de verificación (consulte el capítulo 5.2 “Ventana“ Opciones de sistema ””).
+Diagrama de cableado para detectores de humo de dos cables a salida PGM (LED). Al utilizar este esquema para conectar detectores de incendios, es necesario marcar el campo ” **LED out for 2Wire fire sensor**” con una marca de verificación (consulte el capítulo 5.2 “Ventana“ Opciones de sistema ””).
 
 <img alt="" src="./image17.png" style="width:4.540008748906387in;height:1.2700021872265967in" />
 
-Diagramas de cableado para detectores de humo de dos hilos con módulo de relé SM1. Para conectar un circuito detector de humo a una entrada (IOx), la entrada debe tener asignada la función Zona de incendio (consulta el capítulo 5.7 Ventana "Zonas").
+Diagramas de cableado para detectores de humo de dos hilos con módulo de relé SM1. Para conectar un circuito detector de humo a una entrada (IOx), la entrada debe tener asignada la función Zona de incendio (consulta el capítulo 5.7 Ventana “Zonas”).
 
-Para conectar un circuito detector de humo a una salida PGM (IO10) seleccionada, la función de ***Reinicio del Sensor de Fuego** (Fire Sensor Reset)* debe asignarse a la salida (consulta el capítulo 5.8 Ventana "PGM").
+Para conectar un circuito detector de humo a una salida PGM (IO10) seleccionada, la función de ***Reinicio del Sensor de Fuego** (Fire Sensor Reset)* debe asignarse a la salida (consulta el capítulo 5.8 Ventana “PGM”).
 
 <img alt="" src="./image18.png" style="width:5.066676509186352in;height:1.8033366141732283in" />
 
@@ -421,9 +444,9 @@ o
 
 Diagrama para conectar detectores de humo de cuatro cables.
 
-Para conectar un circuito detector de humo a una entrada (IOx), la entrada debe tener asignada la función *Zona de incendio* (consulta el capítulo 5.7 Ventana "Zonas").
+Para conectar un circuito detector de humo a una entrada (IOx), la entrada debe tener asignada la función *Zona de incendio* (consulta el capítulo 5.7 Ventana “Zonas”).
 
-Para conectar un circuito detector de humo de cuatro cables a una salida PGM (IO10) seleccionada, la función de ***Reinicio del Sensor de Fuego** (Fire Sensor Reset)* debe asignarse a la salida (consulta el capítulo 5.8 Ventana "PGM").
+Para conectar un circuito detector de humo de cuatro cables a una salida PGM (IO10) seleccionada, la función de ***Reinicio del Sensor de Fuego** (Fire Sensor Reset)* debe asignarse a la salida (consulta el capítulo 5.8 Ventana “PGM”).
 
 <img alt="" src="./image20.png" style="width:4.763343175853018in;height:1.5166699475065617in" />
 
@@ -435,9 +458,9 @@ Para conectar un circuito detector de humo de cuatro cables a una salida PGM (IO
 
 El diagrama muestra la conexión y la configuración de la sirena exterior **MR100**. Si el panel de control utilizará un método diferente para monitorear la EOL (la configuración de fábrica es 2.2 kOhm EOL) del circuito de sabotaje de sirena (terminales SAB), es necesario cerrar los contactos JPS1 y conectar una resistencia de la clasificación correspondiente en serie a El circuito de sabotaje. El tipo de zona de **24_horas** está configurado de fábrica para la entrada IO9.
 
-### Diagrama para conectar teclados y lectores RFID (Wiegand 26/34) 
+### Diagrama para conectar teclados y lectores RFID (Wiegand 26/34)
 
-Se pueden conectar hasta 8 dispositivos al bus de datos del teclado. El tipo de teclado conectado debe especificarse en el software TrikdisConfig (consulta el capítulo 5.5 Ventana "Módulos"). El panel de control reconocerá y vinculará automáticamente los dispositivos conectados.
+Se pueden conectar hasta 8 dispositivos al bus de datos del teclado. El tipo de teclado conectado debe especificarse en el software TrikdisConfig (consulta el capítulo 5.5 Ventana “Módulos”). El panel de control reconocerá y vinculará automáticamente los dispositivos conectados.
 
 <img alt="" src="./image23.png" style="width:7.086805555555555in;height:1.6631944444444444in" />
 
@@ -453,7 +476,7 @@ Se pueden conectar hasta 2 lectores RFID al panel de control. Si cuentan con 2 l
 
 ### Diagrama para conectar lectores TM17, CZ-Dallas
 
-El lector iButton **CZ-Dallas** se conecta al „FLEXi“ SP3 utilizando el bus de datos *"1 Wire".* La longitud de los cables que se conectan al bus de datos puede ser de hasta 30 m:
+El lector iButton **CZ-Dallas** se conecta al „FLEXi“ SP3 utilizando el bus de datos *“1 Wire”.* La longitud de los cables que se conectan al bus de datos puede ser de hasta 30 m:
 
 <img alt="" src="./image28.png" style="width:4.853343175853018in;height:2.7000054680664918in" />
 
@@ -475,33 +498,38 @@ Usando las terminales de relé es posible controlar (encender/apagar) de forma r
 
 <img alt="" src="./image32.png" style="width:4.040008748906387in;height:0.94333552055993in" />
 
-###  Diagrama para conectar el comunicador Ethernet E485
+### Diagrama para conectar el comunicador Ethernet E485
 
 El módulo *E485* permite que el panel de control envíe y reciba comandos de control utilizando una conexión a internet alámbrica. Si un módulo *E485* está conectado al panel de control, los informes al CRA y a *Protegus2* se enviarán a través de Internet alámbrico y no se utilizará el internet móvil. Si se pierde la conectividad a internet por cable, se utilizará el internet móvil para enviar informes al CRA. Al restablecerse la conectividad a internet por cable, el panel de control dejará de usar el internet móvil y pasará a comunicarse con CRA y la aplicación móvil *Protegus2* a través del *E485*, es decir, internet por cable.
 
 <img alt="" src="./image33.png" style="width:3.3233398950131234in;height:1.6366699475065616in" />
 
-Consulta el capítulo 5.3 Ventana "Informe al CMS" sobre cómo elegir la prioridad de conectividad (GPRS, LAN, WiFi). La configuración del „FLEXi“ SP3 para el módulo Ethernet E485 se describe en el capítulo 5.5. Ventana "Módulos".
+Consulta el capítulo 5.3 Ventana “Informe al CMS” sobre cómo elegir la prioridad de conectividad (GPRS, LAN, WiFi). La configuración del „FLEXi“ SP3 para el módulo Ethernet E485 se describe en el capítulo 5.5. Ventana “Módulos”.
 
 Si el E485 está conectado, no es necesaria una tarjeta SIM para el panel de control.
 
 ### Diagrama para conectar un RF-SH
 
-Con el *RF-SH* es posible conectar 64 controles remotos inalámbricos, 16 sirenas inalámbricas, 32 sensores inalámbricos y 8 teclados inalámbricos al sistema de seguridad. / La configuración del *„FLEXi“ SP3* para los módulos de expansión se describe en el capítulo 5.5 Ventana "Módulos".
+Con el *RF-SH* es posible conectar 64 controles remotos inalámbricos, 16 sirenas inalámbricas, 32 sensores inalámbricos y 8 teclados inalámbricos al sistema de seguridad. / La configuración del *„FLEXi“ SP3* para los módulos de expansión se describe en el capítulo 5.5 Ventana “Módulos”.
 
 <img alt="" src="./image34.png" style="width:2.510005468066492in;height:1.2800021872265968in" />
 
 ### Diagramas para conectar módulos expansores de la serie iO
 
-Si el panel de control de seguridad „FLEXi“ SP3 necesita más entradas IN o salidas OUT, conecta un expansor de entradas y salidas serie TRIKDIS iO alámbrico o inalámbrico. La configuración del „FLEXi“ SP3 para los módulos de expansión se describe en el capítulo 5.5 Ventana "Módulos".
+Si el panel de control de seguridad „FLEXi“ SP3 necesita más entradas IN o salidas OUT, conecta un expansor de entradas y salidas serie TRIKDIS iO alámbrico o inalámbrico. La configuración del „FLEXi“ SP3 para los módulos de expansión se describe en el capítulo 5.5 Ventana “Módulos”.
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0;">
-  <figure style="margin: 0;">
-    <img src="./image35.png" alt="" style="width: 100%; height: auto;" />
-  </figure>
-  <figure style="margin: 0;">
-    <img src="./image36.png" alt="" style="width: 100%; height: auto;" />
-  </figure>
+
+<figure style="margin: 0;">
+
+<img src="./image35.png" alt="" style="width: 100%; height: auto;" />
+</figure>
+
+<figure style="margin: 0;">
+
+<img src="./image36.png" alt="" style="width: 100%; height: auto;" />
+</figure>
+
 </div>
 
 ### Diagrama para conectar el transmisor RF T16
@@ -510,7 +538,7 @@ El transmisor RF - *T16* utilizado para la transmisión de mensajes de eventos a
 
 <img alt="" src="./image37.png" style="width:2.2433377077865266in;height:1.2466688538932633in" />
 
-### Diagrama para conectar módulo SF485 
+### Diagrama para conectar módulo SF485
 
 El *SF485* actúa como un canal de comunicación de respaldo para transmitir eventos del panel de control de seguridad al CRA (centro de recepción de alarmas) o a la aplicación móvil *Protegus2* a través de la red SigFox cuando los eventos no se pueden transmitir en el canal de comunicación principal. Los mensajes se transmiten en formato Contact ID.
 
@@ -525,72 +553,46 @@ Para encender el panel de control, primero debes encender la fuente de alimentac
 - El diodo NET debe estar verde fijo y parpadear periódicamente en amarillo no menos de 3 veces - el color verde indica que la tarjeta SIM se ha registrado correctamente en la red móvil, y el número de parpadeos verdes indica la intensidad de la señal móvil.
 
 !!! note
-    Una intensidad de red móvil suficiente es 3 (tres destellos amarillos en
-    el indicador NET). / Si observas menos destellos amarillos del diodo
-    NET, la intensidad de la red móvil es insuficiente. Recomendamos elegir
-    un lugar diferente para instalar el panel de control, cambiar la
-    ubicación de la antena o usar una antena móvil más sensible. / Si la
-    indicación de la luz es diferente, consulta el capítulo 1.4 "Indicación
-    de operación LED" para conocer el motivo. / Si todas las luces
-    indicadoras del „FLEXi" SP3 están apagadas, verifica la fuente de
-    alimentación y las conexiones.
-## Control remoto 
+    Una intensidad de red móvil suficiente es 3 (tres destellos amarillos en el indicador NET). / Si observas menos destellos amarillos del diodo NET, la intensidad de la red móvil es insuficiente. Recomendamos elegir un lugar diferente para instalar el panel de control, cambiar la ubicación de la antena o usar una antena móvil más sensible. / Si la indicación de la luz es diferente, consulta el capítulo 1.4 “Indicación de operación LED” para conocer el motivo. / Si todas las luces indicadoras del „FLEXi” SP3 están apagadas, verifica la fuente de alimentación y las conexiones.
 
-### Vincular el *„FLEXi“ SP3* a la cuenta *Protegus2* 
+## Control remoto
+
+### Vincular el *„FLEXi“ SP3* a la cuenta *Protegus2*
 
 Con Protegus2, los usuarios pueden controlar el sistema de alarma de forma remota. También pueden ver el estado del sistema y recibir informes de eventos del sistema.
 
-1.  Si aún no tiene una cuenta personal en el servidor en la nube de Protegus, ingresa a la página [www.protegus.app](http://www.protegus.app) usando un navegador web y crea una cuenta haciendo clic en el enlace *Registrarse (Sign up)*.
+1.  Si aún no tiene una cuenta personal en el servidor en la nube de Protegus, ingresa a la página [www.protegus.app](https://www.protegus.app) usando un navegador web y crea una cuenta haciendo clic en el enlace *Registrarse (Sign up)*.
 
-    <div style="margin: 20px 0; text-align: left;">
-      <a href="https://play.google.com/store/apps/details?id=lt.apps.protegus2" target="_blank" style="display: inline-block; margin-right: 10px;">
-        <img src="./protegus-android.png" alt="Get it on Google Play" style="height:50px;">
-      </a>
-      <a href="https://www.protegus.app" target="_blank" style="display: inline-block; margin-right: 10px;">
-        <img src="./protegus-web.png" alt="Open Web App" style="height:50px;">
-      </a>
-      <a href="https://apps.apple.com/us/app/protegus-2/id1555450252" target="_blank" style="display: inline-block;">
-        <img src="./protegus-ios.png" alt="Download on the App Store" style="height:50px;">
-      </a>
+    <div style="margin: 20px 0; text-align: center;">
+
+    <a href="https://play.google.com/store/apps/details?id=lt.apps.protegus2" target="_blank" style="display: inline-block; margin-right: 10px;"> <img src="./protegus-android.png" alt="Get it on Google Play" style="height:50px;"> </a> <a href="https://www.protegus.app" target="_blank" style="display: inline-block; margin-right: 10px;"> <img src="./protegus-web.png" alt="Open Web App" style="height:50px;"> </a> <a href="https://apps.apple.com/us/app/protegus-2/id1555450252" target="_blank" style="display: inline-block;"> <img src="./protegus-ios.png" alt="Download on the App Store" style="height:50px;"> </a>
+
     </div>
 
 2.  Haz clic en el enlace que recibirás en tu correo electrónico para activar tu cuenta.
 
 3.  Descarga e instala la aplicación móvil Protegus2 en tu teléfono inteligente.
 
-    <div style="margin: 20px 0; text-align: left;">
-      <a href="https://play.google.com/store/apps/details?id=lt.apps.protegus2" target="_blank" style="display: inline-block; margin-right: 10px;">
-        <img src="./protegus-android.png" alt="Get it on Google Play" style="height:50px;">
-      </a>
-      <a href="https://www.protegus.app" target="_blank" style="display: inline-block; margin-right: 10px;">
-        <img src="./protegus-web.png" alt="Open Web App" style="height:50px;">
-      </a>
-      <a href="https://apps.apple.com/us/app/protegus-2/id1555450252" target="_blank" style="display: inline-block;">
-        <img src="./protegus-ios.png" alt="Download on the App Store" style="height:50px;">
-      </a>
-    </div>
-
-<img alt="" src="./image39.png" style="width:5.903345363079615in;height:0.786667760279965in" />
-
-4. Ejecuta la aplicación móvil Protegus2 en tu teléfono inteligente e inicia sesión con tu nombre de usuario y contraseña.
+4.  Ejecuta la aplicación móvil Protegus2 en tu teléfono inteligente e inicia sesión con tu nombre de usuario y contraseña.
 
 !!! note
-    Al agregar un „FLEXi" SP3 a Protegus2:
-    
+    Al agregar un „FLEXi” SP3 a Protegus2:
+
     1.  Se debe insertar una tarjeta SIM activada y se debe ingresar el
         código PIN;
-    
-    2.  El **servicio en la nube de** Protegus debe estar habilitado.
+
+    2.  El servicio en la nube de Protegus debe estar habilitado.
         Consulta el capítulo 5.4 "Usuarios e Informes" (pestaña
         **Protegus**);
-    
+
     3.  La alimentación debe estar encendida (el LED "PWR" debe estar
         verde fijo);
-    
+
     4.  Debe estar conectado a la red (el LED "NET" debe estar verde fijo
         si está conectado a la red GSM; y/o el LED "MOD" debe estar verde
         fijo si está conectado a la red WiFi).
-5. Haga clic en “Agregar nuevo sistema” e ingrese el número “ID único/IMEI” del *“Flexi” SP3*, que encontrará en el producto o en la etiqueta del embalaje. Haga clic en el botón "Siguiente".
+
+5.  Haga clic en “Agregar nuevo sistema” e ingrese el número “ID único/IMEI” del *“Flexi” SP3*, que encontrará en el producto o en la etiqueta del embalaje. Haga clic en el botón “Siguiente”.
 
 <img alt="" src="./image40.png" style="width:2.7244094488188977in;height:3.9330708661417324in" />
 
@@ -598,13 +600,13 @@ Con Protegus2, los usuarios pueden controlar el sistema de alarma de forma remot
 
 1.  Para controlar el panel de control, inicie sesión en *Protegus2*.
 
-2.  En *Protegus2*, haga clic en el botón "Armado" (o "Desarmado"). En la ventana que se abre, ingrese el código de usuario del panel de control.
+2.  En *Protegus2*, haga clic en el botón “Armado” (o “Desarmado”). En la ventana que se abre, ingrese el código de usuario del panel de control.
 
-3.  Si el programa no responde a tus comandos o las vistas de la ventana del programa son completamente diferentes, ingresa a *Configuración* -> *Configuración del sistema* -> ¿Sistema desincronizado? y haz clic en el botón "Sync".
+3.  Si el programa no responde a tus comandos o las vistas de la ventana del programa son completamente diferentes, ingresa a *Configuración* -\> *Configuración del sistema* -\> ¿Sistema desincronizado? y haz clic en el botón “Sync”.
 
 <img alt="" src="./image41.png" style="width:2.220472440944882in;height:3.279527559055118in" />
 
-### Configuración y control vía mensajes SMS 
+### Configuración y control vía mensajes SMS
 
 El panel de control de seguridad „FLEXi“ SP3 se puede controlar y configurar de forma remota con mensajes SMS.
 
@@ -615,28 +617,28 @@ La contraseña SMS predeterminada del panel de control es **123456**. ¡Por razo
 #### Lista de comandos SMS
 
 | Comando | Datos | Descripción |
-|---------|-------|-------------|
+|----|----|----|
 | INFO |  | Solicitar información sobre el panel de control. El nombre del objeto, el estado de la partición, el número IMEI, la intensidad de la señal GSM, la versión del firmware y el número de serie se incluirán en la respuesta. Ejemplo: INFO 123456 |
 | RESET |  | Restablecer el dispositivo. Ejemplo: RESET 123456 |
-| OUTPUTx | ON | Activar una salida, "x" es el número de salida. Ejemplo: OUTPUT1 123456 ON |
-| OUTPUTx | OFF | Desactivar una salida, "x" es el número de salida. / Ejemplo: OUTPUT1 123456 OFF |
-| OUTPUTx | PULSE=ttt | Activar una salida durante un tiempo específico - "x" es el número de salida OUT y "ttt" es un número de tres dígitos que especifica el tiempo de pulso en segundos. Ejemplo: OUTPUT1 123456 PULSE=002 |
+| OUTPUTx | ON | Activar una salida, “x” es el número de salida. Ejemplo: OUTPUT1 123456 ON |
+| OUTPUTx | OFF | Desactivar una salida, “x” es el número de salida. / Ejemplo: OUTPUT1 123456 OFF |
+| OUTPUTx | PULSE=ttt | Activar una salida durante un tiempo específico - “x” es el número de salida OUT y “ttt” es un número de tres dígitos que especifica el tiempo de pulso en segundos. Ejemplo: OUTPUT1 123456 PULSE=002 |
 | PSW | New password | Cambiar contraseña. Ejemplo: PSW 123456 654123 |
 | TIME | YYYY/MM/DD,12:00:00 | Establecer fecha y hora. Ejemplo: TIME 123456 2018/01/03,12:23:00 |
 | TXTA | Object name | Especificar el nombre del objeto. Ejemplo: TXTA 123456 Namas |
-| RDR | PhoneNR#SMStext | Reenvía mensajes SMS al número especificado. El número de teléfono debe comenzar con un símbolo "+" y el código internacional del país. / Ejemplo: RDR 123456 +37061234567#forwarded text |
+| RDR | PhoneNR#SMStext | Reenvía mensajes SMS al número especificado. El número de teléfono debe comenzar con un símbolo “+” y el código internacional del país. / Ejemplo: RDR 123456 +37061234567#forwarded text |
 | ASKI |  | Enviar mensaje SMS con estados de entradas IN. Ejemplo.: ASKI 123456 |
 | ASKO |  | Enviar mensaje SMS con estados de salidas OUT. Ejemplo: ASKO 123456 |
 | ASKA |  | Enviar mensaje SMS con estados de áreas. Ejemplo: ASKA 123456 |
 | ASKT |  | Enviar mensaje SMS con valores de todos los sensores de temperatura. / Ejemplo: ASKT 123456 |
-| DISARM | SYS:x | Desactivar la alarma, "x" es el número de partición (1-8). / Ejemplo: DISARM 123456 SYS:1 |
-| ARM | SYS:x | Activar la alarma, "x" es el número de partición (1-8). / Ejemplo: ARM 123456 SYS:1 |
+| DISARM | SYS:x | Desactivar la alarma, “x” es el número de partición (1-8). / Ejemplo: DISARM 123456 SYS:1 |
+| ARM | SYS:x | Activar la alarma, “x” es el número de partición (1-8). / Ejemplo: ARM 123456 SYS:1 |
 | STAY | SYS:x | Activar área “x” en modo En Casa (Stay), “x” es el número de partición (1-8). / Ejemplo: STAY 123456 SYS:1 |
 | SLEEP | SYS:x | Activar área “x” en modo Sleep (Noche), “x” es el número de partición (1-8). / Ejemplo: SLEEP 123456 SYS:1 |
-| FRS |  | Restablece la salida del sensor de incendio, si la salida OUT tiene asignada la función "Restablecer sensor de incendio". Ejemplo: FRS 123456 |
-| SETN | PhoneX=PhoneNR#Name#email | Agrega un número de teléfono, nombre de usuario y lo asigna al usuario "x". "x" es la línea del número de teléfono en la lista. El número de teléfono debe comenzar con un símbolo "+" y el código de país internacional. El número de teléfono y el nombre de usuario deben estar separados por un símbolo #. / Ejemplo: SETN 123456 PHONE5=+37061234567#JOHN#john@peter.com |
+| FRS |  | Restablece la salida del sensor de incendio, si la salida OUT tiene asignada la función “Restablecer sensor de incendio”. Ejemplo: FRS 123456 |
+| SETN | PhoneX=PhoneNR#Name#email | Agrega un número de teléfono, nombre de usuario y lo asigna al usuario “x”. “x” es la línea del número de teléfono en la lista. El número de teléfono debe comenzar con un símbolo “+” y el código de país internacional. El número de teléfono y el nombre de usuario deben estar separados por un símbolo \#. / Ejemplo: SETN 123456 PHONE5=+37061234567#JOHN#john@peter.com |
 | SETN | PhoneX=DEL | Elimina el número de teléfono y el nombre de usuario de la lista. / Ejemplo: SETN 123456 PHONE5=DEL |
-| UUSD | *Uusd code# | Envía un código UUSD al operador. Ejemplo: UUSD 123456 *245# |
+| UUSD | \*Uusd code# | Envía un código UUSD al operador. Ejemplo: UUSD 123456 \*245# |
 | CONNECT | Protegus=ON | Conectarse al servicio en la nube Protegus. Ejemplo: CONNECT 123456 PROTEGUS=ON |
 | CONNECT | Protegus=OFF | Desconectarse del servicio en la nube Protegus. Ejemplo: CONNECT 123456 PROTEGUS=OFF |
 | CONNECT | Code=123456 | Código de servicio en la nube de Protegus. Ejemplo: CONNECT 123456 CODE=123456 |
@@ -650,30 +652,22 @@ La contraseña SMS predeterminada del panel de control es **123456**. ¡Por razo
 ### Control con llamada telefónica
 
 !!! note
-    El administrador del sistema puede controlar el panel de control
-    mediante mensajes SMS y llamadas telefónicas. / Si deseas permitir que
-    otros controlen el sistema a través de llamadas telefónicas, ingresa sus
-    datos de identificación utilizando el software TrikdisConfig o
-    comandos SMS. / **[El control de llamadas telefónica no funciona con los
-    paneles de control de seguridad *SP3_хх7х*. Los paneles de control de
-    seguridad *SP3_12xx* no tienen mensaje de voz con firmware 1.14 y
-    superior.]{.underline}**
-**Comandos de control de llamadas telefónicas del „FLEXi“ SP3**
+    El administrador del sistema puede controlar el panel de control mediante mensajes SMS y llamadas telefónicas. / Si deseas permitir que otros controlen el sistema a través de llamadas telefónicas, ingresa sus datos de identificación utilizando el software TrikdisConfig o comandos SMS. / **<u>El control de llamadas telefónica no funciona con los paneles de control de seguridad *SP3_хх7х*. Los paneles de control de seguridad *SP3_12xx* no tienen mensaje de voz con firmware 1.14 y superior.</u>** **Comandos de control de llamadas telefónicas del „FLEXi“ SP3**
 
 Control de salidas OUT y particiones del sistema de alarma con llamadas telefónicas:
 
-1.  Si al usuario se le asigna el permiso de controlar las salidas OUT y la salida OUT se le asigna el tipo "Control remoto" (usando TrikdisConfig), o el sistema de seguridad „FLEXi“ SP3 se divide en 1 o más áreas: llame al número de teléfono de la Tarjeta SIM del „FLEXi“ SP3. El „FLEXi“ SP3 responderá la llamada y podrás marcar comandos usando el teclado numérico del teléfono (consulta la siguiente tabla).
+1.  Si al usuario se le asigna el permiso de controlar las salidas OUT y la salida OUT se le asigna el tipo “Control remoto” (usando TrikdisConfig), o el sistema de seguridad „FLEXi“ SP3 se divide en 1 o más áreas: llame al número de teléfono de la Tarjeta SIM del „FLEXi“ SP3. El *„FLEXi“ SP3* responderá la llamada y podrás marcar comandos usando el teclado numérico del teléfono (consulta la siguiente tabla).
 
 #### Lista de comandos del teclado para teléfono móvil
 
 | Botones del teclado | Función | Descripción |
-|---------------------|---------|-------------|
-| [1][área no][#] | Activar el área seleccionada del sistema de alarma | Ejemplo. (activar área 1): 11# |
-| [2][área no][#] | Desactivar el área seleccionada del sistema de alarma | Ejemplo. (desactivar área 1): 21# |
-| [3][salida no][#][estado no] | Control de salida OUT seleccionada | Controla una salida OUT especificada. / Estado: / [0] – salida desactivada; / [1] – salida activada; / [2] – desactivada por tiempo de pulso; / [3] – activada por tiempo de pulso; / (el tiempo de pulso se especifica utilizando el software TrikdisConfig, en la ventana "PGM") / Ejemplo. (establecer la salida 1OUT en estado "encendido"): 31#1 / Ejemplo. (establecer la salida 2OUT en estado "encendido" por el tiempo de pulso especificado en la tabla TrikdisConfig en "PGM"): 32#3 |
-| [4][grabación no][#] | Iniciar grabación del archivo de sonido seleccionado | Ejemplo. (iniciar grabación de voz 1): 41# |
-| [5] | Escuchar (1-5) la grabación de voz que acabas de realizar | Ejemplo: 5 |
-| [6] | Guardar la grabación de voz | Ejemplo: 6 |
+|----|----|----|
+| *\[1\]\[área no\]\[#\]* | Activar el área seleccionada del sistema de alarma | Ejemplo. (activar área 1): 11# |
+| *\[2\]\[área no\]\[#\]* | Desactivar el área seleccionada del sistema de alarma | Ejemplo. (desactivar área 1): 21# |
+| *\[3\]\[salida no\]\[#\]\[estado no\]* | Control de salida OUT seleccionada | Controla una salida OUT especificada. / Estado: / *\[0\]* – salida desactivada; / *\[1\]* – salida activada; / *\[2\]* – desactivada por tiempo de pulso; / *\[3\]* – activada por tiempo de pulso; / (el tiempo de pulso se especifica utilizando el software TrikdisConfig, en la ventana “PGM”) / Ejemplo. (establecer la salida 1OUT en estado “encendido”): 31#1 / Ejemplo. (establecer la salida 2OUT en estado “encendido” por el **tiempo de pulso** especificado en la tabla ***TrikdisConfig** en* “PGM”): 32#3 |
+| *\[4\]\[grabación no\]\[#\]* | Iniciar grabación del archivo de sonido seleccionado | Ejemplo. (iniciar grabación de voz 1): 41# |
+| *\[5\]* | Escuchar (1-5) la grabación de voz que acabas de realizar | Ejemplo: ***5*** |
+| *\[6\]* | Guardar la grabación de voz | Ejemplo: ***6*** |
 
 Una señal de audio acompaña al principio y al final de la grabación del archivo de audio. Tiempo de grabación de archivos de audio 15 seg. Una señal de audio acompaña al final de la reproducción de audio. El final de la grabación de audio se indica mediante una señal audible. Otras acciones solo se pueden tomar cuando se escucha la señal audible.
 
@@ -687,7 +681,7 @@ Una señal de audio acompaña al principio y al final de la grabación del archi
 
 1.  Inicia el software de configuración TrikdisConfig. El programa reconocerá automáticamente el dispositivo conectado y abrirá automáticamente la ventana de configuración del „FLEXi“ SP3.
 
-2.  Haz clic **en Leer [F4]** para consultar los parámetros actuales del „FLEXi“ SP3. Si aparece una ventana emergente, ingresa el código de *administrador* o *instalador*.
+2.  Haz clic **en Leer \[F4\]** para consultar los parámetros actuales del „FLEXi“ SP3. Si aparece una ventana emergente, ingresa el código de *administrador* o *instalador*.
 
 ### Descripción de la barra de estado de TrikdisConfig
 
@@ -707,15 +701,15 @@ Cuando el „FLEXi“ SP3 está conectado, TrikdisConfig mostrará información 
 | Estado | Tipo de conexión con el programa (USB o remoto) |
 | Propósito | Muestra el nivel de acceso (se muestra después de ingresar un código de acceso) |
 
-Cuando se hace clic en el botón **Leer [F4]**, el programa leerá y mostrará la configuración almacenada en el „FLEXi“ SP3. Con TrikdisConfig, puedes modificar la configuración deseada de acuerdo con las descripciones de las ventanas del programa que se muestran a continuación.
+Cuando se hace clic en el botón **Leer \[F4\]**, el programa leerá y mostrará la configuración almacenada en el „FLEXi“ SP3. Con TrikdisConfig, puedes modificar la configuración deseada de acuerdo con las descripciones de las ventanas del programa que se muestran a continuación.
 
-### Ventana "Opciones de Sistema"
+### Ventana “Opciones de Sistema”
 
-**Pestaña "Sistema general"**
+**Pestaña “Sistema general”**
 
 <img alt="" src="./image43.png" style="width:7.086614173228346in;height:4.051181102362205in" />
 
-**Grupo de configuraciones "General"**
+**Grupo de configuraciones “General”**
 
 - Si los informes se enviarán al CRA, ingresa el **Objeto ID** (número hexadecimal de 4 símbolos, 0-9, A-F) proporcionado por el CRA. (**No utilice números de objeto FFFE, FFFF.**).
 
@@ -731,7 +725,7 @@ Cuando se hace clic en el botón **Leer [F4]**, el programa leerá y mostrará l
 
 - **Idioma de texto** – se utilizarán símbolos específicos del idioma seleccionado en los mensajes SMS.
 
-- Es posible **Suspender informe de eventos cuando**... suceden **mismos eventos por**...
+- Es posible **Suspender informe de eventos cuando**… suceden **mismos eventos por**…
 
 - **Restaurar eventos después de reporte** – establece el tiempo después del cual se cancelará la suspensión de informes de eventos. El tiempo puede ser de 0 a 999 minutos.
 
@@ -748,6 +742,7 @@ Cuando se hace clic en el botón **Leer [F4]**, el programa leerá y mostrará l
 - Ingresa el **PIN de la tarjeta SIM**. Si el código PIN está deshabilitado para la tarjeta SIM, no cambies el código predeterminado.
 
   - **APN** – nombre del punto de acceso a internet móvil del proveedor de servicios. Debes ingresar el APN si los mensajes de eventos deberán enviarse a la nube de Protegus o al CRA a través de internet móvil.
+
 - Si el proveedor de servicios de la red GPRS lo requiere, ingresa el nombre de usuario y la contraseña del APN en los campos **Usuario** y **Contraseña**.
 
 - **Locked ICCID** - ingrese el número ICCID de la tarjeta SIM si desea que el panel de control funcione solo con esta tarjeta SIM.
@@ -764,7 +759,7 @@ Puedes configurar la hora haciendo clic en el botón **Establecer hora de PC**. 
 
 - **Retraso de falla de AC, s** - en el caso de un corte de energía eléctrica, se enviará una notificación de corte de energía después del tiempo de retraso especificado. Cuando se restablezca la tensión de alimentación, se enviará una notificación de la recuperación de la tensión de alimentación después del retardo de tiempo especificado.
 
-**Pestaña "Particiones"**
+**Pestaña “Particiones”**
 
 <img alt="" src="./image44.png" style="width:7.086614173228346in;height:2.2755905511811023in" />
 
@@ -786,9 +781,9 @@ Puedes configurar la hora haciendo clic en el botón **Establecer hora de PC**. 
 
 - **Interruptor de llave** – elige de qué manera - Pulso o Nivel - se debe activar una *zona Keyswitch* para que el sistema habilite o deshabilite la protección de las instalaciones.
 
-- **Tamper** – elige el tipo de reacción (silencioso, sonoro cuando está activado, siempre sonoro) cuando el sistema detecta un evento de sabotaje del sensor. "Silencioso": los destinatarios recibirán informes de eventos, pero la sirena no se encenderá; "Sonoro cuando está activado": los destinatarios recibirán informes de eventos, pero la sirena se encenderá solo si el evento ocurre cuando el sistema está activado; "Siempre sonoro": los destinatarios recibirán informes de eventos y la sirena se encenderá incluso cuando el sistema de alarma esté desactivado.
+- **Tamper** – elige el tipo de reacción (silencioso, sonoro cuando está activado, siempre sonoro) cuando el sistema detecta un evento de sabotaje del sensor. “Silencioso”: los destinatarios recibirán informes de eventos, pero la sirena no se encenderá; “Sonoro cuando está activado”: los destinatarios recibirán informes de eventos, pero la sirena se encenderá solo si el evento ocurre cuando el sistema está activado; “Siempre sonoro”: los destinatarios recibirán informes de eventos y la sirena se encenderá incluso cuando el sistema de alarma esté desactivado.
 
-**Pestaña "Agendario"**
+**Pestaña “Agendario”**
 
 <img alt="" src="./image45.png" style="width:7.086614173228346in;height:1.9015748031496063in" />
 
@@ -804,13 +799,13 @@ En esta tabla, puedes organizar escenarios para activar y desactivar automática
 
 - **Acción** – configura el modo de protección (Disarm/Arm/Sleep/Stay) al que el sistema cambiará automáticamente a la hora especificada.
 
-- **Lunes, ...Domingo** – marca los días de la semana en los que el tiempo y el modo de protección establecidos serán válidos.
+- **Lunes, …Domingo** – marca los días de la semana en los que el tiempo y el modo de protección establecidos serán válidos.
 
 - **Festivos** – establece el comportamiento de la programación durante días festivos (Desactivado/Ignorar en festivos/Adicional en festivos/Solo festivos). Desactivo (Disabled): no tomar en cuenta festivos. Ignorar en días festivos (Ignore on holidays): no aplica el horario durante los días festivos. Adicional en festivos (Additional when holidays): realiza una acción adicional durante los festivos. Solo festivos (Only holidays): aplica el horario durante los festivos.
 
-- **Grupo de festivos** –especifica un grupo de festivos (Any - Cualquiera/1/2/3/4) que la programación considere festivos. Si se elige " Any", la programación funcionará en modo festivo durante cualquier día festivo activo.
+- **Grupo de festivos** –especifica un grupo de festivos (Any - Cualquiera/1/2/3/4) que la programación considere festivos. Si se elige ” Any”, la programación funcionará en modo festivo durante cualquier día festivo activo.
 
-**Pestaña "Festivos"**
+**Pestaña “Festivos”**
 
 <img alt="" src="./image46.png" style="width:7.086614173228346in;height:1.905511811023622in" />
 
@@ -822,17 +817,17 @@ En esta tabla, puedes organizar escenarios para activar y desactivar automática
 
 - **Grupo 1, Grupo 2, Grupo 3, Grupo 4** – combinar los festivos en grupos.
 
-**Pestaña "Problemas de sistema"**
+**Pestaña “Problemas de sistema”**
 
 <img alt="" src="./image47.png" style="width:7.086614173228346in;height:2.97244094488189in" />
 
 Si se marca al menos un campo de falla interna del panel de control, entonces el panel de control no podrá armarse si esta falla está presente.
 
-**Pestaña "Acceso"**
+**Pestaña “Acceso”**
 
 <img alt="" src="./image48.png" style="width:7.086614173228346in;height:3.1102362204724407in" />
 
-**Grupo de configuración "Códigos de acceso"**
+**Grupo de configuración “Códigos de acceso”**
 
 - **Código de administrador** – *(código predeterminado: 123456)* proporciona acceso total a la configuración (el código debe ser de 6 símbolos de longitud; puede consistir en letras y/o números latinos).
 
@@ -841,21 +836,17 @@ Si se marca al menos un campo de falla interna del panel de control, entonces el
 - **Código de instalador** – *(código predeterminado: 654321)* da acceso a instaladores para configurar el sistema. Por razones de seguridad, modifícala a un código de 6 símbolos que solamente usted conozca.
 
 !!! note
-    Si se establece el *código de administrador* predeterminado (123456),
-    después de presionar **Leer [F4]**, el programa inmediatamente
-    mostrará los parámetros operativos actuales del dispositivo sin
-    solicitar el código.
-**Grupo de configuración "Permisos de instalador"**
+    Si se establece el *código de administrador* predeterminado (123456), después de presionar **Leer \[F4\]**, el programa inmediatamente mostrará los parámetros operativos actuales del dispositivo sin solicitar el código. **Grupo de configuración “Permisos de instalador”**
 
 - Especifica los permisos del instalador.
 
-### Ventana "Informes a CRA" 
+### Ventana “Informes a CRA”
 
-**Pestaña "Informes"**
+**Pestaña “Informes”**
 
 <img alt="" src="./image49.png" style="width:7.086614173228346in;height:3.838582677165354in" />
 
-**Grupos de configuración "Canal primario" y "Canal de respaldo"**
+**Grupos de configuración “Canal primario” y “Canal de respaldo”**
 
 - **Tipo de comunicación** – elige un protocolo para comunicarse con el receptor (TCP/IP, UDP/IP, SMS).
 
@@ -871,15 +862,15 @@ Si se marca al menos un campo de falla interna del panel de control, entonces el
 
 Si se establecen los parámetros para el canal paralelo (parallel channel), los informes se enviarán utilizando ambos canales simultáneamente. Ambos canales no se pueden configurar para el mismo receptor.
 
-**Grupos de configuración "Canal de respaldo 2" y "Canal paralelo de reserva 2"**
+**Grupos de configuración “Canal de respaldo 2” y “Canal paralelo de reserva 2”**
 
 - **Núm. de teléfono** – (solo para mensajes SMS) ingresa el número de teléfono de un receptor TRIKDIS SMS. El número de teléfono debe comenzar con el código internacional del país (por ejemplo, 370xxxxxxxx).
 
-**Pestaña "Ajustes"**
+**Pestaña “Ajustes”**
 
 <img alt="" src="./image50.png" style="width:7.086614173228346in;height:3.8622047244094486in" />
 
-**Grupo de configuración "Configuraciones"**
+**Grupo de configuración “Configuraciones”**
 
 - **Regresar al Primario después** – período de tiempo después del cual el „FLEXi“ SP3 intentará recuperar la conexión utilizando el canal primario, en minutos.
 
@@ -900,11 +891,9 @@ Si se establecen los parámetros para el canal paralelo (parallel channel), los 
 - **Local time in SIA -** marque la casilla para indicar el tiempo configurado en el módulo en los mensajes enviados a la estación de monitoreo.
 
 !!! note
-    Independientemente de la configuración de IP, asegúrese de que las
-    direcciones DNS coincidan con las admitidas por su ISP.
-**Grupo de configuración "Modo de informe"**
+    Independientemente de la configuración de IP, asegúrese de que las direcciones DNS coincidan con las admitidas por su ISP. **Grupo de configuración “Modo de informe”**
 
-Se establece el orden preferido de envío de mensajes a través de los canales CRA y al Protegus2. Los tipos de canales de comunicación se establecen en orden. Si no es posible establecer una conexión a través del canal de comunicación principal, se realiza la transición al canal de comunicación de respaldo, etc. Si el tipo de conexión de respaldo logró transmitir el mensaje al CRA, se intentará el tipo de conexión "**Regresar a principal**" después del intervalo de tiempo especificado.
+Se establece el orden preferido de envío de mensajes a través de los canales CRA y al Protegus2. Los tipos de canales de comunicación se establecen en orden. Si no es posible establecer una conexión a través del canal de comunicación principal, se realiza la transición al canal de comunicación de respaldo, etc. Si el tipo de conexión de respaldo logró transmitir el mensaje al CRA, se intentará el tipo de conexión “**Regresar a principal**” después del intervalo de tiempo especificado.
 
 - **Tipo principal** – selecciona un tipo de conexión (SIM, WiFi, LAN(E485)) con el receptor CRA y Protegus2.
 
@@ -912,10 +901,11 @@ Se establece el orden preferido de envío de mensajes a través de los canales C
 
 - **Tipo de reserva 2** – seleccione un tipo de conexión (SIM, WiFi, LAN(E485)) con el receptor CRA y Protegus2.
 
-- **Radio T16 /SF485** – marca esta casilla si el transmisor T16 se utilizará para transmitir información. El transmisor T16 funciona como un canal de conectividad de respaldo si se utiliza al menos uno de los otros métodos de conexión (SIM, WiFi, LAN(E485)). Si no existen otros métodos de conexión, será el principal. El T16 solo se puede usar para enviar informes al CRA.
+- **Radio T16 /SF485** – marca esta casilla si el transmisor T16 se utilizará para transmitir información. El transmisor T16 funciona como un canal de conectividad de respaldo si se utiliza al menos uno de los otros métodos de conexión (SIM, WiFi, LAN(E485)). Si no existen otros métodos de conexión, será el principal. El *T16* solo se puede usar para enviar informes al CRA.
+
 - **Regresar a principal (ambos canales)** – período de tiempo después del cual el „FLEXi“ SP3 intentará recuperar la conexión utilizando el canal primario, en minutos.
 
-**Grupo de configuración "Parámetros de la red del comunicador"**
+**Grupo de configuración “Parámetros de la red del comunicador”**
 
 - **DHCP modo** – modo para registrarse en la red WiFi (manual o automática). Marca la casilla y el panel de control del „FLEXi“ SP3 leerá automáticamente la configuración de red (máscara de subred, puerta de enlace) y se le asignará automáticamente una dirección IP (modo de registro automático).
 
@@ -929,21 +919,21 @@ Se establece el orden preferido de envío de mensajes a través de los canales C
 
 - **WiFi SSID contraseña** – contraseña de red WiFi.
 
-**Grupo de configuración "Parámetros SIM"**
+**Grupo de configuración “Parámetros SIM”**
 
 - **Desactivar la indicación de la ausencia de una tarjeta SIM** – cuando se marca la casilla, el panel de control „FLEXi“ SP3 no mostrará una indicación de que no hay una tarjeta SIM insertada.
 
-- **Utilice el marcado y SMS cuando trabaje a través del módulo de Internet** – marcar esta casilla permitirá controlar el panel mediante llamadas telefónicas y mensajes SMS. Si la casilla no está marcada y hay una red WiFi disponible, no se utilizarán SMS ni llamadas telefónicas. Si la casilla no está marcada y no hay red WiFi, el „FLEXi“ SP3 aún podrá controlarse mediante llamadas telefónicas y mensajes SMS. El „FLEXi“ SP3 enviará mensajes SMS al usuario.
+- **Utilice el marcado y SMS cuando trabaje a través del módulo de Internet** – marcar esta casilla permitirá controlar el panel mediante llamadas telefónicas y mensajes SMS. Si la casilla no está marcada y hay una red WiFi disponible, no se utilizarán SMS ni llamadas telefónicas. Si la casilla no está marcada y no hay red WiFi, el „FLEXi“ SP3 aún podrá controlarse mediante llamadas telefónicas y mensajes SMS. El *„FLEXi“ SP3* enviará mensajes SMS al usuario.
 
 - **Desactivar el uso de datos móviles de la tarjeta SIM** – marcar esta casilla desactivará el uso de los datos móviles de la tarjeta SIM. Los datos solo se enviarán mediante WiFi. Si una red WiFi no está disponible, el „FLEXi“ SP3 almacenará datos en la memoria. Cuando se restaure la red WiFi, el „FLEXi“ SP3 enviará datos mediante WiFi.
 
-### Ventana "Usuarios y Reportes"
+### Ventana “Usuarios y Reportes”
 
-**Pestaña "Usuarios"**
+**Pestaña “Usuarios”**
 
 <img alt="" src="./image51.png" style="width:7.086614173228346in;height:2.590551181102362in" />
 
-**Grupo de configuración "Usuarios y reportes al usuario"**
+**Grupo de configuración “Usuarios y reportes al usuario”**
 
 - **Nombre** – del usuario. Estos nombres se utilizarán en mensajes SMS de eventos.
 
@@ -969,7 +959,7 @@ Se establece el orden preferido de envío de mensajes a través de los canales C
 
 #### Vinculación de llaves RFID (tarjetas)
 
-Puedes agregar llaves (tarjetas) RFID ingresando sus números ID en el campo Tag código en *TrikdisConfig*. Haz clic en el botón Escribir [F5] para escribir la lista de llaves (tarjeta) RFID en el panel de control.
+Puedes agregar llaves (tarjetas) RFID ingresando sus números ID en el campo Tag código en *TrikdisConfig*. Haz clic en el botón Escribir \[F5\] para escribir la lista de llaves (tarjeta) RFID en el panel de control.
 
 <img alt="" src="./image52.png" style="width:2.3833377077865268in;height:1.5166699475065617in" />
 
@@ -979,9 +969,9 @@ Vinculación de llaves electrónicas con el lector TM17.
 
 1.  Si la lista **Tag code** está vacía, la primera clave se debe escribir en la primera línea de la lista y se convierte en la **llave maestra**.
 
-2.  Para activar el modo de vinculación de la llave de contacto, mantén presionada la **llave maestra** contra el "ojo" del lector de llaves durante al menos 10 segundos. Cuando el modo de vinculación está activado, el indicador LED del lector de teclas TM17 comenzará a parpadear en verde.
+2.  Para activar el modo de vinculación de la llave de contacto, mantén presionada la **llave maestra** contra el “ojo” del lector de llaves durante al menos 10 segundos. Cuando el modo de vinculación está activado, el indicador LED del lector de teclas TM17 comenzará a parpadear en verde.
 
-3.  Para vincular claves de usuario, sostenlas contra el "ojo" del lector de llaves una por una. 3 señales sonoras del lector indicarán que la llave ha sido vinculada al sistema.
+3.  Para vincular claves de usuario, sostenlas contra el “ojo” del lector de llaves una por una. 3 señales sonoras del lector indicarán que la llave ha sido vinculada al sistema.
 
 4.  Cuando termines de vincular las llaves electrónicas (iButton) del usuario, mantén presionada la **llave maestra** contra el lector de claves para desactivar el modo de vinculación. Cuando el modo de vinculación está apagado, el indicador LED del lector de teclas TM17 dejará de parpadear.
 
@@ -991,23 +981,20 @@ Vinculación de llaves electrónicas con el lector CZ-Dallas.
 
 1.  Si la lista **Tag code** está vacía, la primera clave se debe escribir en la primera línea de la lista y se convierte en la **llave maestra**.
 
-2.  Para activar el modo de vinculación de la llave de contacto, mantén presionada la **llave maestra** contra el "ojo" del lector de llaves durante al menos 10 segundos.
+2.  Para activar el modo de vinculación de la llave de contacto, mantén presionada la **llave maestra** contra el “ojo” del lector de llaves durante al menos 10 segundos.
 
-3.  Para vincular las llaves de cada usuario, sostenlas contra el "ojo" del lector de llaves una por una.
+3.  Para vincular las llaves de cada usuario, sostenlas contra el “ojo” del lector de llaves una por una.
 
 4.  Cuando termines de vincular las llaves electrónicas (iButton) del usuario, mantén presionada la **tecla maestra** contra el lector para desactivar el modo de vinculación.
 
 5.  Para eliminar todas las llaves (incluyendo la llave maestra), sostén la **llave maestra** contra el lector durante al menos 20 segundos.
 
 !!! note
-    El propósito de la llave maestra es de vincular otras llaves
-    electrónicas. Si utilizas la llave maestra para los comandos
-    ACTIVAR/DESACTIVAR, su ejecución tendrá un retraso.
-**Pestaña "Protegus"**
+    El propósito de la llave maestra es de vincular otras llaves electrónicas. Si utilizas la llave maestra para los comandos ACTIVAR/DESACTIVAR, su ejecución tendrá un retraso. **Pestaña “Protegus”**
 
 <img alt="" src="./image53.png" style="width:7.086614173228346in;height:1.905511811023622in" />
 
-**Grupo de configuración "Aplicación en la Nube"**
+**Grupo de configuración “Aplicación en la Nube”**
 
 - **Activar conexión** – habilita el servicio en la nube de Protegus, el „FLEXi“ SP3 podrá intercambiar datos con la aplicación Protegus2 y será posible configurar el panel de control de forma remota utilizando TrikdisConfig.
 
@@ -1015,17 +1002,17 @@ Vinculación de llaves electrónicas con el lector CZ-Dallas.
 
 - **Código de acceso a la Nube** – código de 6 dígitos para conectarse con Protegus2.
 
-**Pestaña "SMS Textos de respuesta"**
+**Pestaña “SMS Textos de respuesta”**
 
 <img alt="" src="./image54.png" style="width:7.086614173228346in;height:2.090551181102362in" />
 
-**Grupo de configuración "Textos de respuesta SMS"**
+**Grupo de configuración “Textos de respuesta SMS”**
 
 - El texto para las respuestas a los comandos enviados mediante mensajes SMS se puede personalizar en la columna de **Texto de SMS**.
 
-### Ventana "Módulos" 
+### Ventana “Módulos”
 
-**Pestaña "Teclados"**
+**Pestaña “Teclados”**
 
 <img alt="" src="./image55.png" style="width:7.086614173228346in;height:3.6653543307086616in" />
 
@@ -1035,7 +1022,7 @@ Vinculación de llaves electrónicas con el lector CZ-Dallas.
 
 - **Eliminar** - botón para eliminar el teclado de la lista.
 
-**Grupo de configuración "Parámetros del teclado"**
+**Grupo de configuración “Parámetros del teclado”**
 
 - **Tipo de teclado** – especifica el tipo de teclado (Crow CR16, Paradox LED, lector Wiegand) conectado al panel de control (terminales GRN, YEL).
 
@@ -1061,11 +1048,11 @@ Vinculación de llaves electrónicas con el lector CZ-Dallas.
 
 - **Do not change charset** - marque la casilla para no cambiar la codificación de texto de los nombres de zonas y particiones para el teclado SK-LCD TouchPad.
 
-**Pestaña "RS485 módulos"**
+**Pestaña “RS485 módulos”**
 
 <img alt="" src="./image56.png" style="width:7.086614173228346in;height:3.074803149606299in" />
 
-**Grupo de configuración "Módulos RS485"**
+**Grupo de configuración “Módulos RS485”**
 
 - **ID** – número del módulo en la lista.
 
@@ -1079,11 +1066,11 @@ Vinculación de llaves electrónicas con el lector CZ-Dallas.
 
 - **Versión de firmware** – cuando el „FLEXi“ SP3 encuentra el módulo conectado se mostrará la versión de su firmware.
 
-**Pestaña "E485 configuraciones"**
+**Pestaña “E485 configuraciones”**
 
 <img alt="" src="./image57.png" style="width:7.086614173228346in;height:2.094488188976378in" />
 
-**Grupo de configuración "Configuración de la red del comunicador"**
+**Grupo de configuración “Configuración de la red del comunicador”**
 
 - **DHCP modo** – modo para registrarse en la red LAN (manual o automática). Marca la casilla y el panel de control del „FLEXi“ SP3 leerá automáticamente la configuración de red (máscara de subred, puerta de enlace) y se le asignará automáticamente una dirección IP (modo de registro automático).
 
@@ -1093,27 +1080,27 @@ Vinculación de llaves electrónicas con el lector CZ-Dallas.
 
 - **Por defecto gateway** – puerta de enlace para el modo de registro manual.
 
-### Ventana "Inalámbrico" 
+### Ventana “Inalámbrico”
 
 <img alt="" src="./image58.png" style="width:7.086614173228346in;height:1.9094488188976377in" />
 
-El „FLEXi“ SP3 es compatible con los sensores inalámbricos Crow de las series FW2 y Shepherd, sirenas y controladores inalámbricos que utilizan el módulo RF-SH.
+El *„FLEXi“ SP3* es compatible con los sensores inalámbricos Crow de las series FW2 y Shepherd, sirenas y controladores inalámbricos que utilizan el módulo RF-SH.
 
 #### Vinculación del transmisor-receptor inalámbrico RF-SH al panel de control *„FLEXi“ SP3*
 
-1.  Conecta el transmisor-receptor RF-SH y el „FLEXi“ SP3 de acuerdo al diagrama del capítulo 3.10 "Diagrama para conectar RF-SH".
+1.  Conecta el transmisor-receptor RF-SH y el „FLEXi“ SP3 de acuerdo al diagrama del capítulo 3.10 “Diagrama para conectar RF-SH”.
 
 2.  Enciende la fuente de alimentación.
 
 3.  Conecta un cable USB Mini-B al „FLEXi“ SP3.
 
-4.  Ejecuta el programa TrikdisConfig, haz clic en el botón **Leer [F4]**.
+4.  Ejecuta el programa TrikdisConfig, haz clic en el botón **Leer \[F4\]**.
 
 5.  En la lista **Módulos**, elige el transmisor-receptor inalámbrico RF-SH.
 
 6.  En el campo **Núm. de serie**, ingresa el número de serie del dispositivo.
 
-7.  Haz clic en **Escribir [F5]**.
+7.  Haz clic en **Escribir \[F5\]**.
 
 8.  Desconecta el cable USB Mini-B.
 
@@ -1121,15 +1108,15 @@ El „FLEXi“ SP3 es compatible con los sensores inalámbricos Crow de las seri
 
 10. Conecta un cable USB Mini-B al „FLEXi“ SP3.
 
-11. Haz clic en **Leer [F4]**.
+11. Haz clic en **Leer \[F4\]**.
 
-12. La versión de firmware del RF-SH aparecerá en la ventana **"Módulos"**.
+12. La versión de firmware del RF-SH aparecerá en la ventana **“Módulos”**.
 
 13. El módulo **RF-SH** ahora está vinculado al „FLEXi“ SP3.
 
 Todos los sensores inalámbricos se pueden vincular simultáneamente.
 
-#### Vinculación de sensores (serie FW2) inalámbricos 
+#### Vinculación de sensores (serie FW2) inalámbricos
 
 1.  Asegúrate de que el transmisor-receptor RF-SH esté conectado al „FLEXi“ SP3 (consulta el capítulo 5.6.1).
 
@@ -1149,28 +1136,28 @@ Todos los sensores inalámbricos se pueden vincular simultáneamente.
 
 9.  Conecta un cable USB Mini-B al „FLEXi“ SP3.
 
-10. Ejecuta TrikdisConfig, haz clic en el botón **Leer [F4]**.
+10. Ejecuta TrikdisConfig, haz clic en el botón **Leer \[F4\]**.
 
 11. Puedes encontrar una lista de sensores inalámbricos vinculados en la ventana **Inalámbrico** del software TrikdisConfig. Los códigos de 7 dígitos en la columna de **Núm. de serie** deben coincidir con los códigos impresos en las carcasas o placas de los sensores.
 
-12. Debes asignar los sensores a zonas y particiones del panel de control de seguridad (ventana **Zonas**). Haz clic en **Escribir [F5]** después de realizar los cambios.
+12. Debes asignar los sensores a zonas y particiones del panel de control de seguridad (ventana **Zonas**). Haz clic en **Escribir \[F5\]** después de realizar los cambios.
 
 13. El sensor inalámbrico ahora está vinculado correctamente al sistema.
 
 !!! note
-    Para eliminar los sensores inalámbricos de la memoria del ***„FLEXi"
-    SP3***:
-    
+    Para eliminar los sensores inalámbricos de la memoria del ***„FLEXi” SP3***:
+
     1.  Conecta un cable USB Mini-B al „FLEXi" SP3.
-    
+
     2.  Ejecuta TrikdisConfig, haz clic en el botón **Leer [F4]**.
-    
+
     3.  En la ventana **Inalámbrico** de TrikdisConfig, en la columna
         **Tipo de dispositivo**, selecciona **Desactivar** en lugar del
         **sensor inalámbrico** que deseas eliminar y haz clic en **Escribir
         [F5]**. El sensor inalámbrico ahora se eliminará de la memoria del
         „FLEXi" SP3.
-#### Vinculación de un control remoto (serie FW2) inalámbrico 
+
+#### Vinculación de un control remoto (serie FW2) inalámbrico
 
 1.  Asegúrate de que el transmisor-receptor RF-SH esté conectado al *„FLEXi“ SP3* (consulta el capítulo 5.6.1).
 
@@ -1190,33 +1177,33 @@ Todos los sensores inalámbricos se pueden vincular simultáneamente.
 
 <img alt="" src="./image59.png" style="width:1.5354330708661417in;height:1.8818897637795275in" />
 
-9. Mantén presionado el botón LEARN del transmisor-receptor **RF-SH** hasta que el indicador LED **LEARN** deje de parpadear de color verde. El transmisor-receptor **RF-SH** ha finalizado el modo de vinculación.
+9.  Mantén presionado el botón LEARN del transmisor-receptor **RF-SH** hasta que el indicador LED **LEARN** deje de parpadear de color verde. El transmisor-receptor **RF-SH** ha finalizado el modo de vinculación.
 
-2.  Conecta un cable USB Mini-B al „FLEXi“ SP3.
+10. Conecta un cable USB Mini-B al „FLEXi“ SP3.
 
-3.  Ejecuta TrikdisConfig, has clic en **Leer [F4]**.
+11. Ejecuta TrikdisConfig, has clic en **Leer \[F4\]**.
 
-4.  En la ventana **Inalámbrico** del software TrikdisConfig, el texto **Controlador remoto** debe aparecer en el campo **Tipo de dispositivo** y el campo **Núm. de serie** debe tener un código de 7 símbolos que coincida con el código en la parte posterior del controlador remoto.
+12. En la ventana **Inalámbrico** del software TrikdisConfig, el texto **Controlador remoto** debe aparecer en el campo **Tipo de dispositivo** y el campo **Núm. de serie** debe tener un código de 7 símbolos que coincida con el código en la parte posterior del controlador remoto.
 
-5.  En el campo **Área**, especifica el área del sistema de seguridad que controlará el controlador inalámbrico (activar/desactivar).
+13. En el campo **Área**, especifica el área del sistema de seguridad que controlará el controlador inalámbrico (activar/desactivar).
 
-6.  En el campo **Usuario**, especifica el número del usuario.
+14. En el campo **Usuario**, especifica el número del usuario.
 
-7.  Puedes asignar funciones adicionales a los botones 3 y 4 del controlador (Activar, Desactivar área; Alarma silenciosa; Alarma de pánico).
+15. Puedes asignar funciones adicionales a los botones 3 y 4 del controlador (Activar, Desactivar área; Alarma silenciosa; Alarma de pánico).
 
-8.  Haz clic en **Escribir [F5]** después de realizar los cambios.
+16. Haz clic en **Escribir \[F5\]** después de realizar los cambios.
 
-9.  El controlador inalámbrico ahora está vinculado con éxito al sistema.
+17. El controlador inalámbrico ahora está vinculado con éxito al sistema.
 
 !!! note
-    Restablecer el controlador inalámbrico a la configuración
-    predeterminada:
-    
+    Restablecer el controlador inalámbrico a la configuración predeterminada:
+
     1.  Presiona los botones 2 y 3 al mismo tiempo y mantenlo presionado
         hasta que el indicador comience a parpadear en color verde y rojo.
-    
+
     2.  Puedes soltar los botones cuando el indicador deje de parpadear. La
         memoria del controlador se ha borrado.
+
 #### Vinculación de una sirena inalámbrica (serie FW2)
 
 1.  Asegúrate de que el transmisor-receptor RF-SH esté conectado al „FLEXi“ SP3 (consulta el capítulo 5.6.1).
@@ -1247,32 +1234,33 @@ Todos los sensores inalámbricos se pueden vincular simultáneamente.
 
 14. Conecte un cable USB Mini-B al „FLEXi“ SP3.
 
-15. Ejecuta TrikdisConfig, haz clic en **Leer [F4]**.
+15. Ejecuta TrikdisConfig, haz clic en **Leer \[F4\]**.
 
 16. En la ventana **Inalámbrico** del software TrikdisConfig, el texto **Sirena** debe aparecer en el campo **Tipo de dispositivo** y el campo **Núm. de serie** debe tener un código de 7 dígitos que coincida con el código en la placa de la sirena.
 
-17. Especifica un número de área en el campo **Área** y haz clic en **Escribir [F5]**.
+17. Especifica un número de área en el campo **Área** y haz clic en **Escribir \[F5\]**.
 
 18. La sirena interna inalámbrica ahora está vinculada al sistema.
 
 !!! note
     Restablecer la sirena inalámbrica a la configuración predeterminada:
-    
+
     1.  Retira la tapa de la sirena.
-    
+
     2.  Desconecta la energía de la sirena.
-    
+
     3.  Presiona el botón **LEARN** en la placa de la sirena y enciende la
         alimentación de energía.
-    
+
     4.  Mantén presionado el botón **LEARN** hasta que el destello de la
         sirena parpadee 3 veces.
-    
+
     5.  Suelta el botón **LEARN**. El destello de la sirena parpadeará en
         intervalos inusuales durante otros 30 segundos.
-    
+
     6.  El destello dejará de parpadear. Se ha restaurado la configuración
         predeterminada de la sirena inalámbrica.
+
 #### Vinculación de sensores inalámbricos (serie SH)
 
 1.  Asegúrate de que el transmisor-receptor RF-SH esté vinculado al „FLEXi“ SP3 (consulta el capítulo 5.6.1).
@@ -1295,26 +1283,27 @@ Todos los sensores inalámbricos se pueden vincular simultáneamente.
 
 10. Conecte un cable USB Mini-B al „FLEXi“ SP3.
 
-11. Ejecuta TrikdisConfig, haz clic en **Leer [F4]**.
+11. Ejecuta TrikdisConfig, haz clic en **Leer \[F4\]**.
 
 12. Puedes encontrar una lista de sensores inalámbricos vinculados en la ventana **Inalámbrico** del software TrikdisConfig. Los códigos de 7 dígitos en la columna **Núm. de serie** deben coincidir con los códigos impresos en las carcasas o placas de los sensores.
 
-13. Debes asignar los sensores a zonas y particiones del panel de control de seguridad (ventana **Zonas**). Haz clic en **Escribir [F5]** después de realizar los cambios.
+13. Debes asignar los sensores a zonas y particiones del panel de control de seguridad (ventana **Zonas**). Haz clic en **Escribir \[F5\]** después de realizar los cambios.
 
 14. El sensor inalámbrico ahora está vinculado al sistema.
 
 !!! note
-    Para eliminar sensores inalámbricos de la memoria del „FLEXi" SP3:
-    
+    Para eliminar sensores inalámbricos de la memoria del „FLEXi” SP3:
+
     1.  Conecta un cable USB Mini-B al „FLEXi" SP3.
-    
+
     2.  Ejecuta TrikdisConfig, haz clic en el botón **Leer [F4]**.
-    
+
     3.  En la ventana **Inalámbrico** de TrikdisConfig, en la columna
         **Tipo de dispositivo**, seleccione **Desactivado** en lugar del
         sensor inalámbrico que deseas eliminar y haz clic en **Escribir
         [F5]**. El sensor inalámbrico ahora se eliminará de la memoria del
         „FLEXi" SP3.
+
 #### Vinculación de un teclado inalámbrico (serie SH)
 
 1.  Asegúrate de que el transmisor-receptor RF-SH esté conectado al „FLEXi“ SP3 (consulta el capítulo 5.6.1).
@@ -1335,30 +1324,31 @@ Todos los sensores inalámbricos se pueden vincular simultáneamente.
 
 9.  Conecta un cable USB Mini-B al „FLEXi“ SP3.
 
-10. Inicia TrikdisConfig, haz clic en **Leer [F4]**.
+10. Inicia TrikdisConfig, haz clic en **Leer \[F4\]**.
 
 11. En la ventana **Inalámbrico** del software TrikdisConfig, el texto **Teclado SH** debe aparecer en el campo **Tipo de dispositivo** y el campo **Núm. de serie** debe tener un código de 7 símbolos que coincida con el código en la parte posterior de la carcasa del teclado.
 
 12. Especifica un número de área en el campo **Área**.
 
-13. Haz clic en **Escribir [F5]** después de realizar los cambios.
+13. Haz clic en **Escribir \[F5\]** después de realizar los cambios.
 
 14. El teclado inalámbrico ahora está vinculado al sistema.
 
 !!! note
-    Para eliminar sensores inalámbricos de la memoria del „FLEXi" SP3:
-    
+    Para eliminar sensores inalámbricos de la memoria del „FLEXi” SP3:
+
     1.  Conecta un cable USB Mini-B al „FLEXi" SP3.
-    
+
     2.  Ejecuta TrikdisConfig, haz clic en el botón **Leer [F4]**.
-    
+
     3.  En la ventana **Inalámbrico** de TrikdisConfig, en la columna
         **Tipo de dispositivo**, selecciona **Desactivado** en lugar de
         **Teclado SH** y haz clic en **Escribir [F5]**. El teclado
         inalámbrico ahora se eliminará de la memoria del „FLEXi" SP3.
-### Ventana "Zonas"
 
-**Pestaña "Configuraciones de zonas"**
+### Ventana “Zonas”
+
+**Pestaña “Configuraciones de zonas”**
 
 <img alt="" src="./image61.png" style="width:7.086614173228346in;height:1.905511811023622in" />
 
@@ -1372,67 +1362,69 @@ Todos los sensores inalámbricos se pueden vincular simultáneamente.
 
 - **Definición** – a cada zona se le puede asignar una de estas funciones de zona:
 
-  - **Entrada** – para conectar un contacto de entrada magnética en la puerta. Puedes establecer tiempos de entrada y salida para este tipo de zona. Después de que se active la alarma, se permite la violación de la zona de "Entrada con Retraso" dentro del tiempo de salida. Si la zona aún se viola cuando después de acabarse el tiempo, las salidas OUT "Sirena" y "Flash" se activan y se envían informes de alarma. Cuando la alarma este activada, una violación de la zona de "Entrada con Retraso" inicia el contador de tiempo de entrada, durante el cual la alarma debe desactivarse. Si la alarma aún no está desactivada y se acabó el tiempo, las salidas OUT "Sirena" y "Flash" se activan y se envían informes de alarma.
+  - **Entrada** – para conectar un contacto de entrada magnética en la puerta. Puedes establecer tiempos de entrada y salida para este tipo de zona. Después de que se active la alarma, se permite la violación de la zona de “Entrada con Retraso” dentro del tiempo de salida. Si la zona aún se viola cuando después de acabarse el tiempo, las salidas OUT “Sirena” y “Flash” se activan y se envían informes de alarma. Cuando la alarma este activada, una violación de la zona de “Entrada con Retraso” inicia el contador de tiempo de entrada, durante el cual la alarma debe desactivarse. Si la alarma aún no está desactivada y se acabó el tiempo, las salidas OUT “Sirena” y “Flash” se activan y se envían informes de alarma.
 
   - **Interior** – para conectar un sensor de movimiento a la puerta de entrada.
 
-> Si el sistema de alarma está activado y se activa la zona "Interior", se activan las señales de salida OUT para "Sirena" y "Flash" y se envía un informe sobre la activación del sistema de alarma.
->
-> Si el sistema de alarma está activado y la zona "Entrada con Retraso" se activa primero, la zona "Interior" también se puede activar durante el tiempo de entrada establecido. Si la alarma no se desactiva durante el tiempo de entrada establecido, las señales de salida OUT para "Sirena" y "Flash" se activan y se envía un informe sobre la activación del sistema de alarma.
+Si el sistema de alarma está activado y se activa la zona “Interior”, se activan las señales de salida OUT para “Sirena” y “Flash” y se envía un informe sobre la activación del sistema de alarma.
+
+Si el sistema de alarma está activado y la zona “Entrada con Retraso” se activa primero, la zona “Interior” también se puede activar durante el tiempo de entrada establecido. Si la alarma no se desactiva durante el tiempo de entrada establecido, las señales de salida OUT para “Sirena” y “Flash” se activan y se envía un informe sobre la activación del sistema de alarma.
 
 - **Interior Stay** – para conectar un sensor de movimiento a la puerta de entrada.
 
-> Si el sistema de alarma está activado y se activa la zona "Interior", se activan las señales de salida OUT para "Sirena" y "Flash" y se envía un informe sobre la activación del sistema de alarma
->
-> Si el sistema de alarma está activado y la zona "Entrada con Retraso" se activa primero, la zona "Interior Stay" también se puede activar durante el tiempo de entrada establecido. Si la alarma no se desactiva durante el tiempo de entrada establecido, las señales de salida OUT para "Sirena" y "Flash" se activan y se envía un informe sobre la activación del sistema de alarma.
->
-> Cuando el sistema de alarma está activado en modo STAY, las zonas de "Interior Stay" no están protegidas.
+Si el sistema de alarma está activado y se activa la zona “Interior”, se activan las señales de salida OUT para “Sirena” y “Flash” y se envía un informe sobre la activación del sistema de alarma
 
-- **Instantáneo** – para conectar sensores de movimiento. Si se viola la zona "Instantáneo" cuando la alarma esta activada, las salidas OUT "Sirena" y "Flash" se activan y se envía un mensaje sobre la activación de la alarma.
+Si el sistema de alarma está activado y la zona “Entrada con Retraso” se activa primero, la zona “Interior Stay” también se puede activar durante el tiempo de entrada establecido. Si la alarma no se desactiva durante el tiempo de entrada establecido, las señales de salida OUT para “Sirena” y “Flash” se activan y se envía un informe sobre la activación del sistema de alarma.
 
-- **Instant Stay** – para conectar sensores de movimiento. Si se viola una zona de "Instant Stay" cuando la alarma está activada, las salidas OUT "Sirena" y "Flash" se activan y se envía un mensaje sobre la activación de la alarma. Cuando el sistema de alarma está activado en modo STAY, las zonas de "Instant Stay" no están protegidas.
+Cuando el sistema de alarma está activado en modo STAY, las zonas de “Interior Stay” no están protegidas.
 
-- **Fuego** – para conectar sensores de fuego. Si se viola esta zona, las salidas OUT "Sirena" y "Flash" se activan inmediatamente y se envía un informe de evento.
+- **Instantáneo** – para conectar sensores de movimiento. Si se viola la zona “Instantáneo” cuando la alarma esta activada, las salidas OUT “Sirena” y “Flash” se activan y se envía un mensaje sobre la activación de la alarma.
+
+- **Instant Stay** – para conectar sensores de movimiento. Si se viola una zona de “Instant Stay” cuando la alarma está activada, las salidas OUT “Sirena” y “Flash” se activan y se envía un mensaje sobre la activación de la alarma. Cuando el sistema de alarma está activado en modo STAY, las zonas de “Instant Stay” no están protegidas.
+
+- **Fuego** – para conectar sensores de fuego. Si se viola esta zona, las salidas OUT “Sirena” y “Flash” se activan inmediatamente y se envía un informe de evento.
 
   - **Interruptor de llave** – para conectar un teclado u otro interruptor. Si el interruptor activa esta zona, la alarma de seguridad se activará o desactivará. La alarma se activará después de que pase el **tiempo de salida** establecido.
 
-  - **24_horas** – para conectar detectores de rotura de cristal y manipulación. Si se viola esta zona, las salidas OUT "Sirena" y "Flash" se activan inmediatamente y se envía un informe de evento.
+  - **24_horas** – para conectar detectores de rotura de cristal y manipulación. Si se viola esta zona, las salidas OUT “Sirena” y “Flash” se activan inmediatamente y se envía un informe de evento.
 
-  - **Silenciosa** – si la alarma está activada y se viola esta zona, se enviará un informe de evento de inmediato, pero no se generarán señales de salida OUT de "Sirena" y "Flash".
+  - **Silenciosa** – si la alarma está activada y se viola esta zona, se enviará un informe de evento de inmediato, pero no se generarán señales de salida OUT de “Sirena” y “Flash”.
 
-  - **Silenciosa_24h** – para conectar botones de pánico. Si se viola esta zona, se enviará inmediatamente un informe de evento independientemente del estado del sistema de seguridad, pero no se activarán las señales de salida "Sirena" y "Flash".
+  - **Silenciosa_24h** – para conectar botones de pánico. Si se viola esta zona, se enviará inmediatamente un informe de evento independientemente del estado del sistema de seguridad, pero no se activarán las señales de salida “Sirena” y “Flash”.
+
 - **Tipo** – elige el tipo de circuito conectado a la entrada de zona IN de una lista: NC – normalmente cerrado; NO – normalmente abierto; EOL - con una resistencia *end of line*; EOL_T - con una resistencia *end of line* y monitoreo de manipulación; ATZ – circuito normalmente cerrado de dos zonas con resistencias *end of line*, sin función de monitoreo de manipulación (para usar este tipo, elige la segunda zona ATZ en la lista de entrada); ATZ_T – circuito normalmente cerrado de dos zonas con resistencias *end of line*, con función de monitoreo de manipulación (para usar este tipo, elige la segunda zona ATZ en la lista de entrada); 3EOL - con una resistencia *end of line* y monitoreo de manipulación (esta configuración es para cuando se utiliza un detector de movimiento PIR con función antienmascaramiento).
 
 - **Timbre** - marque la casilla y el teclado emitirá un pitido cuando se active la zona.
 
 - **Bypass** – marca esta casilla si deseas permitir que esta zona se anule e ignore cuando se active.
 
-- **Forzar** – marca esta casilla si deseas permitir el activado del sistema de seguridad con la zona abierta. Cuando la alarma está activada, las zonas abiertas configuradas en modo "Forzar" se desconectarán temporalmente. Después de restaurar la zona, se encenderán y se controlarán nuevamente. Una violación de esta zona activará una alarma.
+- **Forzar** – marca esta casilla si deseas permitir el activado del sistema de seguridad con la zona abierta. Cuando la alarma está activada, las zonas abiertas configuradas en modo “Forzar” se desconectarán temporalmente. Después de restaurar la zona, se encenderán y se controlarán nuevamente. Una violación de esta zona activará una alarma.
 
 - **CRA** – si la casilla está marcada, los informes de eventos de zona se enviarán a la estación central de monitoreo (CRA).
 
 - **Prot.** – si la casilla está marcada, los informes de eventos de zona se enviarán a la nube de Protegus.
 
 - **Retraso** – tiempo de reacción de la zona entrada IN, en milisegundos.
+
 - **Código CID** – códigos ID de contacto de evento. Este código se completará automáticamente después de seleccionar una definición para la zona.
 
 - **Sonido (Sound)** – especifica el número de la grabación de voz que se reproducirá al usuario cuando el panel de control del „FLEXi“ SP3 llame durante una alarma (esta función es válida para el panel de seguridad SP3_12xx con versión de firmware hasta 1.13 inclusivo).
 
-**Pestaña "SMS y llamadas"**
+**Pestaña “SMS y llamadas”**
 
 <img alt="" src="./image62.png" style="width:7.086614173228346in;height:2.0984251968503935in" />
 
-**Esta pestaña solo se mostrará si hay al menos un usuario en la ventana *"Usuarios y Reportes".***
+Esta pestaña solo se mostrará si hay al menos un usuario en la ventana *“Usuarios y Reportes”.*
 
-- **Zn** – número de zona con la palabra de identificación del evento. Puede ser "*Evento*" o "*Restaurar*".
+- **Zn** – número de zona con la palabra de identificación del evento. Puede ser “*Evento*” o “*Restaurar*”.
 
 - **Texto SMS** – descripción del evento de zona que se incluirá en los informes de eventos enviados al usuario mediante mensajes SMS.
 
 - **Usuario / SMS y Llamada** – elige de qué manera se informará a los usuarios sobre los eventos en cada zona individual, mediante mensajes SMS y/o llamadas telefónicas.
 
-### Ventana "PGM"
+### Ventana “PGM”
 
-**Pestaña "Salidas"**
+**Pestaña “Salidas”**
 
 <img alt="" src="./image63.png" style="width:7.086614173228346in;height:2.1023622047244093in" />
 
@@ -1445,6 +1437,7 @@ Todos los sensores inalámbricos se pueden vincular simultáneamente.
 - **Áreas** – asigna la salida OUT a un área.
 
 - **Definición de salida** – elige el modo operativo de la salida OUT.
+
 - **Sirena** – para conectar una sirena.
 
 - **Control remoto** – para controlar dispositivos eléctricos externos.
@@ -1458,29 +1451,33 @@ Todos los sensores inalámbricos se pueden vincular simultáneamente.
 - **Termostato** – esta configuración hará que la salida PGM funcione en modo termostato. Se debe conectar un sensor de temperatura al „FLEXi“ SP3. La salida PGM debe tener configurado el modo termostato y debe especificarse la temperatura que debe mantener.
 
 - **Timbre** – para repetir las señales de sonido desde un teclado.
+
 - **Tiempo de pulso, s** – puedes establecer la duración de activación de OUT desde 0 a 9999 segundos.
 
 - **CRA** – si esta casilla está marcada, los informes de activación/desactivación de la salida PGM se enviarán a la estación central de monitoreo (CRA).
 
 - **Prot.** – si la casilla está marcada, los informes de activación/desactivación de la salida PGM se enviarán a la nube de Protegus.
 
-**Pestaña "Establecer acción"**
+**Pestaña “Establecer acción”**
 
 <img alt="" src="./image64.png" style="width:7.086614173228346in;height:2.106299212598425in" />
 
 - **Núm.** – número de salida en la lista.
+
 - **Habilitar** – activa el algoritmo de operación PGM.
 
 - **Núm. de PGM** – selecciona la salida OUT PGM deseada que se controlará después de que ocurra el evento descrito en las columnas **Factor, Núm. de Factor, Iniciar cuando, Valor**.
 
 - **Acción**:
-- **PGM apagado** – estado de salida OUT - "apagado".
 
-- **PGM encendido** –estado de salida OUT - "encendido".
+- **PGM apagado** – estado de salida OUT - “apagado”.
 
-- **Pulse apagado** – estado inicial de salida OUT - "encendido". Después del comando, el estado OUT se convertirá en "apagado" durante el tiempo del pulso, y más tarde volverá automáticamente al estado "encendido" inicial.
+- **PGM encendido** –estado de salida OUT - “encendido”.
 
-- **Pulse encendido** – estado inicial de salida OUT - "apagado". Después del comando, el estado OUT se activará durante el **Tiempo de Pulso**, y luego volverá automáticamente al estado inicial "apagado".
+- **Pulse apagado** – estado inicial de salida OUT - “encendido”. Después del comando, el estado OUT se convertirá en “apagado” durante el tiempo del pulso, y más tarde volverá automáticamente al estado “encendido” inicial.
+
+- **Pulse encendido** – estado inicial de salida OUT - “apagado”. Después del comando, el estado OUT se activará durante el **Tiempo de Pulso**, y luego volverá automáticamente al estado inicial “apagado”.
+
 - **Tiempo de Pulso, s** – puedes configurar el tiempo de pulso desde 0 a 9999 segundos.
 
 - **Factor/Núm. de Factor** – elige qué evento *(Entrada(zona), Temperatura, Programación, Manipulación, Sensor de temperatura perdido, iButton, Activar, Desactivar, SMS recibido)* encenderá la salida OUT.
@@ -1491,19 +1488,19 @@ Todos los sensores inalámbricos se pueden vincular simultáneamente.
 
 - **Valor** – dependiendo de la condición elegida en la columna **Factor** (SMS recibido, Temperatura) se puede especificar un valor (texto del mensaje SMS recibido, voltaje o temperatura). Si se identifica este valor, se realizará la acción (elegida en la columna **Acción**). El texto del mensaje SMS se puede separar usando símbolos de %. Los símbolos % se utilizan para separar la palabra clave que cambiará el estado de una salida PGM de todo el mensaje SMS recibido.
 
-**%.....%** - parte del texto del mensaje SMS recibido debe coincidir con el texto ingresado entre símbolos de % (por ejemplo **%hoUSe%**. El texto en un mensaje SMS debe incluir el texto "hoUSe". Ejemplo de un mensaje SMS: **VacationhoUSe25864**).
+**%…..%** - parte del texto del mensaje SMS recibido debe coincidir con el texto ingresado entre símbolos de % (por ejemplo **%hoUSe%**. El texto en un mensaje SMS debe incluir el texto “hoUSe”. Ejemplo de un mensaje SMS: **VacationhoUSe25864**).
 
-**.....%** - el comienzo del mensaje SMS recibido debe coincidir con el texto ingresado hasta el símbolo % (por ejemplo, **hoUSe%**. El mensaje SMS debe comenzar con el texto **"hoUSe"**. Ejemplo de un mensaje SMS: **hoUSeddss**).
+**…..%** - el comienzo del mensaje SMS recibido debe coincidir con el texto ingresado hasta el símbolo % (por ejemplo, **hoUSe%**. El mensaje SMS debe comenzar con el texto **“hoUSe”**. Ejemplo de un mensaje SMS: **hoUSeddss**).
 
-**%.....** – el final del mensaje SMS recibido debe coincidir con el texto ingresado después del símbolo %. (por ejemplo, **%hoUSe**. El mensaje SMS debe terminar con el texto **"hoUSe"**. Ejemplo de un mensaje SMS: **1144hoUSe**).
+**%…..** – el final del mensaje SMS recibido debe coincidir con el texto ingresado después del símbolo %. (por ejemplo, **%hoUSe**. El mensaje SMS debe terminar con el texto **“hoUSe”**. Ejemplo de un mensaje SMS: **1144hoUSe**).
 
 El texto del mensaje SMS distingue entre mayúsculas y minúsculas.
 
-**Pestaña "Control"**
+**Pestaña “Control”**
 
 <img alt="" src="./image65.png" style="width:7.086614173228346in;height:2.5669291338582676in" />
 
-**Grupo de configuraciones "Control de Entrada/Salida"**
+**Grupo de configuraciones “Control de Entrada/Salida”**
 
 - **Lector** – se indican los lectores que se pueden conectar al panel de seguridad.
 
@@ -1517,11 +1514,11 @@ El texto del mensaje SMS distingue entre mayúsculas y minúsculas.
 
 - **Acción de área** - indican el cambio del modo de seguridad del panel de seguridad cuando se conecta una llave iButton o una tarjeta RFID al lector.
 
-**Grupo de configuraciones "Control de teclado Paradox"**
+**Grupo de configuraciones “Control de teclado Paradox”**
 
 - **Llave de utilidad** - si mantiene presionadas las teclas de función durante 3 segundos, se activará la salida PGM. La salida PGM se activará por una duración de pulso (si el modo de operación es **Pulso**) o el nivel de la señal de salida PGM cambiará (si el modo de operación es **Nivel**).
 
-**Pestaña "Horario"**
+**Pestaña “Horario”**
 
 <img alt="" src="./image66.png" style="width:7.086614173228346in;height:2.1023622047244093in" />
 
@@ -1532,9 +1529,10 @@ El texto del mensaje SMS distingue entre mayúsculas y minúsculas.
 - **Tiempo desde** – establece la hora en que se activará OUT (hora de inicio programada).
 
 - **Tiempo hasta** – configura la hora en que se apagará OUT (hora de finalización programada).
+
 - **Lun – Dom** – puedes marcar los días de la semana en que OUT deberá activarse/desactivarse.
 
-**Pestaña "Termostato"**
+**Pestaña “Termostato”**
 
 <img alt="" src="./image67.png" style="width:7.086614173228346in;height:2.0984251968503935in" />
 
@@ -1550,11 +1548,11 @@ El texto del mensaje SMS distingue entre mayúsculas y minúsculas.
 
 - **Temperatura –** establece la temperatura que mantendrá el termostato.
 
-**Pestaña "SMS y llamadas"**
+**Pestaña “SMS y llamadas”**
 
 <img alt="" src="./image68.png" style="width:7.086614173228346in;height:2.106299212598425in" />
 
-**Esta pestaña solo se mostrará si hay al menos un usuario en la ventana *"Usuarios y Reportes"***. Esta configuración solo se puede realizar para los primeros 8 usuarios.
+Esta pestaña solo se mostrará si hay al menos un usuario en la ventana *“Usuarios y Reportes”*. Esta configuración solo se puede realizar para los primeros 8 usuarios.
 
 - **PGM** – muestra el número de salida OUT y el tipo de evento de activación/desactivación (“Evento” - evento de activación de salida OUT y “Restauración” - evento de desactivación de salida OUT).
 
@@ -1562,7 +1560,7 @@ El texto del mensaje SMS distingue entre mayúsculas y minúsculas.
 
 - **Usuario / SMS y Llam.** – elige a qué usuarios informar utilizando mensajes SMS y/o llamadas telefónicas cuando la salida OUT está activada/desactivada.
 
-### Ventana "Sensores"
+### Ventana “Sensores”
 
 <img alt="" src="./image69.png" style="width:7.086614173228346in;height:2.87007874015748in" />
 
@@ -1582,9 +1580,9 @@ El texto del mensaje SMS distingue entre mayúsculas y minúsculas.
 
 - **Tipo de sensor** – elige el tipo de sensor de temperatura conectado (**Dallas 1Wire** - se pueden conectar hasta 8 sensores de temperatura de este tipo. Si se eligen los sensores de Dallas, se vincularán automáticamente; **Humedad y temperatura (AM23xx serie)** - se puede conectar un sensor de temperatura y humedad AM2301. Si se utilizará el sensor de Humedad y Temperatura, debe asignarse manualmente en la columna **Tipo de módulo**).
 
-### Ventana "Eventos de sistema"
+### Ventana “Eventos de sistema”
 
-**Pestaña "Eventos"**
+**Pestaña “Eventos”**
 
 <img alt="" src="./image70.png" style="width:7.086614173228346in;height:2.6850393700787403in" />
 
@@ -1602,11 +1600,11 @@ El texto del mensaje SMS distingue entre mayúsculas y minúsculas.
 
 - **SMS texto de restauración** –texto SMS de evento de restauración.
 
-**Pestaña "SMS y llamadas"**
+**Pestaña “SMS y llamadas”**
 
 <img alt="" src="./image71.png" style="width:7.086614173228346in;height:2.6850393700787403in" />
 
-**Esta pestaña solo se mostrará si hay al menos un usuario en la ventana *"Usuarios y Reportes"*.**
+Esta pestaña solo se mostrará si hay al menos un usuario en la ventana *“Usuarios y Reportes”*.
 
 - **ID** – número y palabra de identificación (Evento, Restauración) del evento.
 
@@ -1614,7 +1612,7 @@ El texto del mensaje SMS distingue entre mayúsculas y minúsculas.
 
 - **Usuario / SMS y Llamada** – elige las formas en que se informará a los usuarios sobre cada evento: mensaje **SMS** y/o **Llamada** telefónica.
 
-### Ventana "Registro de eventos"
+### Ventana “Registro de eventos”
 
 <img alt="" src="./image72.png" style="width:7.086614173228346in;height:2.7007874015748032in" />
 
@@ -1633,13 +1631,7 @@ Para restablecer la configuración predeterminada del panel de control, haz clic
 ### Actualización de firmware
 
 !!! note
-    Después de conectar el „FLEXi" SP3 a TrikdisConfig, el
-    programa solicitará automáticamente actualizar el firmware si existen
-    actualizaciones disponibles. Se necesita una conexión a Internet para
-    esta función. / Si el software antivirus está instalado en su
-    computadora, puede bloquear la función de actualización automática de
-    firmware. En este caso, deberá configurar su software antivirus.
-El firmware del „FLEXi“ SP3 también se puede actualizar manualmente. Todas las configuraciones anteriores del „FLEXi“ SP3 permanecen sin cambios después de una actualización. Si el firmware se instala manualmente, se puede cambiar a una versión más nueva o más antigua.
+    Después de conectar el „FLEXi” SP3 a TrikdisConfig, el programa solicitará automáticamente actualizar el firmware si existen actualizaciones disponibles. Se necesita una conexión a Internet para esta función. / Si el software antivirus está instalado en su computadora, puede bloquear la función de actualización automática de firmware. En este caso, deberá configurar su software antivirus. El firmware del „FLEXi“ SP3 también se puede actualizar manualmente. Todas las configuraciones anteriores del „FLEXi“ SP3 permanecen sin cambios después de una actualización. Si el firmware se instala manualmente, se puede cambiar a una versión más nueva o más antigua.
 
 Realiza estos pasos:
 
@@ -1651,10 +1643,79 @@ Realiza estos pasos:
 
 <img alt="" src="./image74.png" style="width:7.086614173228346in;height:3.1811023622047245in" />
 
-4. Haz clic en el botón **Abrir firmware** y elige el archivo de firmware requerido. Si no tienes el archivo, los usuarios registrados pueden descargar el archivo de firmware más reciente desde la sección de descargas para „FLEXi“ SP3 en [www.trikdis.com](http://www.trikdis.com).
+4.  Haz clic en el botón **Abrir firmware** y elige el archivo de firmware requerido. Si no tienes el archivo, los usuarios registrados pueden descargar el archivo de firmware más reciente desde la sección de descargas para „FLEXi“ SP3 en [www.trikdis.com](http://www.trikdis.com).
 
-2.  Haga clic en el botón **Actualizar [F12]**.
+5.  Haga clic en el botón **Actualizar \[F12\]**.
 
-3.  Espera a que finalicen las actualizaciones.
+6.  Espera a que finalicen las actualizaciones.
 
-Una vez que se finalice la configuración, haz clic en el botón **Escribir [F5]** y desconecta el cable USB.
+Una vez que se finalice la configuración, haz clic en el botón **Escribir \[F5\]** y desconecta el cable USB.
+
+## Garantía y Limitación de Responsabilidad.
+
+El panel de control tiene una garantía de 24 meses a partir de la fecha de la compra. Durante el período de garantía, se garantizan reparaciones sin costo por fallas causadas por el fabricante.
+
+La garantía es válida si el panel de control fue instalado por personal capacitado siguiendo las instrucciones en este documento y las regulaciones aplicables para la instalación de equipos eléctricos y operado siguiendo las instrucciones de este documento y las regulaciones aplicables para la operación segura de equipos eléctricos.
+
+El panel de control debe enviarse a reparación en el embalaje del fabricante junto con un informe de defectos que indique las características del funcionamiento defectuoso.
+
+Una vez que la garantía ha expirado, los costos del mantenimiento técnico y las reparaciones del panel de control se realizan a cargo del comprador.
+
+La garantía puede finalizar antes de tiempo si:
+
+- Personal no autorizado reparó o intentó reparar el panel de control;
+
+- El panel se usó para cualquier otro propósito que no sea el propuesto;
+
+- El panel fue almacenado y/o instalado en lugares inadecuados con condiciones climáticas incompatibles o un ambiente químico corrosivos;
+
+- El panel se rompió por fuerza mecánica y/o se dañó intencionalmente;
+
+- El panel fue dañado por *circunstancias de fuerza mayor* (descarga de rayos, etc.).
+
+El fabricante no es responsable por:
+
+- el funcionamiento defectuoso del panel de control si el panel no se instala o no se usa de acuerdo con su manual.
+
+- el funcionamiento defectuoso del panel de control si la causa es un mal funcionamiento o pérdida de conectividad GSM/GPRS/Internet o fallas en la red del operador.
+
+- restricciones o terminación de los servicios de conectividad GSM/GPRS/Internet al comprador o usuario del panel, y no se compensará al comprador o usuario del panel por los daños a la propiedad o no relacionados a la propiedad causados por esto.
+
+- restricciones o terminación del servicio de suministro eléctrico al comprador o usuario del panel, y no se compensará al comprador o usuario del panel por los daños a la propiedad o no relacionados a la propiedad causados por esto.
+
+- robo, incendio en las instalaciones o cualquier otra pérdida sufrida por el comprador o usuario del panel, y no compensará al comprador o usuario del panel por los daños a la propiedad o no relacionados a la propiedad causados por estos eventos.
+
+## Medidas de precaución
+
+Lea este manual atentamente antes de usar el panel de control.
+
+El panel de control „FLEXi“ SP3 es un dispositivo eléctrico, lo que significa que debe ser instalado y mantenido solo por personal capacitado siguiendo las instrucciones de este documento y las regulaciones aplicables para la instalación de equipos eléctricos.
+
+¡La alimentación al panel debe estar desconectada durante la instalación!
+
+El panel de control debe instalarse en una ubicación con acceso limitado dentro de las instalaciones y tener una distancia segura a los equipos electrónicos sensibles. El panel no es resistente a vibraciones, otros efectos mecánicos, humedad y ambientes químicos corrosivos. El panel de control cumple con los requerimientos aplicables a la Especificación Ambiental Clase II de la Norma EN 50131.
+
+!!! warning
+
+    Los marcos, transformadores, baterías y equipos de programación
+    utilizados deben cumplir los requisitos de seguridad de la norma EN
+    60950.
+
+    El dispositivo se alimenta de una red de suministro eléctrico de 230 V y
+    50 Hz a través de un transformador reductor Clase II que reduce el
+    voltaje a 16-18 V o de una fuente de alimentación DC de 16-24V. Se
+    utiliza una batería de 12 V con al menos 7 Ah de capacidad como fuente
+    de alimentación auxiliar. El consumo de corriente depende de la potencia
+    de los dispositivos externos conectados.
+
+    Para protección, se debe instalar en el circuito de alimentación un
+    interruptor de seguridad automático de dos polos. El espacio entre los
+    contactos de apagado debe ser de al menos 3 mm. El interruptor de
+    seguridad debe instalarse en una ubicación conocida por los
+    especialistas que proveen mantenimiento al panel de control.
+
+    Para desconectar el panel de control de la red eléctrica:
+
+    - de la red de AC: apague el interruptor de seguridad automático;
+
+    - de la batería: desconecta las terminales.

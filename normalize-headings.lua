@@ -4,7 +4,7 @@
 -- - Merge numeric-only headers (e.g., "1.2") with next short paragraph
 -- - KEEP_TYPED_NUMBERS=true keeps "2. Wiring" in heading text
 
-local KEEP_TYPED_NUMBERS = true
+local KEEP_TYPED_NUMBERS = false
 local stringify = pandoc.utils.stringify
 
 local function is_numeric_only(s)
