@@ -450,6 +450,56 @@ sed -i '' '/src="\.\/image3\.png"/d' index.md
 python3 "$SCRIPT_DIR/replace-gsm-with-cellular.py" index.md
 python3 "$SCRIPT_DIR/normalize-lt-terminology.py" index.md
 
+if [[ "$base" == FIRECOM_* ]]; then
+python3 <<'PY'
+from pathlib import Path
+import re
+
+index = Path('index.md')
+lines = index.read_text().splitlines()
+
+def rewrite_section(lines, header_text, alt_text):
+    for idx, line in enumerate(lines):
+        if line.strip() == header_text.strip():
+            j = idx + 1
+            table_lines = []
+            while j < len(lines) and lines[j].strip() == '':
+                j += 1
+            while j < len(lines) and lines[j].startswith('|'):
+                table_lines.append(lines[j])
+                j += 1
+            if not table_lines:
+                return
+
+            cells = []
+            for row in table_lines[2:]:
+                row = row.strip()
+                if row.startswith('|') and row.endswith('|'):
+                    cells.append(row[1:-1].strip())
+
+            content = ' '.join(cells)
+            if not content:
+                return
+
+            parts = [part.strip(' .') for part in re.split(r'\.\s+', content) if part.strip(' .')]
+            if not parts:
+                return
+
+            new_block = [lines[idx], '', f'<img src="./image4.png" alt="{alt_text}" style="width: 100%; height: auto;" />', '']
+            new_block.extend(f"{i}. {part}" for i, part in enumerate(parts, 1))
+            new_block.append('')
+
+            lines[idx:j] = new_block
+            return
+
+rewrite_section(lines, '### Elements of the *FIRECOM* communicator', 'FIRECOM communicator elements')
+rewrite_section(lines, '### Elementos del comunicador FIRECOM', 'Elementos del comunicador FIRECOM')
+rewrite_section(lines, '### Элементы коммуникатора FIRECOM', 'Элементы коммуникатора FIRECOM')
+
+index.write_text('\n'.join(lines) + '\n')
+PY
+fi
+
 python3 <<'PY'
 from pathlib import Path
 index = Path('index.md')
