@@ -9,6 +9,7 @@ This handles cases where the DOCX has multiple cover images that all get
 processed and end up as duplicate centered divs in the output.
 """
 
+import os
 import sys
 import re
 
@@ -78,6 +79,55 @@ def remove_duplicate_cover_images(file_path):
             # Not a centered div start, keep the line as-is
             result.append(line)
             i += 1
+
+    # If no centered image div was preserved, attempt to insert one after the
+    # first H1 using the earliest image reference available.
+    if not seen_first_centered_image:
+        image_src = None
+        manual_dir = os.path.dirname(file_path)
+
+        # Prefer common cover image filenames if present alongside the markdown.
+        preferred_names = [
+            "image1.png",
+            "image1.jpg",
+            "image01.png",
+            "image01.jpg"
+        ]
+        for name in preferred_names:
+            candidate_path = os.path.join(manual_dir, name)
+            if os.path.exists(candidate_path):
+                image_src = f"./{name}"
+                break
+
+        # Otherwise look for the first explicit image reference in the document,
+        # skipping the known stray image3.png that we strip later in the pipeline.
+        if not image_src:
+            img_tag = re.compile(r'<img[^>]*src="([^"]+)"')
+            for line in result:
+                match = img_tag.search(line)
+                if match:
+                    candidate = match.group(1)
+                    if candidate.endswith("image3.png"):
+                        continue
+                    image_src = candidate
+                    break
+
+        if image_src:
+            insert_idx = 0
+            for idx, line in enumerate(result):
+                if line.startswith('# '):
+                    insert_idx = idx + 1
+                    break
+            block = []
+            if insert_idx > 0 and result[insert_idx - 1].strip() != '':
+                block.append('\n')
+            block.extend([
+                '<div style="text-align: center;">\n',
+                f'  <img src="{image_src}" alt="" width="400">\n',
+                '</div>\n',
+                '\n'
+            ])
+            result[insert_idx:insert_idx] = block
 
     # Write back
     with open(file_path, 'w', encoding='utf-8') as f:

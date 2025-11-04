@@ -11,6 +11,8 @@ function Header(el)
 
     -- Check for DOCX Word style classes
     for _, class in ipairs(classes) do
+        local lower_class = class:lower()
+
         -- DOCX Heading 1 (class "Pagrindinis") → Currently H1, should be H2
         if class == "Pagrindinis" then
             if el.level == 1 then
@@ -20,7 +22,15 @@ function Header(el)
         end
 
         -- DOCX Heading 2 (class "2-Po-Pag") → Currently H2, should be H3
-        if class == "2-Po-Pag" or class == "2-po-Pag" then
+        if lower_class == "2-po-pag" then
+            if el.level == 2 then
+                el.level = 3
+            end
+            return el
+        end
+
+        -- DOCX Heading 2 variants like "1.1-Po-pag-(nerodyti-turiny)" → demote to H3
+        if lower_class:match('^%d+%.%d+-po%-pag') then
             if el.level == 2 then
                 el.level = 3
             end
