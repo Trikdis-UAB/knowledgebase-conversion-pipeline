@@ -495,6 +495,7 @@ def rewrite_section(lines, header_text, alt_text):
 rewrite_section(lines, '### Elements of the *FIRECOM* communicator', 'FIRECOM communicator elements')
 rewrite_section(lines, '### Elementos del comunicador FIRECOM', 'Elementos del comunicador FIRECOM')
 rewrite_section(lines, '### Элементы коммуникатора FIRECOM', 'Элементы коммуникатора FIRECOM')
+rewrite_section(lines, '### Komunikatoriaus FIRECOM elementai', 'Komunikatoriaus FIRECOM elementai')
 
 index.write_text('\n'.join(lines) + '\n')
 PY
