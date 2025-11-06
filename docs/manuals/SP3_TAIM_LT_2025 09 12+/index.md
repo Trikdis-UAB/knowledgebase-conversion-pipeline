@@ -272,10 +272,7 @@ Sutrikus sistemos maitinimui iš pagrindinio maitinimo šaltinio, bus formuojama
 | Sabotažo jutiklis (angl. Tamper)                                  | 1 vnt.  |
 | Kontaktų kaladėlė su 3,15 A saugikliu                             | 1 vnt.  |
 
-!!! note
-    USB laidas (Mini-B tipo), skirtas centralei programuoti, kartu neteikiamas.
-
-## Sistemos įrengimas
+!!! note USB laidas (Mini-B tipo), skirtas centralei programuoti, kartu neteikiamas. \## Sistemos įrengimas
 
 ### Rekomenduojama įrengimo tvarka
 
@@ -311,10 +308,7 @@ Paveikslėlyje pateiktos centralės plokštės ir jos tvirtinimo kiaurymių matm
 
 5.  Į montažinį korpusą įstatykite rezervinio maitinimo akumuliatorių. Jo gnybtus prijunkite prie centralės rezervinio maitinimo šaltinio jungties BAT+ / BAT–.
 
-!!! note
-    Akumuliatorius turi būti įkraunamas ne ilgiau nei per 72 val., kad apsaugos sistema atitiktų II-ą apsaugos klasę arba 24val., kad atitiktų III-ą apsaugos klasę.
-
-#### Rekomendacijos centralės veikimo parametrams nustatyti
+!!! note Akumuliatorius turi būti įkraunamas ne ilgiau nei per 72 val., kad apsaugos sistema atitiktų II-ą apsaugos klasę arba 24val., kad atitiktų III-ą apsaugos klasę. \#### Rekomendacijos centralės veikimo parametrams nustatyti
 
 1.  Kaip prisijungti centralės konfigūravimui žr. sk. 5 „Veikimo parametrų nustatymas su programa TrikdisConfig
 
@@ -541,10 +535,7 @@ Norint centralę paleisti veikti, reikia įjungti jos maitinimo šaltinį. Centr
 
 - Diodas „NET“ turi šviesti žaliai ir periodiškai ne mažiau nei 3 kartus sužybsėti geltonai – žalia spalva indikuoja, kad SIM kortelė sėkmingai priregistruota prie mobiliojo ryšio tinklo, o geltonų žybsnių skaičius reiškia mobiliojo signalo lygį.
 
-!!! note
-    Pakankamas mobiliojo ryšio signalo lygis - 3 (trys „NET” indikatoriaus geltoni žybsniai). / Jei suskaičiuojate mažiau geltonų „NET” diodo žybsnių, tai mobiliojo ryšio signalo lygis nepakankamas. Rekomenduojame arba pasirinkti kitą centralės įrengimo vietą, arba pakeisti antenos vietą, arba naudoti jautresnę mobiliojo ryšio anteną. / Jei centralės šviesinė indikacija kitokia, kad nustatytumėte, kas nutikę, žiūrėkite skyrių 1.4 „Šviesinė veikimo indikacija”. / Jei „FLEXi” SP3 indikacija visai nešviečia, patikrinkite maitinimo šaltinį ir laidinius sujungimus.
-
-## Nuotolinis valdymas
+!!! note Pakankamas mobiliojo ryšio signalo lygis - 3 (trys „NET” indikatoriaus geltoni žybsniai). / Jei suskaičiuojate mažiau geltonų „NET” diodo žybsnių, tai mobiliojo ryšio signalo lygis nepakankamas. Rekomenduojame arba pasirinkti kitą centralės įrengimo vietą, arba pakeisti antenos vietą, arba naudoti jautresnę mobiliojo ryšio anteną. / Jei centralės šviesinė indikacija kitokia, kad nustatytumėte, kas nutikę, žiūrėkite skyrių 1.4 „Šviesinė veikimo indikacija”. / Jei „FLEXi” SP3 indikacija visai nešviečia, patikrinkite maitinimo šaltinį ir laidinius sujungimus. \## Nuotolinis valdymas
 
 ### *„FLEXi” SP3* priskyrimas prie vartotojo *Protegus2* paskyros
 
@@ -560,8 +551,7 @@ Su Protegus2 vartotojai galės valdyti apsaugos sistemą nuotoliniu būdu. Jie t
 
 2.  Spustelkite elektroniniu paštu gautą nuorodą, kad patvirtintumėte paskyros sukūrimą. Telefone paleiskite Protegus2 aplikaciją ir savo vartotojo vardu ir slaptažodžiu prie jos prisijunkite.
 
-!!! note
-    Pridėjimo prie Protegus2 metu „FLEXi” SP3 turi būti:
+!!! note Pridėjimo prie Protegus2 metu „FLEXi” SP3 turi būti:
 
     1.  Įstatyta aktyvuota SIM kortelė su įvestu PIN arba išjungtu PIN kodo
         reikalavimu;
@@ -636,8 +626,7 @@ Pirminėje centralės konfigūracijoje SMS slaptažodžio reikšmė **123456**. 
 
 ### Valdymas skambučiu
 
-!!! note
-    Sistemos administratorius gali valdyti „FLEXi” SP3 telefono skambučiu ir SMS komandomis. / Jei norite leisti sistemą valdyti skambučiu kitiems asmenims, įveskite jų identifikavimo duomenis su programa TrikdisConfig arba SMS komandomis. / **<u>Valdymas skambučiu neveikia su apsaugos centralėmis *SP3_хх7х*. *SP3_12xx* apsaugos centralės neturi balso pranešimo su 1.14 ir naujesne programinės įrangos versija.</u>** **„FLEXi” SP3 valdymo komandos telefono skambučiu**
+!!! note Sistemos administratorius gali valdyti „FLEXi” SP3 telefono skambučiu ir SMS komandomis. / Jei norite leisti sistemą valdyti skambučiu kitiems asmenims, įveskite jų identifikavimo duomenis su programa TrikdisConfig arba SMS komandomis. / **<u>Valdymas skambučiu neveikia su apsaugos centralėmis *SP3_хх7х*. *SP3_12xx* apsaugos centralės neturi balso pranešimo su 1.14 ir naujesne programinės įrangos versija.</u>** **„FLEXi” SP3 valdymo komandos telefono skambučiu**
 
 Išėjimų OUT ir apsaugos sričių valdymas skambučiu:
 
@@ -820,8 +809,7 @@ Jei yra pažymėtas bent vienas apsaugos centralės vidinio gedimo laukas, tai a
 
 - **Instaliuotojo kodas** – (*gamyklinis kodas - 654321*) suteikia prieigą prie sistemos konfigūravimo montuotojui. Saugumui užtikrinti, pakeiskite jį į tik Jums žinomą šešiaženklį kodą.
 
-!!! note
-    Jei nustatytas numatytasis *administratoriaus kodas* (123456), programa nereikalaus jo įvesti ir po mygtuko **Skaityti \[F4\]** paspaudimo pateiks esamų nustatytų gaminio veikimo parametrų reikšmes. **Parinkčių grupė „Instaliuotojo teisės“**
+!!! note Jei nustatytas numatytasis *administratoriaus kodas* (123456), programa nereikalaus jo įvesti ir po mygtuko **Skaityti \[F4\]** paspaudimo pateiks esamų nustatytų gaminio veikimo parametrų reikšmes. **Parinkčių grupė „Instaliuotojo teisės“**
 
 - Nurodo montuotojo teises.
 
@@ -875,8 +863,7 @@ Nustačius lygiagretaus pulto kanalo parametrus, pranešimai vienu metu bus siun
 
 - **Esamas laikas SIA** - pažymėkite langelį, kad stebėjimo pultui siunčiamuose pranešimuose būtų nurodytas modulyje nustatytas laikas.
 
-!!! note
-    Nepriklausomai nuo jūsų IP nustatymų, įsitikinkite, kad jūsų DNS adresai atitinka tuos, kuriuos palaiko jūsų IPT. **Parinkčių grupė „Siuntimo tvarka“**
+!!! note Nepriklausomai nuo jūsų IP nustatymų, įsitikinkite, kad jūsų DNS adresai atitinka tuos, kuriuos palaiko jūsų IPT. **Parinkčių grupė „Siuntimo tvarka“**
 
 Nustatomi parametrai, kaip centralė siųs pranešimus į CSP kanalus ir į Protegus2. Eilės tvarka nustatomi ryšio tipai. Nepavykus jungtis pirminiu ryšio tipu, pereinama į sekantį ir t.t. Jei atsarginiu ryšio tipu pavyko perduoti pranešimą į CSP, tai **Grįžimą į pagrindinį** ryšio tipą bus bandoma atlikti po nustatyto laiko tarpo.
 
@@ -974,8 +961,7 @@ Kontaktinių raktų registravimas su skaitytuvu CZ-Dallas.
 
 5.  Norint ištrinti visus raktus (ir pagrindinį), reikia palaikyti **„Pagrindinį raktą“** priglaudus prie skaitytuvo ne trumpiau 20 s.
 
-!!! note
-    „Pagrindinio rakto” paskirtis – kitiems kontaktiniams raktams registruoti. Naudojant „Pagrindinį raktą” komandų (ARM/DISARM) vykdymas turės uždelsimą. **Skirtukas „Protegus“**
+!!! note „Pagrindinio rakto” paskirtis – kitiems kontaktiniams raktams registruoti. Naudojant „Pagrindinį raktą” komandų (ARM/DISARM) vykdymas turės uždelsimą. **Skirtukas „Protegus“**
 
 <img alt="" src="./image53.png" style="width:7.086614173228346in;height:2.0826771653543306in" />
 
@@ -1127,8 +1113,7 @@ Belaidžių jutiklių registravimą galima atlikti visiems iš karto.
 
 13. Belaidis jutiklis pilnai priregistruotas.
 
-!!! note
-    Belaidžių jutiklių ištrynimas iš „FLEXi” SP3 atminties:
+!!! note Belaidžių jutiklių ištrynimas iš „FLEXi” SP3 atminties:
 
     1.  Prijunkite USB Mini-B kabelį prie „FLEXi" SP3.
 
@@ -1176,8 +1161,7 @@ Belaidžių jutiklių registravimą galima atlikti visiems iš karto.
 
 17. Belaidis valdymo pultelis pilnai priregistruotas.
 
-!!! note
-    Belaidžio valdymo pultelio gamyklinių nustatymų atstatymas:
+!!! note Belaidžio valdymo pultelio gamyklinių nustatymų atstatymas:
 
     1.  Pultelyje vienu metu paspaudžiami 2 ir 3 mygtukai ir laikomi kol
         indikatorius pradės mirksėti žaliai ir raudonai.
@@ -1223,8 +1207,7 @@ Belaidžių jutiklių registravimą galima atlikti visiems iš karto.
 
 18. Belaidė vidinė sirena pilnai priregistruota.
 
-!!! note
-    Belaidės sirenos gamyklinių nustatymų atstatymas:
+!!! note Belaidės sirenos gamyklinių nustatymų atstatymas:
 
     1.  Nuimkite sirenos dangtį.
 
@@ -1272,8 +1255,7 @@ Belaidžių jutiklių registravimą galima atlikti visiems iš karto.
 
 14. Belaidis jutiklis pilnai priregistruotas.
 
-!!! note
-    Belaidžių jutiklių ištrynimas iš „FLEXi” SP3 atminties:
+!!! note Belaidžių jutiklių ištrynimas iš „FLEXi” SP3 atminties:
 
     1.  Prijunkite USB Mini-B kabelį prie „FLEXi" SP3.
 
@@ -1315,8 +1297,7 @@ Belaidžių jutiklių registravimą galima atlikti visiems iš karto.
 
 14. Belaidė klaviatūra pilnai priregistruota.
 
-!!! note
-    Belaidžių jutiklių ištrynimas iš „FLEXi” SP3 atminties:
+!!! note Belaidžių jutiklių ištrynimas iš „FLEXi” SP3 atminties:
 
     1.  Prijunkite USB Mini-B kabelį prie „FLEXi" SP3.
 
@@ -1616,8 +1597,7 @@ Norint atkurti centralės gamyklinius nustatymus, reikia nuspausti programos Tri
 
 ### Programinės įrangos atnaujinimas
 
-!!! note
-    Prijungus „FLEXi” SP3 prie TrikdisConfig, programa pasiūlys atnaujinti įrenginio veikimo programą, jeigu yra atnaujinimų. Šiam veikimui reikalingas interneto ryšys. / Jei jūsų kompiuteryje yra instaliuota antivirusinė programa, ji gali blokuoti automatinio gamyklinės programinės įrangos atnaujinimo funkciją. Šiuo atveju turėsite perkonfigūruoti savo antivirusinę programą. „FLEXi” SP3 veikimo programą galima atnaujinti ar pakeisti ir rankiniu būdu. Po atnaujinimo išlieka visi ankstesni „FLEXi” SP3 parametrai. Veikimo programą įrašant rankiniu būdu, ji gali būti pakeista į naujesnę arba senesnę versiją.
+!!! note Prijungus „FLEXi” SP3 prie TrikdisConfig, programa pasiūlys atnaujinti įrenginio veikimo programą, jeigu yra atnaujinimų. Šiam veikimui reikalingas interneto ryšys. / Jei jūsų kompiuteryje yra instaliuota antivirusinė programa, ji gali blokuoti automatinio gamyklinės programinės įrangos atnaujinimo funkciją. Šiuo atveju turėsite perkonfigūruoti savo antivirusinę programą. „FLEXi” SP3 veikimo programą galima atnaujinti ar pakeisti ir rankiniu būdu. Po atnaujinimo išlieka visi ankstesni „FLEXi” SP3 parametrai. Veikimo programą įrašant rankiniu būdu, ji gali būti pakeista į naujesnę arba senesnę versiją.
 
 Atlikite šiuos žingsnius:
 

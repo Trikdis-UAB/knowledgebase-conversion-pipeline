@@ -273,10 +273,7 @@ Si ocurriesen problemas con la alimentación del sistema desde la fuente de alim
 | Sensor de manipulación | 1 pza. |
 | Bloque de terminales con fusible de 3.15 A | 1 pza. |
 
-!!! note
-    El cable USB (tipo Mini-B) para programar el panel de control se vende por separado.
-
-## Instalación del sistema
+!!! note El cable USB (tipo Mini-B) para programar el panel de control se vende por separado. \## Instalación del sistema
 
 ### Orden de instalación recomendada
 
@@ -312,10 +309,7 @@ La siguiente imagen muestra las dimensiones de la placa y sus orificios de monta
 
 5.  Inserta la batería de respaldo en el marco de montaje. Conecta las terminales de la batería a las terminales BAT + / BAT– del panel de control.
 
-!!! note
-    La batería debe recargarse en menos de 72 horas para que el sistema de alarma cumpla con Seguridad Clase II o 24 horas para cumplir con la Seguridad Clase III.
-
-#### Recomendaciones para configurar los parámetros del panel de control
+!!! note La batería debe recargarse en menos de 72 horas para que el sistema de alarma cumpla con Seguridad Clase II o 24 horas para cumplir con la Seguridad Clase III. \#### Recomendaciones para configurar los parámetros del panel de control
 
 1.  Consulta el capítulo 5 “Configuración de parámetros en TrikdisConfig” para información sobre cómo conectarse al panel para configurarlo.
 
@@ -552,10 +546,7 @@ Para encender el panel de control, primero debes encender la fuente de alimentac
 
 - El diodo NET debe estar verde fijo y parpadear periódicamente en amarillo no menos de 3 veces - el color verde indica que la tarjeta SIM se ha registrado correctamente en la red móvil, y el número de parpadeos verdes indica la intensidad de la señal móvil.
 
-!!! note
-    Una intensidad de red móvil suficiente es 3 (tres destellos amarillos en el indicador NET). / Si observas menos destellos amarillos del diodo NET, la intensidad de la red móvil es insuficiente. Recomendamos elegir un lugar diferente para instalar el panel de control, cambiar la ubicación de la antena o usar una antena móvil más sensible. / Si la indicación de la luz es diferente, consulta el capítulo 1.4 “Indicación de operación LED” para conocer el motivo. / Si todas las luces indicadoras del „FLEXi” SP3 están apagadas, verifica la fuente de alimentación y las conexiones.
-
-## Control remoto
+!!! note Una intensidad de red móvil suficiente es 3 (tres destellos amarillos en el indicador NET). / Si observas menos destellos amarillos del diodo NET, la intensidad de la red móvil es insuficiente. Recomendamos elegir un lugar diferente para instalar el panel de control, cambiar la ubicación de la antena o usar una antena móvil más sensible. / Si la indicación de la luz es diferente, consulta el capítulo 1.4 “Indicación de operación LED” para conocer el motivo. / Si todas las luces indicadoras del „FLEXi” SP3 están apagadas, verifica la fuente de alimentación y las conexiones. \## Control remoto
 
 ### Vincular el *„FLEXi“ SP3* a la cuenta *Protegus2*
 
@@ -575,8 +566,7 @@ Con Protegus2, los usuarios pueden controlar el sistema de alarma de forma remot
 
 4.  Ejecuta la aplicación móvil Protegus2 en tu teléfono inteligente e inicia sesión con tu nombre de usuario y contraseña.
 
-!!! note
-    Al agregar un „FLEXi” SP3 a Protegus2:
+!!! note Al agregar un „FLEXi” SP3 a Protegus2:
 
     1.  Se debe insertar una tarjeta SIM activada y se debe ingresar el
         código PIN;
@@ -651,8 +641,7 @@ La contraseña SMS predeterminada del panel de control es **123456**. ¡Por razo
 
 ### Control con llamada telefónica
 
-!!! note
-    El administrador del sistema puede controlar el panel de control mediante mensajes SMS y llamadas telefónicas. / Si deseas permitir que otros controlen el sistema a través de llamadas telefónicas, ingresa sus datos de identificación utilizando el software TrikdisConfig o comandos SMS. / **<u>El control de llamadas telefónica no funciona con los paneles de control de seguridad *SP3_хх7х*. Los paneles de control de seguridad *SP3_12xx* no tienen mensaje de voz con firmware 1.14 y superior.</u>** **Comandos de control de llamadas telefónicas del „FLEXi“ SP3**
+!!! note El administrador del sistema puede controlar el panel de control mediante mensajes SMS y llamadas telefónicas. / Si deseas permitir que otros controlen el sistema a través de llamadas telefónicas, ingresa sus datos de identificación utilizando el software TrikdisConfig o comandos SMS. / **<u>El control de llamadas telefónica no funciona con los paneles de control de seguridad *SP3_хх7х*. Los paneles de control de seguridad *SP3_12xx* no tienen mensaje de voz con firmware 1.14 y superior.</u>** **Comandos de control de llamadas telefónicas del „FLEXi“ SP3**
 
 Control de salidas OUT y particiones del sistema de alarma con llamadas telefónicas:
 
@@ -835,8 +824,7 @@ Si se marca al menos un campo de falla interna del panel de control, entonces el
 
 - **Código de instalador** – *(código predeterminado: 654321)* da acceso a instaladores para configurar el sistema. Por razones de seguridad, modifícala a un código de 6 símbolos que solamente usted conozca.
 
-!!! note
-    Si se establece el *código de administrador* predeterminado (123456), después de presionar **Leer \[F4\]**, el programa inmediatamente mostrará los parámetros operativos actuales del dispositivo sin solicitar el código. **Grupo de configuración “Permisos de instalador”**
+!!! note Si se establece el *código de administrador* predeterminado (123456), después de presionar **Leer \[F4\]**, el programa inmediatamente mostrará los parámetros operativos actuales del dispositivo sin solicitar el código. **Grupo de configuración “Permisos de instalador”**
 
 - Especifica los permisos del instalador.
 
@@ -890,8 +878,7 @@ Si se establecen los parámetros para el canal paralelo (parallel channel), los 
 
 - **Local time in SIA -** marque la casilla para indicar el tiempo configurado en el módulo en los mensajes enviados a la estación de monitoreo.
 
-!!! note
-    Independientemente de la configuración de IP, asegúrese de que las direcciones DNS coincidan con las admitidas por su ISP. **Grupo de configuración “Modo de informe”**
+!!! note Independientemente de la configuración de IP, asegúrese de que las direcciones DNS coincidan con las admitidas por su ISP. **Grupo de configuración “Modo de informe”**
 
 Se establece el orden preferido de envío de mensajes a través de los canales CRA y al Protegus2. Los tipos de canales de comunicación se establecen en orden. Si no es posible establecer una conexión a través del canal de comunicación principal, se realiza la transición al canal de comunicación de respaldo, etc. Si el tipo de conexión de respaldo logró transmitir el mensaje al CRA, se intentará el tipo de conexión “**Regresar a principal**” después del intervalo de tiempo especificado.
 
@@ -989,8 +976,7 @@ Vinculación de llaves electrónicas con el lector CZ-Dallas.
 
 5.  Para eliminar todas las llaves (incluyendo la llave maestra), sostén la **llave maestra** contra el lector durante al menos 20 segundos.
 
-!!! note
-    El propósito de la llave maestra es de vincular otras llaves electrónicas. Si utilizas la llave maestra para los comandos ACTIVAR/DESACTIVAR, su ejecución tendrá un retraso. **Pestaña “Protegus”**
+!!! note El propósito de la llave maestra es de vincular otras llaves electrónicas. Si utilizas la llave maestra para los comandos ACTIVAR/DESACTIVAR, su ejecución tendrá un retraso. **Pestaña “Protegus”**
 
 <img alt="" src="./image53.png" style="width:7.086614173228346in;height:1.905511811023622in" />
 
@@ -1144,8 +1130,7 @@ Todos los sensores inalámbricos se pueden vincular simultáneamente.
 
 13. El sensor inalámbrico ahora está vinculado correctamente al sistema.
 
-!!! note
-    Para eliminar los sensores inalámbricos de la memoria del ***„FLEXi” SP3***:
+!!! note Para eliminar los sensores inalámbricos de la memoria del ***„FLEXi” SP3***:
 
     1.  Conecta un cable USB Mini-B al „FLEXi" SP3.
 
@@ -1195,8 +1180,7 @@ Todos los sensores inalámbricos se pueden vincular simultáneamente.
 
 17. El controlador inalámbrico ahora está vinculado con éxito al sistema.
 
-!!! note
-    Restablecer el controlador inalámbrico a la configuración predeterminada:
+!!! note Restablecer el controlador inalámbrico a la configuración predeterminada:
 
     1.  Presiona los botones 2 y 3 al mismo tiempo y mantenlo presionado
         hasta que el indicador comience a parpadear en color verde y rojo.
@@ -1242,8 +1226,7 @@ Todos los sensores inalámbricos se pueden vincular simultáneamente.
 
 18. La sirena interna inalámbrica ahora está vinculada al sistema.
 
-!!! note
-    Restablecer la sirena inalámbrica a la configuración predeterminada:
+!!! note Restablecer la sirena inalámbrica a la configuración predeterminada:
 
     1.  Retira la tapa de la sirena.
 
@@ -1291,8 +1274,7 @@ Todos los sensores inalámbricos se pueden vincular simultáneamente.
 
 14. El sensor inalámbrico ahora está vinculado al sistema.
 
-!!! note
-    Para eliminar sensores inalámbricos de la memoria del „FLEXi” SP3:
+!!! note Para eliminar sensores inalámbricos de la memoria del „FLEXi” SP3:
 
     1.  Conecta un cable USB Mini-B al „FLEXi" SP3.
 
@@ -1334,8 +1316,7 @@ Todos los sensores inalámbricos se pueden vincular simultáneamente.
 
 14. El teclado inalámbrico ahora está vinculado al sistema.
 
-!!! note
-    Para eliminar sensores inalámbricos de la memoria del „FLEXi” SP3:
+!!! note Para eliminar sensores inalámbricos de la memoria del „FLEXi” SP3:
 
     1.  Conecta un cable USB Mini-B al „FLEXi" SP3.
 
@@ -1630,8 +1611,7 @@ Para restablecer la configuración predeterminada del panel de control, haz clic
 
 ### Actualización de firmware
 
-!!! note
-    Después de conectar el „FLEXi” SP3 a TrikdisConfig, el programa solicitará automáticamente actualizar el firmware si existen actualizaciones disponibles. Se necesita una conexión a Internet para esta función. / Si el software antivirus está instalado en su computadora, puede bloquear la función de actualización automática de firmware. En este caso, deberá configurar su software antivirus. El firmware del „FLEXi“ SP3 también se puede actualizar manualmente. Todas las configuraciones anteriores del „FLEXi“ SP3 permanecen sin cambios después de una actualización. Si el firmware se instala manualmente, se puede cambiar a una versión más nueva o más antigua.
+!!! note Después de conectar el „FLEXi” SP3 a TrikdisConfig, el programa solicitará automáticamente actualizar el firmware si existen actualizaciones disponibles. Se necesita una conexión a Internet para esta función. / Si el software antivirus está instalado en su computadora, puede bloquear la función de actualización automática de firmware. En este caso, deberá configurar su software antivirus. El firmware del „FLEXi“ SP3 también se puede actualizar manualmente. Todas las configuraciones anteriores del „FLEXi“ SP3 permanecen sin cambios después de una actualización. Si el firmware se instala manualmente, se puede cambiar a una versión más nueva o más antigua.
 
 Realiza estos pasos:
 
