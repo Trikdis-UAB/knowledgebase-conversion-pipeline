@@ -37,7 +37,7 @@ The `fix_table_structure.py` script automatically fixes table structure issues d
 ## Integration
 
 ### Automatic Application
-The fix is integrated into `convert-single.sh` at line 95:
+The fix is integrated into `scripts/convert-single.sh` at line 95:
 ```bash
 # Fix table structure issues (H1 in cells, empty rows, malformed headers)
 python3 "$SCRIPT_DIR/fix_table_structure.py" index.md
@@ -78,7 +78,7 @@ The script detects specific malformed patterns:
 - `fix_table_structure.py` - Core table fixing logic
 
 ### Pipeline Integration
-- `convert-single.sh` - Calls the script automatically
+- `scripts/convert-single.sh` - Calls the script automatically
 
 ### Documentation
 - `TABLE_STRUCTURE_FIX.md` - This documentation

@@ -19,17 +19,19 @@ OUT_DIR="${OUT_DIR:-docs/manuals}"
 
 # Get absolute paths
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+FILTER_DIR="${ROOT_DIR}/lua-filters"
 inp="$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
 base="$(basename "${inp%.docx}")"
 doc_dir="${OUT_DIR}/${base}"
 
 # Ensure filters exist
 for f in strip-cover.lua strip-toc.lua promote-strong-top.lua demote-extra-h1.lua fix-numbered-heading-levels.lua normalize-headings.lua move-first-image-to-description.lua split-inline-images.lua reposition-sentence-splitting-images.lua convert-image-sizes.lua softwrap-tokens.lua clean-table-pipes.lua mark-two-col.lua convert-underline.lua remove-unwanted-blockquotes.lua maintain-list-continuity.lua strip-classes.lua fix-typography.lua bold-list-titles.lua fix-crossrefs.lua clean-html-blocks.lua unwrap-table-blockquotes.lua remove-standalone-asterisks.lua fix-rowspan-headers.lua flatten-instruction-tables.lua; do
-  [ -f "$SCRIPT_DIR/$f" ] || { echo "Missing $f"; exit 1; }
+  [ -f "$FILTER_DIR/$f" ] || { echo "Missing $f"; exit 1; }
 done
 # Check the filters in filters subdirectory
-[ -f "$SCRIPT_DIR/filters/convert-legend-tables-ordered-lists.lua" ] || { echo "Missing filters/convert-legend-tables-ordered-lists.lua"; exit 1; }
-[ -f "$SCRIPT_DIR/filters/flatten-two-cell-tables.lua" ] || { echo "Missing filters/flatten-two-cell-tables.lua"; exit 1; }
+[ -f "$FILTER_DIR/convert-legend-tables-ordered-lists.lua" ] || { echo "Missing lua-filters/convert-legend-tables-ordered-lists.lua"; exit 1; }
+[ -f "$FILTER_DIR/flatten-two-cell-tables.lua" ] || { echo "Missing lua-filters/flatten-two-cell-tables.lua"; exit 1; }
 
 mkdir -p "$doc_dir"
 pushd "$doc_dir" >/dev/null
@@ -40,51 +42,51 @@ pandoc "$inp" \
   --extract-media="." \
   --wrap=none \
   --markdown-headings=atx \
-  --lua-filter="$SCRIPT_DIR/strip-cover.lua" \
-  --lua-filter="$SCRIPT_DIR/strip-toc.lua" \
-  --lua-filter="$SCRIPT_DIR/map-docx-heading-levels.lua" \
-  --lua-filter="$SCRIPT_DIR/fix-numbered-heading-levels.lua" \
-  --lua-filter="$SCRIPT_DIR/promote-strong-top.lua" \
-  --lua-filter="$SCRIPT_DIR/demote-extra-h1.lua" \
-  --lua-filter="$SCRIPT_DIR/remove-table-widths.lua" \
-  --lua-filter="$SCRIPT_DIR/convert-warning-tables.lua" \
-  --lua-filter="$SCRIPT_DIR/filters/convert-legend-tables-ordered-lists.lua" \
-  --lua-filter="$SCRIPT_DIR/filters/flatten-two-cell-tables.lua" \
-  --lua-filter="$SCRIPT_DIR/flatten-instruction-tables.lua" \
-  --lua-filter="$SCRIPT_DIR/unwrap-table-blockquotes.lua" \
-  --lua-filter="$SCRIPT_DIR/convert-image-tables.lua" \
-  --lua-filter="$SCRIPT_DIR/normalize-headings.lua" \
-  --lua-filter="$SCRIPT_DIR/strip-manual-heading-numbers.lua" \
-  --lua-filter="$SCRIPT_DIR/promote-centered-bold.lua" \
-  --lua-filter="$SCRIPT_DIR/normalize-sp3-title.lua" \
-  --lua-filter="$SCRIPT_DIR/move-first-image-to-description.lua" \
-  --lua-filter="$SCRIPT_DIR/split-inline-images.lua" \
-  --lua-filter="$SCRIPT_DIR/reposition-sentence-splitting-images.lua" \
-  --lua-filter="$SCRIPT_DIR/convert-image-sizes.lua" \
-  --lua-filter="$SCRIPT_DIR/softwrap-tokens.lua" \
-  --lua-filter="$SCRIPT_DIR/remove-empty-table-columns.lua" \
-  --lua-filter="$SCRIPT_DIR/clean-table-pipes.lua" \
-  --lua-filter="$SCRIPT_DIR/mark-two-col.lua" \
-  --lua-filter="$SCRIPT_DIR/convert-underline.lua" \
-  --lua-filter="$SCRIPT_DIR/convert-blockquote-headings.lua" \
-  --lua-filter="$SCRIPT_DIR/remove-unwanted-blockquotes.lua" \
-  --lua-filter="$SCRIPT_DIR/unwrap-post-image-blockquotes.lua" \
-  --lua-filter="$SCRIPT_DIR/insert-protegus-buttons.lua" \
-  --lua-filter="$SCRIPT_DIR/remove-download-banners.lua" \
-  --lua-filter="$SCRIPT_DIR/rewrite-protegus-links.lua" \
-  --lua-filter="$SCRIPT_DIR/maintain-list-continuity.lua" \
-  --lua-filter="$SCRIPT_DIR/strip-classes.lua" \
-  --lua-filter="$SCRIPT_DIR/fix-typography.lua" \
-  --lua-filter="$SCRIPT_DIR/bold-list-titles.lua" \
-  --lua-filter="$SCRIPT_DIR/fix-html-tags.lua" \
-  --lua-filter="$SCRIPT_DIR/fix-crossrefs.lua" \
-  --lua-filter="$SCRIPT_DIR/remove-standalone-asterisks.lua" \
-  --lua-filter="$SCRIPT_DIR/fix-admonition-lists.lua" \
-  --lua-filter="$SCRIPT_DIR/strip-admonition-quotes.lua" \
-  --lua-filter="$SCRIPT_DIR/reduce-excess-strong.lua" \
-  --lua-filter="$SCRIPT_DIR/unwrap-paragraph-strong.lua" \
-  --lua-filter="$SCRIPT_DIR/relocate-warranty.lua" \
-  --lua-filter="$SCRIPT_DIR/clean-html-blocks.lua"
+  --lua-filter="$FILTER_DIR/strip-cover.lua" \
+  --lua-filter="$FILTER_DIR/strip-toc.lua" \
+  --lua-filter="$FILTER_DIR/map-docx-heading-levels.lua" \
+  --lua-filter="$FILTER_DIR/fix-numbered-heading-levels.lua" \
+  --lua-filter="$FILTER_DIR/promote-strong-top.lua" \
+  --lua-filter="$FILTER_DIR/demote-extra-h1.lua" \
+  --lua-filter="$FILTER_DIR/remove-table-widths.lua" \
+  --lua-filter="$FILTER_DIR/convert-warning-tables.lua" \
+  --lua-filter="$FILTER_DIR/convert-legend-tables-ordered-lists.lua" \
+  --lua-filter="$FILTER_DIR/flatten-two-cell-tables.lua" \
+  --lua-filter="$FILTER_DIR/flatten-instruction-tables.lua" \
+  --lua-filter="$FILTER_DIR/unwrap-table-blockquotes.lua" \
+  --lua-filter="$FILTER_DIR/convert-image-tables.lua" \
+  --lua-filter="$FILTER_DIR/normalize-headings.lua" \
+  --lua-filter="$FILTER_DIR/strip-manual-heading-numbers.lua" \
+  --lua-filter="$FILTER_DIR/promote-centered-bold.lua" \
+  --lua-filter="$FILTER_DIR/normalize-sp3-title.lua" \
+  --lua-filter="$FILTER_DIR/move-first-image-to-description.lua" \
+  --lua-filter="$FILTER_DIR/split-inline-images.lua" \
+  --lua-filter="$FILTER_DIR/reposition-sentence-splitting-images.lua" \
+  --lua-filter="$FILTER_DIR/convert-image-sizes.lua" \
+  --lua-filter="$FILTER_DIR/softwrap-tokens.lua" \
+  --lua-filter="$FILTER_DIR/remove-empty-table-columns.lua" \
+  --lua-filter="$FILTER_DIR/clean-table-pipes.lua" \
+  --lua-filter="$FILTER_DIR/mark-two-col.lua" \
+  --lua-filter="$FILTER_DIR/convert-underline.lua" \
+  --lua-filter="$FILTER_DIR/convert-blockquote-headings.lua" \
+  --lua-filter="$FILTER_DIR/remove-unwanted-blockquotes.lua" \
+  --lua-filter="$FILTER_DIR/unwrap-post-image-blockquotes.lua" \
+  --lua-filter="$FILTER_DIR/insert-protegus-buttons.lua" \
+  --lua-filter="$FILTER_DIR/remove-download-banners.lua" \
+  --lua-filter="$FILTER_DIR/rewrite-protegus-links.lua" \
+  --lua-filter="$FILTER_DIR/maintain-list-continuity.lua" \
+  --lua-filter="$FILTER_DIR/strip-classes.lua" \
+  --lua-filter="$FILTER_DIR/fix-typography.lua" \
+  --lua-filter="$FILTER_DIR/bold-list-titles.lua" \
+  --lua-filter="$FILTER_DIR/fix-html-tags.lua" \
+  --lua-filter="$FILTER_DIR/fix-crossrefs.lua" \
+  --lua-filter="$FILTER_DIR/remove-standalone-asterisks.lua" \
+  --lua-filter="$FILTER_DIR/fix-admonition-lists.lua" \
+  --lua-filter="$FILTER_DIR/strip-admonition-quotes.lua" \
+  --lua-filter="$FILTER_DIR/reduce-excess-strong.lua" \
+  --lua-filter="$FILTER_DIR/unwrap-paragraph-strong.lua" \
+  --lua-filter="$FILTER_DIR/relocate-warranty.lua" \
+  --lua-filter="$FILTER_DIR/clean-html-blocks.lua"
 
 # If Pandoc made ./media/, flatten to current folder and fix links
 if [ -d "media" ]; then

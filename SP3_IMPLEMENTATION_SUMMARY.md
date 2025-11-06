@@ -11,7 +11,7 @@
 ### ✅ Issue 1: Missing H1 Title
 **Problem:** Document started with `## **Security control panel "FLEXi" SP3**` (H2 with bold)
 **Expected:** `# Security control panel "FLEXi" SP3` (H1 without bold)
-**Solution:** Added pattern to line 158 of `convert-single.sh` to convert control panel titles to H1
+**Solution:** Added pattern to line 158 of `scripts/convert-single.sh` to convert control panel titles to H1
 **Method:** Post-processing sed command
 **Result:** Title now displays as H1 correctly
 
@@ -89,7 +89,7 @@
 
 ## Filter Integration Order
 
-New filters integrated into `convert-single.sh` at these locations:
+New filters integrated into `scripts/convert-single.sh` at these locations:
 
 ```bash
 Line 52: --lua-filter="convert-image-tables.lua"        # After table unwrapping
@@ -166,7 +166,7 @@ All filters designed to work with:
 - `fix_admonitions.py` (enhanced)
 
 ### Shell Scripts
-- `convert-single.sh` (filter integration + post-processing)
+- `scripts/convert-single.sh` (filter integration + post-processing)
 
 ### Documentation
 - `SP3_CONVERSION_ISSUES.md` (issue analysis)
@@ -257,7 +257,7 @@ Successfully converted 4 additional manuals using the SP3 fixes:
 **Problem**: Gator manual had `## GSM gate controller GATOR` (H2) instead of `# GATOR Gate Controller` (H1).
 
 **Root Cause**: 
-- `convert-single.sh` line 155 converts ALL H1→H2
+- `scripts/convert-single.sh` line 155 converts ALL H1→H2
 - Lines 156-158 convert specific product types back to H1
 - Missing pattern for "Gate Controller" products
 
@@ -273,7 +273,7 @@ Successfully converted 4 additional manuals using the SP3 fixes:
    end
    ```
 
-2. **convert-single.sh** (line 158):
+2. **scripts/convert-single.sh** (line 158):
    ```bash
    sed -i '' 's/^## \(.*Gate Controller\)$/# \1/g' index.md
    ```
@@ -282,7 +282,7 @@ Successfully converted 4 additional manuals using the SP3 fixes:
 
 **Files Modified**:
 - `promote-strong-top.lua` (added gate controller pattern detection)
-- `convert-single.sh` (added gate controller sed pattern)
+- `scripts/convert-single.sh` (added gate controller sed pattern)
 
 ---
 
@@ -337,7 +337,7 @@ image25: Split at 44.0%, optimal 44.3% ✅ (0.3% difference)
 1. `fix_admonitions.py` - Enhanced with regex to detect and remove quoted admonition titles
 
 ### Pipeline Changes:
-1. `convert-single.sh` line 158 - Added gate controller sed pattern
+1. `scripts/convert-single.sh` line 158 - Added gate controller sed pattern
 2. Filter reordering to ensure H2→H1 conversion happens at right time
 
 ### Manual Fixes:
@@ -377,7 +377,7 @@ All 5 manuals previewed locally and ready for production deployment to docs.trik
 - `/Users/local/projects/knowledgebase-conversion-pipeline/remove-unwanted-blockquotes.lua`
 
 ### Modified Scripts
-- `/Users/local/projects/knowledgebase-conversion-pipeline/convert-single.sh`
+- `/Users/local/projects/knowledgebase-conversion-pipeline/scripts/convert-single.sh`
 - `/Users/local/projects/knowledgebase-conversion-pipeline/fix_admonitions.py`
 
 ### Documentation

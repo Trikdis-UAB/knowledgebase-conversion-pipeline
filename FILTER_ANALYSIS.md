@@ -136,7 +136,7 @@ New filter required.
 ### Existing Filter
 **`fix_admonitions.py`** (Python post-processor)
 - Already handles admonition formatting
-- Located at line ~95 in convert-single.sh
+- Located at line ~95 in scripts/convert-single.sh
 
 ### Solution
 ✅ **ENHANCE `fix_admonitions.py`**
@@ -226,7 +226,7 @@ Testing only, no new code.
 
 ## Pipeline Integration Order
 
-New/modified filters should be added in this order in `convert-single.sh`:
+New/modified filters should be added in this order in `scripts/convert-single.sh`:
 
 ```bash
 # Early in pipeline (before other processing)

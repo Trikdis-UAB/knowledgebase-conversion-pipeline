@@ -186,7 +186,7 @@ python3 fix_admonitions.py test-file.md
   - Added negative lookahead to prevent pattern collision
 
 ### No Changes Required
-- **`convert-single.sh`** - Pipeline order remains correct
+- **`scripts/convert-single.sh`** - Pipeline order remains correct
 - **Other filters** - No interference with admonition processing
 
 ## Pipeline Integration

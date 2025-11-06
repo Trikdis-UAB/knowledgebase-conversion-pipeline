@@ -271,11 +271,11 @@ All filters should be designed to work with OTHER manuals too, not just SP3:
 
 ## Conversion Command
 
-Current conversion command (from `convert-single.sh`):
+Current conversion command (from `scripts/convert-single.sh`):
 
 ```bash
 env OUT_DIR="/tmp/sp3-test" \
-  ./convert-single.sh "/Volumes/TRIKDIS/PRODUKTAI/SP3/_ENG/SP3_TAIM_EN_2025 09 12.docx"
+  ./scripts/convert-single.sh "/Volumes/TRIKDIS/PRODUKTAI/SP3/_ENG/SP3_TAIM_EN_2025 09 12.docx"
 ```
 
 After implementing filters, test with:
@@ -283,7 +283,7 @@ After implementing filters, test with:
 ```bash
 cd /Users/local/projects/knowledgebase-conversion-pipeline
 env OUT_DIR="/tmp/sp3-fixed" \
-  ./convert-single.sh "/Volumes/TRIKDIS/PRODUKTAI/SP3/_ENG/SP3_TAIM_EN_2025 09 12.docx"
+  ./scripts/convert-single.sh "/Volumes/TRIKDIS/PRODUKTAI/SP3/_ENG/SP3_TAIM_EN_2025 09 12.docx"
 ```
 
 Then compare:

@@ -19,16 +19,18 @@ OUT_DIR="${OUT_DIR:-docs/manuals}"
 
 # Get absolute paths
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
+FILTER_DIR="${ROOT_DIR}/lua-filters"
 inp="$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
 base="$(basename "${inp%.docx}")"
 doc_dir="${OUT_DIR}/${base}"
 
 # Ensure filters exist
 for f in strip-cover.lua strip-toc.lua promote-strong-top.lua fix-numbered-heading-levels.lua normalize-headings.lua move-first-image-to-description.lua split-inline-images.lua convert-image-sizes.lua softwrap-tokens.lua clean-table-pipes.lua mark-two-col.lua convert-underline.lua remove-unwanted-blockquotes.lua maintain-list-continuity.lua strip-classes.lua fix-typography.lua fix-crossrefs.lua clean-html-blocks.lua unwrap-table-blockquotes.lua remove-standalone-asterisks.lua fix-rowspan-headers.lua flatten-instruction-tables.lua; do
-  [ -f "$SCRIPT_DIR/$f" ] || { echo "Missing $f"; exit 1; }
+  [ -f "$FILTER_DIR/$f" ] || { echo "Missing $f"; exit 1; }
 done
 # Check the new filter in filters subdirectory
-[ -f "$SCRIPT_DIR/filters/flatten-two-cell-tables.lua" ] || { echo "Missing filters/flatten-two-cell-tables.lua"; exit 1; }
+[ -f "$FILTER_DIR/flatten-two-cell-tables.lua" ] || { echo "Missing lua-filters/flatten-two-cell-tables.lua"; exit 1; }
 
 mkdir -p "$doc_dir"
 pushd "$doc_dir" >/dev/null
@@ -39,32 +41,32 @@ pandoc "$inp" \
   --extract-media="." \
   --wrap=none \
   --markdown-headings=atx \
-  --lua-filter="$SCRIPT_DIR/strip-cover.lua" \
-  --lua-filter="$SCRIPT_DIR/strip-toc.lua" \
-  --lua-filter="$SCRIPT_DIR/promote-strong-top.lua" \
-  --lua-filter="$SCRIPT_DIR/map-docx-heading-levels.lua" \
-  --lua-filter="$SCRIPT_DIR/fix-numbered-heading-levels.lua" \
-  --lua-filter="$SCRIPT_DIR/remove-table-widths.lua" \
-  --lua-filter="$SCRIPT_DIR/filters/flatten-two-cell-tables.lua" \
-  --lua-filter="$SCRIPT_DIR/flatten-instruction-tables.lua" \
-  --lua-filter="$SCRIPT_DIR/unwrap-table-blockquotes.lua" \
-  --lua-filter="$SCRIPT_DIR/normalize-headings.lua" \
-  --lua-filter="$SCRIPT_DIR/strip-manual-heading-numbers.lua" \
-  --lua-filter="$SCRIPT_DIR/move-first-image-to-description.lua" \
-  --lua-filter="$SCRIPT_DIR/split-inline-images.lua" \
-  --lua-filter="$SCRIPT_DIR/convert-image-sizes.lua" \
-  --lua-filter="$SCRIPT_DIR/softwrap-tokens.lua" \
-  --lua-filter="$SCRIPT_DIR/remove-empty-table-columns.lua" \
-  --lua-filter="$SCRIPT_DIR/clean-table-pipes.lua" \
-  --lua-filter="$SCRIPT_DIR/mark-two-col.lua" \
-  --lua-filter="$SCRIPT_DIR/convert-underline.lua" \
-  --lua-filter="$SCRIPT_DIR/remove-unwanted-blockquotes.lua" \
-  --lua-filter="$SCRIPT_DIR/maintain-list-continuity.lua" \
-  --lua-filter="$SCRIPT_DIR/strip-classes.lua" \
-  --lua-filter="$SCRIPT_DIR/fix-typography.lua" \
-  --lua-filter="$SCRIPT_DIR/fix-crossrefs.lua" \
-  --lua-filter="$SCRIPT_DIR/remove-standalone-asterisks.lua" \
-  --lua-filter="$SCRIPT_DIR/clean-html-blocks.lua"
+  --lua-filter="$FILTER_DIR/strip-cover.lua" \
+  --lua-filter="$FILTER_DIR/strip-toc.lua" \
+  --lua-filter="$FILTER_DIR/promote-strong-top.lua" \
+  --lua-filter="$FILTER_DIR/map-docx-heading-levels.lua" \
+  --lua-filter="$FILTER_DIR/fix-numbered-heading-levels.lua" \
+  --lua-filter="$FILTER_DIR/remove-table-widths.lua" \
+  --lua-filter="$FILTER_DIR/flatten-two-cell-tables.lua" \
+  --lua-filter="$FILTER_DIR/flatten-instruction-tables.lua" \
+  --lua-filter="$FILTER_DIR/unwrap-table-blockquotes.lua" \
+  --lua-filter="$FILTER_DIR/normalize-headings.lua" \
+  --lua-filter="$FILTER_DIR/strip-manual-heading-numbers.lua" \
+  --lua-filter="$FILTER_DIR/move-first-image-to-description.lua" \
+  --lua-filter="$FILTER_DIR/split-inline-images.lua" \
+  --lua-filter="$FILTER_DIR/convert-image-sizes.lua" \
+  --lua-filter="$FILTER_DIR/softwrap-tokens.lua" \
+  --lua-filter="$FILTER_DIR/remove-empty-table-columns.lua" \
+  --lua-filter="$FILTER_DIR/clean-table-pipes.lua" \
+  --lua-filter="$FILTER_DIR/mark-two-col.lua" \
+  --lua-filter="$FILTER_DIR/convert-underline.lua" \
+  --lua-filter="$FILTER_DIR/remove-unwanted-blockquotes.lua" \
+  --lua-filter="$FILTER_DIR/maintain-list-continuity.lua" \
+  --lua-filter="$FILTER_DIR/strip-classes.lua" \
+  --lua-filter="$FILTER_DIR/fix-typography.lua" \
+  --lua-filter="$FILTER_DIR/fix-crossrefs.lua" \
+  --lua-filter="$FILTER_DIR/remove-standalone-asterisks.lua" \
+  --lua-filter="$FILTER_DIR/clean-html-blocks.lua"
 
 # If Pandoc made ./media/, flatten to current folder and fix links
 if [ -d "media" ]; then

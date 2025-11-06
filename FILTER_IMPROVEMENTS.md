@@ -19,7 +19,7 @@ October 2, 2025
 **Symptom:** No H1 title, document started with "## Description"
 **Root Cause:**
 1. GET cover has "Cellular/Ethernet communicator GET" (slash in name)
-2. `strip-cover.lua` didn't recognize this pattern
+2. `lua-filters/strip-cover.lua` didn't recognize this pattern
 3. `promote-strong-top.lua` never saw the product name
 
 ### Problem 3: Manual Format Variations
@@ -78,7 +78,7 @@ end
 - "Cellular/Ethernet communicator GET" → "# GET Cellular Communicator"
 - "Ethernet communicator E16T" → "# E16T Ethernet Communicator"
 
-### 3. Enhanced `strip-cover.lua`
+### 3. Enhanced `lua-filters/strip-cover.lua`
 
 **New Capabilities:**
 - Broader pattern matching for product names
@@ -131,7 +131,7 @@ The communicator is designed to...
 
 1. `/Users/local/projects/knowledgebase-conversion-pipeline/strip-toc.lua`
 2. `/Users/local/projects/knowledgebase-conversion-pipeline/promote-strong-top.lua`
-3. `/Users/local/projects/knowledgebase-conversion-pipeline/strip-cover.lua`
+3. `/Users/local/projects/knowledgebase-conversion-pipeline/lua-filters/strip-cover.lua`
 
 ## Technical Details
 
@@ -192,8 +192,8 @@ If issues occur, document the pattern and update filters.
 These improvements are automatic - no changes needed to conversion workflow:
 
 ```bash
-# Just run convert-single.sh as normal
-./convert-single.sh "path/to/manual.docx"
+# Just run scripts/convert-single.sh as normal
+./scripts/convert-single.sh "path/to/manual.docx"
 
 # Filters now handle GET, GT, GT+, and future product variations
 ```

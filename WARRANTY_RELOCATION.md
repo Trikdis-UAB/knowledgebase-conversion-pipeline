@@ -6,7 +6,7 @@ The `relocate-warranty.lua` filter automatically preserves warranty and safety r
 
 ## Problem Solved
 
-All TRIKDIS product manuals contain warranty/limitation of liability content after the TOC but before the main content chapters. Without this filter, these sections were being stripped by the `strip-cover.lua` filter along with the TOC and cover page.
+All TRIKDIS product manuals contain warranty/limitation of liability content after the TOC but before the main content chapters. Without this filter, these sections were being stripped by the `lua-filters/strip-cover.lua` filter along with the TOC and cover page.
 
 ## Warranty Section Patterns
 
@@ -73,12 +73,12 @@ The filter automatically detects warranty sections in all supported languages:
 3. Result: Warranty section appears as final H2 chapter at bottom
 
 ### Pipeline Integration
-The filter runs FIRST in the conversion pipeline (line 42 in `convert-single.sh`), before `strip-cover.lua`:
+The filter runs FIRST in the conversion pipeline (line 42 in `scripts/convert-single.sh`), before `lua-filters/strip-cover.lua`:
 
 ```bash
---lua-filter="$SCRIPT_DIR/relocate-warranty.lua" \  # Line 42 - FIRST
---lua-filter="$SCRIPT_DIR/strip-cover.lua" \        # Line 43
---lua-filter="$SCRIPT_DIR/strip-toc.lua" \          # Line 44
+--lua-filter="$FILTER_DIR/relocate-warranty.lua" \  # Line 42 - FIRST
+--lua-filter="$FILTER_DIR/strip-cover.lua" \        # Line 43
+--lua-filter="$FILTER_DIR/strip-toc.lua" \          # Line 44
 # ... rest of filters
 ```
 
@@ -98,15 +98,15 @@ The filter runs FIRST in the conversion pipeline (line 42 in `convert-single.sh`
 - **relocate-warranty.lua** - Main filter that detects, extracts, and relocates warranty sections
 
 ### Modified Files
-- **convert-single.sh** - Added relocate-warranty.lua as first filter (line 42)
-- **check-requirements.sh** - Added relocate-warranty.lua to filter check list
+- **scripts/convert-single.sh** - Added relocate-warranty.lua as first filter (line 42)
+- **scripts/check-requirements.sh** - Added relocate-warranty.lua to filter check list
 
 ## Testing
 
 ### Manual Testing
 Test with any TRIKDIS manual:
 ```bash
-./convert-single.sh "path/to/manual.docx"
+./scripts/convert-single.sh "path/to/manual.docx"
 # Check last section of output - should be warranty/safety requirements
 ```
 
@@ -124,13 +124,13 @@ Test with any TRIKDIS manual:
 ### Issue: Warranty section not appearing
 **Cause:** Filter not running or warranty text doesn't match patterns
 **Solution:**
-1. Check filter is in pipeline: `grep relocate-warranty convert-single.sh`
+1. Check filter is in pipeline: `grep relocate-warranty scripts/convert-single.sh`
 2. Verify warranty text matches patterns in relocate-warranty.lua
 3. Check manual's warranty section is bold paragraph (not heading)
 
 ### Issue: Warranty appearing in wrong location
 **Cause:** Filter running too late in pipeline
-**Solution:** Ensure relocate-warranty.lua runs BEFORE strip-cover.lua
+**Solution:** Ensure relocate-warranty.lua runs BEFORE lua-filters/strip-cover.lua
 
 ### Issue: Warranty content truncated
 **Cause:** "Description" heading detection stopping collection too early

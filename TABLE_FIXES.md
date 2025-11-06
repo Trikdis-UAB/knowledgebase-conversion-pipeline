@@ -151,7 +151,7 @@ The fixes work in this sequence during conversion:
 
 ## Related Files
 
-- `convert-single.sh` - Disabled `flatten-rowspan.lua` filter (line 51)
+- `scripts/convert-single.sh` - Disabled `flatten-rowspan.lua` filter (line 51)
 - `flatten-rowspan.lua` - No longer used in pipeline
 - `TABLE_STRUCTURE_FIX.md` - Documents earlier table fixes
 - `GITHUB_ALERTS_CONFIG.md` - MkDocs configuration for alerts
@@ -164,7 +164,7 @@ To test table conversion:
 cd /Users/local/projects/knowledgebase-conversion-pipeline
 
 # Convert a manual
-env OUT_DIR="/tmp/test-tables" ./convert-single.sh "path/to/manual.docx"
+env OUT_DIR="/tmp/test-tables" ./scripts/convert-single.sh "path/to/manual.docx"
 
 # Check table format
 grep -A 10 "| Parameter |" /tmp/test-tables/*/index.md
@@ -238,7 +238,7 @@ In the PDF, models like "PC585", "SPECTRA SP4000", etc. are underlined to indica
 Pandoc's GFM (GitHub Flavored Markdown) writer **strips HTML tags from table cells** when creating pipe tables. Even though `convert-underline.lua` converts `Underline` AST elements to `<u>` tags, these get removed when Pandoc outputs pipe tables.
 
 ### Fix
-**Files**: `convert-underline.lua` and `convert-single.sh` (line 199)
+**Files**: `convert-underline.lua` and `scripts/convert-single.sh` (line 199)
 
 Implemented a **marker-based approach** that works for any underlined text in any table:
 
@@ -250,7 +250,7 @@ Implemented a **marker-based approach** that works for any underlined text in an
    end
    ```
 
-2. **Post-processing** (convert-single.sh): Convert markers to HTML after pipe tables are created:
+2. **Post-processing** (scripts/convert-single.sh): Convert markers to HTML after pipe tables are created:
    ```bash
    sed -i '' 's/⟪U⟫/<u>/g; s/⟪\/U⟫/<\/u>/g' index.md
    ```

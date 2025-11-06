@@ -44,12 +44,12 @@ Convert TRIKDIS product manuals from .docx to clean Markdown for MkDocs and Typo
 ### Convert Single File
 ```bash
 cd /Users/local/projects/knowledgebase-conversion-pipeline
-./convert-single.sh "path/to/manual.docx"
+./scripts/convert-single.sh "path/to/manual.docx"
 ```
 
 ### Preview Converted Manuals
 ```bash
-./preview.sh
+./scripts/preview.sh
 ```
 - Syncs latest mkdocs.yml from trikdis-docs
 - Serves on http://127.0.0.1:8001
@@ -82,10 +82,10 @@ docs/manuals/[Manual Name]/
 ### Prerequisites
 - Pandoc installed via Homebrew
 - All 23 Lua filters present
-- Check with: `./check-requirements.sh`
+- Check with: `./scripts/check-requirements.sh`
 
 ### Batch Conversion
-- `convert-batch.sh` calls `convert-single.sh` for each file
+- `scripts/convert-batch.sh` calls `scripts/convert-single.sh` for each file
 - Ensures identical output quality and consistency
 - No duplication of conversion logic
 
@@ -102,7 +102,7 @@ docs/manuals/[Manual Name]/
 ## Processing Pipeline
 
 ### Lua Filters (Applied in Order)
-1. `strip-cover.lua` - Remove cover pages (preserve product name for title generation)
+1. `lua-filters/strip-cover.lua` - Remove cover pages (preserve product name for title generation)
 2. `strip-toc.lua` - Remove Table of Contents
 3. `promote-strong-top.lua` - Extract product name and create H1 title (e.g., "GT+ Cellular Communicator")
 4. `flatten-two-cell-tables.lua` - Flatten simple tables

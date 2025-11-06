@@ -39,7 +39,7 @@ Convert product manuals from **.docx** to clean **Markdown** with correct headin
 The pipeline applies 36 Lua filters to clean and normalize Word documents:
 
 1. **relocate-warranty.lua**: Relocates warranty/safety sections from beginning to end of document (supports multiple consecutive sections as separate H2 headings)
-2. **strip-cover.lua**: Removes cover page content but preserves product name (e.g., "Cellular communicator GT+") for title generation
+2. **lua-filters/strip-cover.lua**: Removes cover page content but preserves product name (e.g., "Cellular communicator GT+") for title generation
 3. **strip-toc.lua**: Removes Word's Table of Contents sections
 4. **promote-strong-top.lua**: Extracts product name from bold text and creates H1 title in format "[MODEL] Product Type" (supports Cellular Communicator, Gate Controller, Control Panel, Alarm Panel)
 5. **map-docx-heading-levels.lua**: Maps DOCX Word style classes to correct markdown heading levels (H1→H2, H2→H3, H3→H4)
@@ -77,27 +77,27 @@ The pipeline applies 36 Lua filters to clean and normalize Word documents:
 
 ## Quick Start
 
-1. **Check requirements**: `./check-requirements.sh`
-2. **Find latest manual**: `./find-latest-manual.sh "/Volumes/TRIKDIS/PRODUKTAI/GT"`
-3. **Convert single file**: `./convert-single.sh "filename.docx"`
-4. **Preview locally**: `./preview.sh` (serves on http://127.0.0.1:8001)
-5. **Convert all files**: `./convert-batch.sh`
+1. **Check requirements**: `./scripts/check-requirements.sh`
+2. **Find latest manual**: `./scripts/find-latest-manual.sh "/Volumes/TRIKDIS/PRODUKTAI/GT"`
+3. **Convert single file**: `./scripts/convert-single.sh "filename.docx"`
+4. **Preview locally**: `./scripts/preview.sh` (serves on http://127.0.0.1:8001)
+5. **Convert all files**: `./scripts/convert-batch.sh`
 
 ---
 
 ## Finding Latest Manuals
 
-Use the `find-latest-manual.sh` script to locate the most recent manual for a product:
+Use the `scripts/find-latest-manual.sh` helper to locate the most recent manual for a product:
 
 ```bash
 # Find latest GT manual
-./find-latest-manual.sh "/Volumes/TRIKDIS/PRODUKTAI/GT"
+./scripts/find-latest-manual.sh "/Volumes/TRIKDIS/PRODUKTAI/GT"
 
 # Find latest GT+ manual
-./find-latest-manual.sh "/Volumes/TRIKDIS/PRODUKTAI/GT+"
+./scripts/find-latest-manual.sh "/Volumes/TRIKDIS/PRODUKTAI/GT+"
 
 # Find latest GET manual
-./find-latest-manual.sh "/Volumes/TRIKDIS/PRODUKTAI/GET"
+./scripts/find-latest-manual.sh "/Volumes/TRIKDIS/PRODUKTAI/GET"
 ```
 
 The script:
@@ -113,7 +113,7 @@ The script:
 
 **Use in conversion:**
 ```bash
-./convert-single.sh "$(./find-latest-manual.sh /Volumes/TRIKDIS/PRODUKTAI/GT)"
+./scripts/convert-single.sh "$(./scripts/find-latest-manual.sh /Volumes/TRIKDIS/PRODUKTAI/GT)"
 ```
 
 ---
@@ -121,7 +121,7 @@ The script:
 ## Single-file Conversion
 
 ```bash
-./convert-single.sh "docx manuals/GT UM_ENG_2024 08 08-.docx"
+./scripts/convert-single.sh "docx manuals/GT UM_ENG_2024 08 08-.docx"
 ```
 
 This creates:
@@ -139,7 +139,7 @@ Perfect for:
 Preview converted manuals exactly as they will appear when published:
 
 ```bash
-./preview.sh
+./scripts/preview.sh
 ```
 
 This script:
@@ -155,12 +155,12 @@ This script:
 ## Batch Conversion
 
 ```bash
-./convert-batch.sh
+./scripts/convert-batch.sh
 ```
 
 Converts all `.docx` files in current directory and `docx manuals/` subdirectory.
 
-**Note:** The batch script calls `convert-single.sh` for each file, ensuring identical output quality and consistency.
+**Note:** The batch script calls `scripts/convert-single.sh` for each file, ensuring identical output quality and consistency.
 
 ---
 
@@ -252,7 +252,7 @@ After converting a DOCX manual, follow this workflow to publish it to https://do
 ### 1. Convert the DOCX
 ```bash
 cd /Users/local/projects/knowledgebase-conversion-pipeline
-./convert-single.sh "docx manuals/your-manual.docx"
+./scripts/convert-single.sh "docx manuals/your-manual.docx"
 ```
 This creates: `docs/manuals/your-manual/index.md` (with images)
 
@@ -308,51 +308,48 @@ The GitHub Actions workflow automatically:
 ```
 knowledgebase-conversion-pipeline/
 ├── README.md                    # This documentation
-├── check-requirements.sh        # Verify all tools are installed
-├── convert-single.sh           # Convert single DOCX → folder/index.md
-├── convert-batch.sh            # Convert all DOCX files
+├── lua-filters/                # Pandoc Lua filters used by the conversion pipeline
+│   ├── strip-cover.lua                      # Remove cover pages (preserve product name)
+│   ├── strip-toc.lua                        # Remove Table of Contents
+│   ├── promote-strong-top.lua               # Extract product name, create H1 (supports gate controllers)
+│   ├── map-docx-heading-levels.lua          # Map DOCX styles to heading levels
+│   ├── fix-numbered-heading-levels.lua      # Fix numbered heading levels
+│   ├── flatten-two-cell-tables.lua          # Flatten simple tables
+│   ├── flatten-instruction-tables.lua       # Flatten multi-row instruction tables
+│   ├── unwrap-table-blockquotes.lua         # Remove blockquote wrappers from table cells
+│   ├── convert-image-tables.lua             # Convert image-only tables to CSS grids (NEW)
+│   ├── fix-rowspan-headers.lua              # Fix malformed rowspan table headers
+│   ├── normalize-headings.lua               # Fix heading levels for numbered sections
+│   ├── strip-manual-heading-numbers.lua     # Remove manual heading numbers
+│   ├── move-first-image-to-description.lua  # Position first image
+│   ├── split-inline-images.lua              # Separate inline images
+│   ├── convert-image-sizes.lua              # Convert image sizes to HTML/CSS
+│   ├── softwrap-tokens.lua                  # Handle text wrapping
+│   ├── remove-empty-table-columns.lua       # Remove empty separator columns from tables
+│   ├── clean-table-pipes.lua                # Fix table pipe characters
+│   ├── mark-two-col.lua                     # Mark two-column tables
+│   ├── convert-underline.lua                # Convert underline formatting
+│   ├── convert-blockquote-headings.lua      # Convert blockquote headings to proper headers (NEW)
+│   ├── remove-unwanted-blockquotes.lua      # Remove spurious blockquotes and feature descriptions
+│   ├── maintain-list-continuity.lua         # Fix numbered list continuity
+│   ├── strip-classes.lua                    # Remove Word styling classes
+│   ├── fix-typography.lua                   # Fix apostrophes, quotes, empty bold formatting
+│   ├── fix-html-tags.lua                    # Convert HTML sub/sup to bracketed format (NEW)
+│   ├── fix-crossrefs.lua                    # Fix broken cross-references
+│   ├── fix-admonition-lists.lua             # Fix broken list numbering in admonitions (NEW)
+│   ├── remove-standalone-asterisks.lua      # Remove standalone **** markers
+│   ├── clean-html-blocks.lua                # Clean HTML blocks
+│   └── remove-table-widths.lua              # Remove table widths and merge multi-line cells
 │
-├── Lua Filters (43 total):
-├── strip-cover.lua                      # Remove cover pages (preserve product name)
-├── strip-toc.lua                        # Remove Table of Contents
-├── promote-strong-top.lua               # Extract product name, create H1 (supports gate controllers)
-├── map-docx-heading-levels.lua          # Map DOCX styles to heading levels
-├── fix-numbered-heading-levels.lua      # Fix numbered heading levels
-├── flatten-two-cell-tables.lua          # Flatten simple tables
-├── flatten-instruction-tables.lua       # Flatten multi-row instruction tables
-├── unwrap-table-blockquotes.lua         # Remove blockquote wrappers from table cells
-├── convert-image-tables.lua             # Convert image-only tables to CSS grids (NEW)
-├── fix-rowspan-headers.lua              # Fix malformed rowspan table headers
-├── normalize-headings.lua               # Fix heading levels for numbered sections
-├── strip-manual-heading-numbers.lua     # Remove manual heading numbers
-├── move-first-image-to-description.lua  # Position first image
-├── split-inline-images.lua              # Separate inline images
-├── convert-image-sizes.lua              # Convert image sizes to HTML/CSS
-├── softwrap-tokens.lua                  # Handle text wrapping
-├── remove-empty-table-columns.lua       # Remove empty separator columns from tables
-├── clean-table-pipes.lua                # Fix table pipe characters
-├── mark-two-col.lua                     # Mark two-column tables
-├── convert-underline.lua                # Convert underline formatting
-├── convert-blockquote-headings.lua      # Convert blockquote headings to proper headers (NEW)
-├── remove-unwanted-blockquotes.lua      # Remove spurious blockquotes and feature descriptions
-├── maintain-list-continuity.lua         # Fix numbered list continuity
-├── strip-classes.lua                    # Remove Word styling classes
-├── fix-typography.lua                   # Fix apostrophes, quotes, empty bold formatting
-├── fix-html-tags.lua                    # Convert HTML sub/sup to bracketed format (NEW)
-├── fix-crossrefs.lua                    # Fix broken cross-references
-├── fix-admonition-lists.lua             # Fix broken list numbering in admonitions (NEW)
-├── remove-standalone-asterisks.lua      # Remove standalone **** markers
-├── clean-html-blocks.lua                # Clean HTML blocks
-├── remove-table-widths.lua              # Remove table widths and merge multi-line cells
-│
-├── Python Post-processors:
-├── html-tables-to-pipes.py              # Convert HTML tables to pipe tables
-├── fix_table_structure.py               # Fix table structure issues
-├── normalize-callouts.py                # Normalize callouts
-├── fix-relative-images.py               # Fix image paths
-├── fix_admonitions.py                   # Fix admonition formatting
-├── fix-list-continuity.py               # Fix list continuity
-├── reduce-spacing.py                    # Reduce excessive spacing
+├── scripts/                    # Conversion and utility scripts (Bash + Python)
+│   ├── convert-single.sh           # Convert single DOCX → folder/index.md
+│   ├── convert-batch.sh            # Convert all DOCX files
+│   ├── check-requirements.sh       # Verify all tools are installed
+│   ├── publish.sh                  # Copy manual into trikdis-docs
+│   ├── preview.sh                  # Symlink manuals into trikdis-docs WIP section
+│   ├── add-app-store-buttons.py    # Inject App Store buttons into markdown
+│   ├── diagnose-gap.py             # Inspect conversion gaps versus markdown
+│   └── … (see directory for additional helpers and post-processors)
 │
 ├── docs/
 │   ├── assets/
@@ -825,7 +822,7 @@ The automatic gate... it activates the controller's 1IN input...
 - **Problem**: Text showed " / " between sentences instead of proper paragraph breaks
 - **Example**: "All wiring... / The purposes and voltages..."
 - **Root Cause**: Filter order - `remove-table-widths.lua` ran before `flatten-two-cell-tables.lua`
-- **Fix**: Swapped filter order in convert-single.sh (line 50 vs 52)
+- **Fix**: Swapped filter order in scripts/convert-single.sh (line 50 vs 52)
 - **Result**: Clean paragraph breaks throughout section 2.5
 
 **Section 2.5 Specific Enhancements:**
@@ -834,9 +831,9 @@ The automatic gate... it activates the controller's 1IN input...
 - Result matches PDF source structure exactly
 
 **Files Modified:**
-- `filters/flatten-two-cell-tables.lua` - Fixed Pandoc API syntax bug (line 123)
+- `lua-filters/flatten-two-cell-tables.lua` - Fixed Pandoc API syntax bug (line 123)
 - `move-first-image-to-description.lua` - Only remove first (cover) image, not all images
-- `convert-single.sh` - Swapped filter order, added section 2.5 formatting commands
+- `scripts/convert-single.sh` - Swapped filter order, added section 2.5 formatting commands
 
 **Verification:**
 - ✅ Section 2.5 first sentence bold
@@ -863,7 +860,7 @@ Archived 10 unused Lua filters to reduce clutter and clarify which filters are a
   - `clean-table-blockquotes.lua` → replaced by `unwrap-table-blockquotes.lua`
   - `fix-rowspan-tables.lua`, `flatten-rowspan.lua` → replaced by `fix-rowspan-headers.lua`
   - `flatten-numbered-list-tables.lua` → functionality merged into other filters
-  - `flatten-two-cell-tables.lua` → duplicate (version in `filters/` subdirectory is used)
+  - `flatten-two-cell-tables.lua` → duplicate (version in `lua-filters/` directory is used)
 - Experimental filters never used: 2 filters
   - `extract-table-images.lua` (4664 bytes)
   - `force-markdown-tables.lua` (1988 bytes)
@@ -889,7 +886,7 @@ See `archive/unused-filters/README.md` for details about each archived filter.
 - **Problem**: GET manual showed two identical cover images after H1 title
 - **Root Cause**: Both `move-first-image-to-description.lua` filter AND sed command were creating centered images
 - **Fix Applied**:
-  - Disabled conflicting sed command (line 101 in convert-single.sh)
+  - Disabled conflicting sed command (line 101 in scripts/convert-single.sh)
   - Enhanced Lua filter to remove ALL images before Description heading
   - Added `remove-duplicate-cover-images.py` as safety net for edge cases
 - **Result**: Only ONE cover image appears after H1 title (all future manuals)
@@ -906,7 +903,7 @@ See `archive/unused-filters/README.md` for details about each archived filter.
 - NEW: `bold-list-titles.lua` - Automatic bold formatting for list titles
 - NEW: `remove-duplicate-cover-images.py` - Safety net for duplicate images
 - MODIFIED: `move-first-image-to-description.lua` - Enhanced to remove all cover images
-- MODIFIED: `convert-single.sh` - Disabled conflicting sed, added new filters
+- MODIFIED: `scripts/convert-single.sh` - Disabled conflicting sed, added new filters
 
 **Tested With:**
 - GET Manual: Duplicate image removed ✅
@@ -939,7 +936,7 @@ See `archive/unused-filters/README.md` for details about each archived filter.
 
 **Filters Updated:**
 - `move-first-image-to-description.lua` - Now checks H1 or H2 for Description heading
-- `strip-cover.lua` - Preserves cover image for positioning
+- `lua-filters/strip-cover.lua` - Preserves cover image for positioning
 - `strip-toc.lua` - Fixed H1 recognition for SP3-style Table of Contents
 
 **Pipeline Updated:**
@@ -1045,7 +1042,7 @@ All filters designed to work with:
 **Issue 3 - Warranty/Safety Section Removal**: Warranty and safety requirement sections were being removed with cover page instead of relocated.
 
 **Solution**: Activated `relocate-warranty.lua` filter
-- Runs FIRST in pipeline (before strip-cover.lua)
+- Runs FIRST in pipeline (before lua-filters/strip-cover.lua)
 - Extracts warranty/safety sections from beginning of document
 - Relocates to bottom, BEFORE Annex section (if present)
 - Falls back to end of document if no Annex
@@ -1088,7 +1085,7 @@ All filters designed to work with:
 **Files Modified**:
 - `html-tables-to-pipes.py` - Fixed rowspan column handling
 - `expand-multi-state-tables.py` - New script to expand multi-state rows
-- `convert-single.sh` - Integrated expand script into pipeline
+- `scripts/convert-single.sh` - Integrated expand script into pipeline
 
 ### October 9, 2025 - Table Conversion Fixes (5 Issues Resolved)
 
@@ -1160,14 +1157,14 @@ All filters designed to work with:
 - ✅ **Automatic title generation**: Extracts product name from DOCX cover page (e.g., "Cellular communicator GT+")
 - ✅ **Smart H1 creation**: Creates H1 title in format "[MODEL] Cellular Communicator" (e.g., "GT+ Cellular Communicator")
 - ✅ **Product image formatting**: Centers first image with consistent width (400px) after H1 title
-- ✅ **Updated filters**: `strip-cover.lua` preserves product name, `promote-strong-top.lua` extracts and transforms it
+- ✅ **Updated filters**: `lua-filters/strip-cover.lua` preserves product name, `promote-strong-top.lua` extracts and transforms it
 - ✅ **Works for all products**: GT, GT+, and future models automatically get correct titles
 
 ### September 2024 - Core Pipeline
 - ✅ Per-manual folder structure with index.md
 - ✅ Images in same folder for Typora compatibility
 - ✅ 19 Lua filters for comprehensive cleanup
-- ✅ Batch script refactored to use convert-single.sh for consistency
+- ✅ Batch script refactored to use scripts/convert-single.sh for consistency
 - ✅ **Image size fix**: Convert Pandoc `{width=...}` to HTML with CSS for browser compatibility
 - ✅ MkDocs Material admonitions support
 - ✅ Typography scaling CSS

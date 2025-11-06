@@ -26,7 +26,7 @@ Add to your Pandoc command:
 pandoc input.md --lua-filter=maintain-list-continuity.lua -o output.md
 ```
 
-### In convert-single.sh
+### In scripts/convert-single.sh
 The filter is already integrated in the conversion pipeline:
 ```bash
 pandoc "$input_file" \
@@ -116,7 +116,7 @@ Test cases include:
 
 ## Files
 - **Filter**: `maintain-list-continuity.lua`
-- **Integration**: `convert-single.sh`
+- **Integration**: `scripts/convert-single.sh`
 - **Tests**: `test-edge-cases.md`
 - **Documentation**: This file
 

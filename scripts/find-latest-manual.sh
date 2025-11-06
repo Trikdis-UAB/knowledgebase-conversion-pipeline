@@ -1,6 +1,6 @@
 #!/bin/bash
 # Find the latest manual in a product directory
-# Usage: ./find-latest-manual.sh "/Volumes/TRIKDIS/PRODUKTAI/GT"
+# Usage: ./scripts/find-latest-manual.sh "/Volumes/TRIKDIS/PRODUKTAI/GT"
 
 if [ $# -eq 0 ]; then
   echo "Usage: $0 <product_directory>"

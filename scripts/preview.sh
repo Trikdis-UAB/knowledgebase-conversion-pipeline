@@ -5,6 +5,7 @@ set -euo pipefail
 # Keeps converted manuals separate from production content
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 TRIKDIS_DOCS="/Users/local/projects/trikdis-docs/manuals"
 WIP_DIR="$TRIKDIS_DOCS/docs/wip"
 
@@ -23,14 +24,14 @@ mkdir -p "$WIP_DIR"
 
 # Create symlink from conversion pipeline docs to trikdis-docs WIP
 # This way we don't copy files - they stay in the pipeline
-if [ -d "$SCRIPT_DIR/docs/manuals" ]; then
-  for manual_dir in "$SCRIPT_DIR/docs/manuals"/*; do
+if [ -d "$ROOT_DIR/docs/manuals" ]; then
+  for manual_dir in "$ROOT_DIR/docs/manuals"/*; do
     if [ -d "$manual_dir" ]; then
       manual_name=$(basename "$manual_dir")
       ln -s "$manual_dir" "$WIP_DIR/$manual_name"
     fi
   done
-  manual_count=$(ls -1 "$SCRIPT_DIR/docs/manuals" | wc -l)
+  manual_count=$(ls -1 "$ROOT_DIR/docs/manuals" | wc -l)
   echo "   Linked $manual_count manual(s) to WIP"
 else
   echo "   No manuals found to preview"

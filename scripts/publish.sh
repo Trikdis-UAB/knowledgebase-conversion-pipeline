@@ -2,20 +2,21 @@
 set -euo pipefail
 
 # Publish a converted manual to trikdis-docs
-# Usage: ./publish.sh "GT+ UM_ENG_2025 09 11" "en/alarm-communicators/gt-plus"
+# Usage: ./scripts/publish.sh "GT+ UM_ENG_2025 09 11" "en/alarm-communicators/gt-plus"
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 TRIKDIS_DOCS="/Users/local/projects/trikdis-docs/manuals"
 
 if [ $# -ne 2 ]; then
-  echo "Usage: ./publish.sh \"MANUAL_NAME\" \"DESTINATION_PATH\""
+  echo "Usage: ./scripts/publish.sh \"MANUAL_NAME\" \"DESTINATION_PATH\""
   echo ""
   echo "Example:"
-  echo "  ./publish.sh \"GT+ UM_ENG_2025 09 11\" \"en/alarm-communicators/gt-plus\""
+  echo "  ./scripts/publish.sh \"GT+ UM_ENG_2025 09 11\" \"en/alarm-communicators/gt-plus\""
   echo ""
   echo "Available manuals:"
-  if [ -d "$SCRIPT_DIR/docs/manuals" ]; then
-    ls -1 "$SCRIPT_DIR/docs/manuals"
+  if [ -d "$ROOT_DIR/docs/manuals" ]; then
+    ls -1 "$ROOT_DIR/docs/manuals"
   fi
   exit 1
 fi
@@ -23,7 +24,7 @@ fi
 MANUAL_NAME="$1"
 DEST_PATH="$2"
 
-SOURCE_DIR="$SCRIPT_DIR/docs/manuals/$MANUAL_NAME"
+SOURCE_DIR="$ROOT_DIR/docs/manuals/$MANUAL_NAME"
 DEST_DIR="$TRIKDIS_DOCS/docs/$DEST_PATH"
 
 # Check if source exists
@@ -31,7 +32,7 @@ if [ ! -d "$SOURCE_DIR" ]; then
   echo "❌ Manual not found: $SOURCE_DIR"
   echo ""
   echo "Available manuals:"
-  ls -1 "$SCRIPT_DIR/docs/manuals"
+  ls -1 "$ROOT_DIR/docs/manuals"
   exit 1
 fi
 

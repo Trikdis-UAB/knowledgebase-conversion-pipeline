@@ -31,9 +31,9 @@ These filters were replaced by improved versions:
    - Early rowspan flattening attempt
    - New version provides cleaner output
 
-7. **flatten-two-cell-tables.lua** → Replaced by `filters/flatten-two-cell-tables.lua`
-   - Duplicate filter (moved to filters/ subdirectory)
-   - The version in filters/ is used
+7. **flatten-two-cell-tables.lua** → Replaced by `lua-filters/flatten-two-cell-tables.lua`
+   - Duplicate filter (now lives in lua-filters/ directory)
+   - The version in lua-filters/ is used
 
 8. **unwrap-post-image-blockquotes.lua** → Functionality merged
    - Experimental blockquote unwrapping
@@ -62,7 +62,7 @@ These filters are archived rather than deleted because they:
 
 The active conversion pipeline uses **35 Lua filters** located in:
 - Main directory: 33 filters
-- `filters/` subdirectory: 2 filters
+- `lua-filters/` directory: 2 filters
 
 Plus **13 Python post-processors** for a total of **48 active filters**.
 

@@ -98,7 +98,7 @@ image25.png:
 
 ### Gate Controller Support Added
 - ✅ Added pattern to promote-strong-top.lua (line 85-90)
-- ✅ Added sed pattern to convert-single.sh (line 158)
+- ✅ Added sed pattern to scripts/convert-single.sh (line 158)
 - ✅ Gator manual now has proper H1 title and cover image
 
 ### GET Image Split Issue Fixed
