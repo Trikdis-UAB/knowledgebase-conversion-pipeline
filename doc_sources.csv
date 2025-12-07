@@ -55,7 +55,26 @@ Controllers,GATOR_WIFI,GATOR WiFi Gate Controller,en,/Volumes/TRIKDIS/PRODUKTAI/
 Valdikliai,GATOR_WIFI,Gator Wifi,lt,/Volumes/TRIKDIS/PRODUKTAI/Gator WiFi/_LT/Gator WiFI_UM_LT_2025 03 25.docx,2025-10-30,
 Controladores,GATOR_WIFI,Gator Wifi,es,/Volumes/TRIKDIS/PRODUKTAI/Gator WiFi/_ESP/Gator WiFi_UM_ESP_2025 03 25.docx,2025-10-30,
 Контроллеры,GATOR_WIFI,Wi-Fi контроллер GATOR,ru,/Volumes/TRIKDIS/PRODUKTAI/Gator WiFi/_RU/Gator WiFi_UM_RU_2025 03 25.docx,2025-10-30,
-Future,TODO_KEYPADS,Keypads,,,2025-10-30,"Inventory needed: e.g., SK LCD, SK LED, wireless keypad"
+Keypads,SK_LCD_BUTTON,Keypad SK-LCD Button,en,/Volumes/TRIKDIS/PRODUKTAI/SK LCD Button/_ENG/SK-LCD button_UM_ENG 2025 01 29.docx,2025-11-06,Latest revision 2025-01-29
+Klaviatūros,SK_LCD_BUTTON,SK-LCD mygtukinė klaviatūra,lt,/Volumes/TRIKDIS/PRODUKTAI/SK LCD Button/_LT/SK-LCD button_UM_LT 2025 01 29.docx,2025-11-06,Naujausia versija 2025-01-29
+Teclados,SK_LCD_BUTTON,Teclado SK-LCD Button,es,/Volumes/TRIKDIS/PRODUKTAI/SK LCD Button/_ESP/SK-LCD button_UM_ESP 2025 01 29.docx,2025-11-06,Última revisión 2025-01-29
+Клавиатуры,SK_LCD_BUTTON,Клавиатура SK-LCD Button,ru,/Volumes/TRIKDIS/PRODUKTAI/SK LCD Button/_RU/SK-LCD button_UM_RU 2025 01 29.docx,2025-11-06,Актуальная версия 2025-01-29
+Keypads,SK_LED_BUTTON,Keypad SK-LED Button,en,/Volumes/TRIKDIS/PRODUKTAI/SK LED Button/_ENG/SK-LED button_UM_ENG 2024 07 08.docx,2025-11-06,Latest revision 2024-07-08
+Klaviatūros,SK_LED_BUTTON,SK-LED Button klaviatūra,lt,/Volumes/TRIKDIS/PRODUKTAI/SK LED Button/_LT/SK-LED button_UM_LT 2024 07 08.docx,2025-11-06,Naujausia versija 2024-07-08
+Teclados,SK_LED_BUTTON,Teclado SK-LED Button,es,/Volumes/TRIKDIS/PRODUKTAI/SK LED Button/_ESP/SK-LED button_UM_ESP 2024 07 09.docx,2025-11-06,Última revisión 2024-07-09
+Клавиатуры,SK_LED_BUTTON,Клавиатура SK-LED Button,ru,/Volumes/TRIKDIS/PRODUKTAI/SK LED Button/_RU/SK-LED button_UM_RU 2024 07 08.docx,2025-11-06,Актуальная версия 2024-07-08
+Keypads,FLEXI_SK_LCD,Keypad FLEXi SK LCD,en,/Volumes/TRIKDIS/PRODUKTAI/SK-LCD TouchPad/_EN/SK-LCD TouchPad_UM_ENG 2024 11 19.docx,2025-11-06,Latest revision 2024-11-19
+Klaviatūros,FLEXI_SK_LCD,Klaviatūra FLEXi SK LCD,lt,/Volumes/TRIKDIS/PRODUKTAI/SK-LCD TouchPad/_LT/SK-LCD TouchPad_UM_LT 2024 11 19.docx,2025-11-06,Naujausia versija 2024-11-19
+Teclados,FLEXI_SK_LCD,Teclado FLEXi SK LCD,es,/Volumes/TRIKDIS/PRODUKTAI/SK-LCD TouchPad/_ESP/SK-LCD TouchPad_UM_ESP 2024 11 19.docx,2025-11-06,Última revisión 2024-11-19
+Клавиатуры,FLEXI_SK_LCD,Клавиатура FLEXi SK LCD,ru,/Volumes/TRIKDIS/PRODUKTAI/SK-LCD TouchPad/_RU/SK-LCD TouchPad_UM_RU 2024 11 19.docx,2025-11-06,Актуальная версия 2024-11-19
+Keypads,FLEXI_SK_LED,Keypad FLEXi SK LED,en,/Volumes/TRIKDIS/PRODUKTAI/SK-LED TouchPad/_ENG/SK-LED TouchPad_UM_ENG 2024 05 24.docx,2025-11-06,Latest revision 2024-05-24
+Klaviatūros,FLEXI_SK_LED,Klaviatūra FLEXi SK LED,lt,/Volumes/TRIKDIS/PRODUKTAI/SK-LED TouchPad/_LT/SK-LED TouchPad_UM_LT 2024 05 24.docx,2025-11-06,Naujausia versija 2024-05-24
+Teclados,FLEXI_SK_LED,Teclado FLEXi SK LED,es,/Volumes/TRIKDIS/PRODUKTAI/SK-LED TouchPad/_ES/SK-LED TouchPad_UM_ESP 2024 05 24.docx,2025-11-06,Última revisión 2024-05-24
+Клавиатуры,FLEXI_SK_LED,Клавиатура FLEXi SK LED,ru,,2025-11-06,RU source not located in SK-LED TouchPad directory
+Keypads,SH_KP,Wireless keypad SH KP,en,,2025-11-06,Pending source path
+Klaviatūros,SH_KP,Belaidė klaviatūra SH KP,lt,,2025-11-06,Pending source path
+Teclados,SH_KP,Teclado inalámbrico SH KP,es,,2025-11-06,Pending source path
+Клавиатуры,SH_KP,Беспроводная клавиатура SH KP,ru,,2025-11-06,Pending source path
 Future,TODO_SENSORS,Wireless sensors,,,2025-10-30,Large catalog; identify manuals
 Future,TODO_RECEIVERS,Receivers,,,2025-10-30,Inventory needed
 Future,TODO_MONITORING,Monitoring software,,,2025-10-30,Check IPcom Linux/Windows manuals

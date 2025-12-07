@@ -329,6 +329,9 @@ def process_markdown_file(filepath):
 
     def replace_table(match):
         html_table = match.group(0)
+        if 'data-keypad-table' in html_table:
+            # Leave keypad-layout tables untouched for specialized handling
+            return html_table
         pipe_table = convert_html_table_to_pipe(html_table)
         return pipe_table if pipe_table != html_table else html_table
 

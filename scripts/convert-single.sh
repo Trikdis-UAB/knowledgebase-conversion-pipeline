@@ -50,9 +50,13 @@ pandoc "$inp" \
   --lua-filter="$FILTER_DIR/demote-extra-h1.lua" \
   --lua-filter="$FILTER_DIR/remove-table-widths.lua" \
   --lua-filter="$FILTER_DIR/convert-warning-tables.lua" \
+  --lua-filter="$FILTER_DIR/collapse-spacer-columns.lua" \
+  --lua-filter="$FILTER_DIR/convert-keypad-layout.lua" \
+  --lua-filter="$FILTER_DIR/promote-keypad-headings.lua" \
   --lua-filter="$FILTER_DIR/convert-legend-tables-ordered-lists.lua" \
   --lua-filter="$FILTER_DIR/flatten-two-cell-tables.lua" \
   --lua-filter="$FILTER_DIR/flatten-instruction-tables.lua" \
+  --lua-filter="$FILTER_DIR/flatten-layout-tables.lua" \
   --lua-filter="$FILTER_DIR/unwrap-table-blockquotes.lua" \
   --lua-filter="$FILTER_DIR/convert-image-tables.lua" \
   --lua-filter="$FILTER_DIR/normalize-headings.lua" \
@@ -63,6 +67,7 @@ pandoc "$inp" \
   --lua-filter="$FILTER_DIR/split-inline-images.lua" \
   --lua-filter="$FILTER_DIR/reposition-sentence-splitting-images.lua" \
   --lua-filter="$FILTER_DIR/convert-image-sizes.lua" \
+  --lua-filter="$FILTER_DIR/scale-inline-icons.lua" \
   --lua-filter="$FILTER_DIR/softwrap-tokens.lua" \
   --lua-filter="$FILTER_DIR/remove-empty-table-columns.lua" \
   --lua-filter="$FILTER_DIR/clean-table-pipes.lua" \
@@ -87,6 +92,8 @@ pandoc "$inp" \
   --lua-filter="$FILTER_DIR/unwrap-paragraph-strong.lua" \
   --lua-filter="$FILTER_DIR/relocate-warranty.lua" \
   --lua-filter="$FILTER_DIR/clean-html-blocks.lua"
+
+cp index.md /tmp/pre-keypad.md
 
 # If Pandoc made ./media/, flatten to current folder and fix links
 if [ -d "media" ]; then
@@ -289,6 +296,12 @@ sed -i '' '/^# .*Si[uų]stuvas .*$/a\
 </div>
 ' index.md
 
+case "$base" in
+  "SK-LCD button"*|"SK-LCD TouchPad"*|"SK-LED button"*|"SK-LED TouchPad"*|"FLEXI_SK_"*)
+    perl -0pi -e 's#<div style="text-align: center;">\s*\n\s*<img src="\./image1\.png"[^>]*width="400"[^>]*>\s*\n</div>\n\n##' index.md
+    ;;
+esac
+
 # Remove excessive bold/italic formatting from Description opening paragraph
 # First remove all bold-italic (***text***) → (text)
 sed -i '' 's/\*\*\*\([^*][^*]*[^*]\)\*\*\*/\1/g' index.md
@@ -352,10 +365,23 @@ python3 "$SCRIPT_DIR/remove-duplicate-cover-images.py" index.md
 python3 <<'PY'
 import json
 import subprocess
+import sys
+from subprocess import TimeoutExpired
 from pathlib import Path
 
 index = Path('index.md')
-doc = json.loads(subprocess.run(['pandoc', str(index), '-t', 'json'], stdout=subprocess.PIPE, check=True).stdout)
+try:
+    doc_json = subprocess.run(
+        ['pandoc', str(index), '-t', 'json'],
+        stdout=subprocess.PIPE,
+        check=True,
+        timeout=30,
+    ).stdout
+except TimeoutExpired:
+    print("[unwrap-strong] skipped: pandoc json conversion timed out", file=sys.stderr)
+    sys.exit(0)
+
+doc = json.loads(doc_json)
 
 def stringify_node(node):
     if isinstance(node, dict):
@@ -423,14 +449,12 @@ for block in doc['blocks']:
             changed = True
 
 if changed:
-    new_md = subprocess.run([
-        'pandoc',
-        '-f', 'json',
-        '-t', 'gfm',
-        '--wrap', 'none'
-    ],
-                             input=json.dumps(doc).encode(), stdout=subprocess.PIPE,
-                             check=True).stdout.decode()
+    new_md = subprocess.run(
+        ['pandoc', '-f', 'json', '-t', 'gfm', '--wrap', 'none'],
+        input=json.dumps(doc).encode(),
+        stdout=subprocess.PIPE,
+        check=True,
+    ).stdout.decode()
     index.write_text(new_md)
 PY
 
@@ -446,7 +470,7 @@ python3 "$SCRIPT_DIR/fix-table-spacing.py" index.md
 # Remove stray images that interrupt bullet lists (e.g., image3.png in SP3 Features section)
 # These are typically product images incorrectly placed in the middle of feature lists
 # Runs after all Python post-processors to ensure it's not re-added
-sed -i '' '/src="\.\/image3\.png"/d' index.md
+sed -i '' '/^[[:space:]]*<img src="\.\/image3\.png"/d' index.md
 
 # Replace GSM with Cellular in gate controller manuals
 python3 "$SCRIPT_DIR/replace-gsm-with-cellular.py" index.md
@@ -512,6 +536,8 @@ if updated != text:
     index.write_text(updated)
 PY
 
+python3 "$SCRIPT_DIR/rewrite_keypad_tables.py" index.md
+
 # Add app store buttons (auto-detects if button images exist)
 python3 "$SCRIPT_DIR/add-app-store-buttons.py" index.md
 
@@ -526,6 +552,136 @@ updated, count = pattern.subn(r'\1', text)
 if count:
     index.write_text(updated)
     print(f"[html-cleanup] replaced {count} raw HTML spans", file=sys.stderr)
+PY
+
+# Final keypad table rewrite (safety net in case upstream steps reintroduced JSON blobs)
+python3 "$SCRIPT_DIR/rewrite_keypad_tables.py" index.md
+
+python3 <<'PY'
+from pathlib import Path
+index = Path('index.md')
+text = index.read_text()
+
+# Normalize media paths that may still reference "media/"
+text = text.replace('](media/', '](').replace('src="media/', 'src="./')
+# Normalize bare image filenames to ./imageX.ext for Typora friendliness
+import re
+text = re.sub(r'!\[\]\((image[0-9]+\.(?:png|jpe?g))\)', r'![](./\1)', text)
+text = re.sub(r'!\[\]\((?!\./)(image[0-9]+\.(?:png|jpe?g))\)', r'![](./\1)', text)
+text = re.sub(r'src="(image[0-9]+\.(?:png|jpe?g))"', r'src="./\1"', text)
+# Unescape inline button images so they render (e.g., \[![](./image2.png)\] -> ![](./image2.png))
+text = re.sub(r'\\\[(\!\[[^\]]*\]\([^)]+\))\\\]', r'\1', text)
+# Same for inline <img> wrapped in escaped brackets
+text = re.sub(r'\\\[(<img[^>]+>)\\\]', r'\1', text)
+
+# Upscale tiny inline icons to be readable
+def scale_markdown_icon(match):
+    src = match.group(1)
+    return f'<img src="./{src}" alt="" style="width:0.35in;height:auto" />'
+text = re.sub(r'!\[\]\(\./?(image[0-9]+\.(?:png|jpe?g))\)', scale_markdown_icon, text)
+
+def bump_img_style(match):
+    width = float(match.group(1))
+    height = match.group(2)
+    if width < 0.25:
+        width = 0.35
+    if height:
+        hval = float(height)
+        if hval < 0.25:
+            height = 0.35
+        else:
+            height = hval
+    else:
+        height = None
+    style = f'width:{width:.4f}in;'
+    if height:
+        style += f'height:{height:.4f}in;'
+    return f'style="{style}"'
+text = re.sub(
+    r'style="[^"]*width:([0-9\.]+)in;?[^"]*(?:height:([0-9\.]+)in;?)?[^"]*"',
+    bump_img_style,
+    text,
+)
+
+# Fix misinterpreted note heading
+note_heading = '## For area status changing into the opposite one it is sufficient to enter User code and select the preferred area. To delete symbols or command entered, press button [].].'
+if note_heading in text:
+    text = text.replace(
+        note_heading,
+        '!!! note\nFor area status changing into the opposite one it is sufficient to enter User code and select the preferred area. To delete symbols or command entered, press button [].',
+    )
+
+# Render admonitions in a Typora-friendly way (blockquote with bold label)
+text = re.sub(
+    r'^!!!\s+note\s*\n([^\n]+)',
+    r'> **Note.** \1',
+    text,
+    flags=re.MULTILINE,
+)
+text = re.sub(
+    r'^!!!\s+warning(?:"[^"]*")?\s*\n([^\n]+)',
+    r'> **Warning.** \1',
+    text,
+    flags=re.MULTILINE,
+)
+
+# Demote specific headings that should be inline underlined text
+text = text.replace(
+    '### To send emergency message to your security service',
+    '**<u>To send emergency message to your security service</u>**',
+)
+
+lines = text.splitlines()
+first_overview = None
+cover_block = [
+    '<div style="text-align: center;">',
+    '  <img src="./image1.png" alt="" width="400">',
+    '</div>',
+    '',
+]
+
+# Find first Keypad overview heading
+for i, line in enumerate(lines):
+    if line.strip() == '## Keypad overview':
+        first_overview = i
+        break
+
+if first_overview is not None:
+    # Drop cover blocks that appear before the heading
+    i = 0
+    while i < first_overview:
+        if lines[i:i + len(cover_block)] == cover_block:
+            del lines[i:i + len(cover_block)]
+            first_overview -= len(cover_block)
+            continue
+        i += 1
+
+    # Remove any duplicate Keypad overview headings after the first one
+    cleaned = []
+    seen_first = False
+    for line in lines:
+        if line.strip() == '## Keypad overview':
+            if seen_first:
+                continue
+            seen_first = True
+        cleaned.append(line)
+    lines = cleaned
+
+    # Ensure cover image immediately after the heading
+    insert_at = first_overview + 1
+    if lines[insert_at:insert_at + len(cover_block)] != cover_block:
+        lines[insert_at:insert_at] = [''] + cover_block
+
+    # Remove any subsequent cover blocks
+    i = insert_at + len(cover_block)
+    while i < len(lines):
+        if lines[i:i + len(cover_block)] == cover_block:
+            del lines[i:i + len(cover_block)]
+            continue
+        i += 1
+
+text = '\n'.join(lines) + '\n'
+index.write_text(text)
 PY
 
 # Optimize images for web and print (max 1200px width, 85% quality)
