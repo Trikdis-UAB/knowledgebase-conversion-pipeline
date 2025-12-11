@@ -4,6 +4,7 @@
 import os
 import shutil
 import sys
+from pathlib import Path
 
 BUTTONS = {
     "protegus-android.png": "app-store-buttons/protegus-android.png",
@@ -12,18 +13,20 @@ BUTTONS = {
 }
 
 
-def ensure_buttons(target_dir: str, script_dir: str) -> bool:
+def ensure_buttons(target_dir: Path, repo_root: Path) -> bool:
+    """Copy Protegus button assets from repo root into target_dir."""
     changed = False
     for dest_name, rel_source in BUTTONS.items():
-        source_path = os.path.join(script_dir, rel_source)
-        dest_path = os.path.join(target_dir, dest_name)
-        if not os.path.exists(source_path):
+        source_path = repo_root / rel_source
+        dest_path = target_dir / dest_name
+        if not source_path.exists():
             continue
         try:
-            if not os.path.exists(dest_path) or os.path.getmtime(source_path) > os.path.getmtime(dest_path):
+            if not dest_path.exists() or source_path.stat().st_mtime > dest_path.stat().st_mtime:
                 shutil.copy2(source_path, dest_path)
                 changed = True
         except OSError:
+            # Non-fatal; keep going.
             pass
     return changed
 
@@ -33,11 +36,11 @@ def main() -> None:
         print("Usage: python3 add-app-store-buttons.py <file.md>")
         sys.exit(1)
 
-    md_path = sys.argv[1]
-    target_dir = os.path.dirname(md_path)
-    script_dir = os.path.dirname(os.path.abspath(__file__))
+    md_path = Path(sys.argv[1]).resolve()
+    target_dir = md_path.parent
+    repo_root = Path(__file__).resolve().parent.parent
 
-    if ensure_buttons(target_dir, script_dir):
+    if ensure_buttons(target_dir, repo_root):
         print(f"✓ Ensured Protegus button assets in {target_dir}")
     else:
         print(f"✓ Protegus button assets already present in {target_dir}")

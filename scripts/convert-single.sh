@@ -528,6 +528,9 @@ if count:
     print(f"[html-cleanup] replaced {count} raw HTML spans", file=sys.stderr)
 PY
 
+# Final pass to split escaped headings that remain inside admonition lines
+python3 "$SCRIPT_DIR/fix-inline-admonition-headings.py" index.md
+
 # Optimize images for web and print (max 1200px width, 85% quality)
 echo "Optimizing images..."
 shopt -s nullglob
