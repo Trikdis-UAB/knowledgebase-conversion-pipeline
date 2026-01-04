@@ -83,6 +83,14 @@ The pipeline applies 36 Lua filters to clean and normalize Word documents:
 4. **Preview locally**: `./scripts/preview.sh` (serves on http://127.0.0.1:8001)
 5. **Convert all files**: `./scripts/convert-batch.sh`
 
+### Keypad Manuals (SK-LCD/SK-LED/FLEXi)
+`convert-single.sh` automatically enables keypad-specific filters for manuals named:
+`SK-LCD button`, `SK-LCD TouchPad`, `SK-LED button`, `SK-LED TouchPad`, or `FLEXI_SK_*`.
+
+You can override auto-detection:
+- Force keypad mode: `KEYPAD_MODE=1 ./scripts/convert-single.sh "file.docx"`
+- Disable keypad mode: `KEYPAD_MODE=0 ./scripts/convert-single.sh "file.docx"`
+
 ---
 
 ## Finding Latest Manuals

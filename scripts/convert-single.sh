@@ -25,8 +25,25 @@ inp="$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
 base="$(basename "${inp%.docx}")"
 doc_dir="${OUT_DIR}/${base}"
 
+# Enable keypad-specific handling automatically for keypad manuals unless overridden.
+KEYPAD_MODE="${KEYPAD_MODE:-}"
+if [ -z "$KEYPAD_MODE" ]; then
+  case "$base" in
+    "SK-LCD button"*|"SK-LCD TouchPad"*|"SK-LED button"*|"SK-LED TouchPad"*|"FLEXI_SK_"*)
+      KEYPAD_MODE=1
+      ;;
+    *)
+      KEYPAD_MODE=0
+      ;;
+  esac
+fi
+if [ "$KEYPAD_MODE" != "0" ] && [ "$KEYPAD_MODE" != "1" ]; then
+  echo "KEYPAD_MODE must be 0 or 1 (got: $KEYPAD_MODE)" >&2
+  exit 1
+fi
+
 # Ensure filters exist
-for f in strip-cover.lua strip-toc.lua promote-strong-top.lua demote-extra-h1.lua fix-numbered-heading-levels.lua normalize-headings.lua move-first-image-to-description.lua split-inline-images.lua reposition-sentence-splitting-images.lua convert-image-sizes.lua softwrap-tokens.lua clean-table-pipes.lua mark-two-col.lua convert-underline.lua remove-unwanted-blockquotes.lua maintain-list-continuity.lua strip-classes.lua fix-typography.lua bold-list-titles.lua fix-crossrefs.lua clean-html-blocks.lua unwrap-table-blockquotes.lua remove-standalone-asterisks.lua fix-rowspan-headers.lua flatten-instruction-tables.lua; do
+for f in strip-cover.lua strip-toc.lua promote-strong-top.lua demote-extra-h1.lua fix-numbered-heading-levels.lua normalize-headings.lua move-first-image-to-description.lua split-inline-images.lua reposition-sentence-splitting-images.lua convert-image-sizes.lua softwrap-tokens.lua clean-table-pipes.lua mark-two-col.lua convert-underline.lua remove-unwanted-blockquotes.lua maintain-list-continuity.lua strip-classes.lua fix-typography.lua bold-list-titles.lua fix-crossrefs.lua clean-html-blocks.lua unwrap-table-blockquotes.lua remove-standalone-asterisks.lua fix-rowspan-headers.lua flatten-instruction-tables.lua collapse-spacer-columns.lua convert-keypad-layout.lua promote-keypad-headings.lua flatten-layout-tables.lua scale-inline-icons.lua; do
   [ -f "$FILTER_DIR/$f" ] || { echo "Missing $f"; exit 1; }
 done
 # Check the filters in filters subdirectory
@@ -35,6 +52,23 @@ done
 
 mkdir -p "$doc_dir"
 pushd "$doc_dir" >/dev/null
+
+keypad_filters_after_warning=()
+keypad_filters_after_flatten=()
+keypad_filters_after_image_sizes=()
+if [ "$KEYPAD_MODE" = "1" ]; then
+  keypad_filters_after_warning=(
+    --lua-filter="$FILTER_DIR/collapse-spacer-columns.lua"
+    --lua-filter="$FILTER_DIR/convert-keypad-layout.lua"
+    --lua-filter="$FILTER_DIR/promote-keypad-headings.lua"
+  )
+  keypad_filters_after_flatten=(
+    --lua-filter="$FILTER_DIR/flatten-layout-tables.lua"
+  )
+  keypad_filters_after_image_sizes=(
+    --lua-filter="$FILTER_DIR/scale-inline-icons.lua"
+  )
+fi
 
 pandoc "$inp" \
   -o "index.md" \
@@ -50,9 +84,11 @@ pandoc "$inp" \
   --lua-filter="$FILTER_DIR/demote-extra-h1.lua" \
   --lua-filter="$FILTER_DIR/remove-table-widths.lua" \
   --lua-filter="$FILTER_DIR/convert-warning-tables.lua" \
+  "${keypad_filters_after_warning[@]}" \
   --lua-filter="$FILTER_DIR/convert-legend-tables-ordered-lists.lua" \
   --lua-filter="$FILTER_DIR/flatten-two-cell-tables.lua" \
   --lua-filter="$FILTER_DIR/flatten-instruction-tables.lua" \
+  "${keypad_filters_after_flatten[@]}" \
   --lua-filter="$FILTER_DIR/unwrap-table-blockquotes.lua" \
   --lua-filter="$FILTER_DIR/convert-image-tables.lua" \
   --lua-filter="$FILTER_DIR/normalize-headings.lua" \
@@ -63,6 +99,7 @@ pandoc "$inp" \
   --lua-filter="$FILTER_DIR/split-inline-images.lua" \
   --lua-filter="$FILTER_DIR/reposition-sentence-splitting-images.lua" \
   --lua-filter="$FILTER_DIR/convert-image-sizes.lua" \
+  "${keypad_filters_after_image_sizes[@]}" \
   --lua-filter="$FILTER_DIR/softwrap-tokens.lua" \
   --lua-filter="$FILTER_DIR/remove-empty-table-columns.lua" \
   --lua-filter="$FILTER_DIR/clean-table-pipes.lua" \
@@ -329,6 +366,9 @@ python3 "$SCRIPT_DIR/fix_table_structure.py" index.md
 # Note: Legend tables with ordered lists are handled by convert-legend-tables-ordered-lists.lua filter
 echo "Converting HTML tables to pipe tables..."
 python3 "$SCRIPT_DIR/html-tables-to-pipes.py" index.md
+if [ "$KEYPAD_MODE" = "1" ]; then
+  python3 "$SCRIPT_DIR/rewrite_keypad_tables.py" index.md
+fi
 
 # Expand multi-state tables (tables with <br> tags) into separate rows
 echo "Expanding multi-state tables..."
@@ -349,6 +389,7 @@ python3 "$SCRIPT_DIR/fix-inline-admonition-headings.py" index.md
 # Remove duplicate cover images (safety net for edge cases)
 python3 "$SCRIPT_DIR/remove-duplicate-cover-images.py" index.md
 
+if [ "$KEYPAD_MODE" = "0" ]; then
 python3 <<'PY'
 import json
 import subprocess
@@ -433,6 +474,7 @@ if changed:
                              check=True).stdout.decode()
     index.write_text(new_md)
 PY
+fi
 
 # Remove empty headers (headers with only whitespace)
 python3 "$SCRIPT_DIR/remove-empty-headers.py" index.md
@@ -530,6 +572,410 @@ PY
 
 # Final pass to split escaped headings that remain inside admonition lines
 python3 "$SCRIPT_DIR/fix-inline-admonition-headings.py" index.md
+
+if [ "$KEYPAD_MODE" = "1" ]; then
+  python3 "$SCRIPT_DIR/rewrite_keypad_tables.py" index.md
+python3 <<'PY'
+from pathlib import Path
+import re
+
+index = Path('index.md')
+text = index.read_text()
+
+# Normalize media paths that may still reference "media/"
+text = text.replace('](media/', '](').replace('src="media/', 'src="./')
+# Normalize bare image filenames to ./imageX.ext for Typora friendliness
+text = re.sub(r'!\[\]\((image[0-9]+\.(?:png|jpe?g))\)', r'![](./\1)', text)
+text = re.sub(r'!\[\]\((?!\./)(image[0-9]+\.(?:png|jpe?g))\)', r'![](./\1)', text)
+text = re.sub(r'src="(image[0-9]+\.(?:png|jpe?g))"', r'src="./\1"', text)
+# Unescape inline button images so they render (e.g., \[![](./image2.png)\] -> ![](./image2.png))
+text = re.sub(r'\\\[(\!\[[^\]]*\]\([^)]+\))\\\]', r'\1', text)
+# Same for inline <img> wrapped in escaped brackets
+text = re.sub(r'\\\[(<img[^>]+>)\\\]', r'\1', text)
+
+# Upscale tiny inline icons to be readable
+def scale_markdown_icon(match):
+    src = match.group(1)
+    return f'<img src="./{src}" alt="" style="width:0.35in;height:auto" />'
+text = re.sub(r'!\[\]\(\./?(image[0-9]+\.(?:png|jpe?g))\)', scale_markdown_icon, text)
+
+def bump_img_style(match):
+    width = float(match.group(1))
+    height = match.group(2)
+    if width < 0.25:
+        width = 0.35
+    if height:
+        hval = float(height)
+        if hval < 0.25:
+            height = 0.35
+        else:
+            height = hval
+    else:
+        height = None
+    style = f'width:{width:.4f}in;'
+    if height:
+        style += f'height:{height:.4f}in;'
+    return f'style="{style}"'
+text = re.sub(
+    r'style="[^"]*width:([0-9\.]+)in;?[^"]*(?:height:([0-9\.]+)in;?)?[^"]*"',
+    bump_img_style,
+    text,
+)
+
+# Fix misinterpreted note heading
+note_heading = '## For area status changing into the opposite one it is sufficient to enter User code and select the preferred area. To delete symbols or command entered, press button [].].'
+if note_heading in text:
+    text = text.replace(
+        note_heading,
+        '!!! note\nFor area status changing into the opposite one it is sufficient to enter User code and select the preferred area. To delete symbols or command entered, press button [].',
+    )
+
+# Convert MkDocs admonitions to GitHub-style alerts for markdown_callouts
+text = re.sub(r'^!!!\s+note\s*\n', '> [!NOTE]\n> ', text, flags=re.MULTILINE)
+text = re.sub(r'^!!!\s+warning(?:"[^"]*")?\s*\n', '> [!WARNING]\n> ', text, flags=re.MULTILINE)
+# Normalize inline "Note" labels into GitHub-style alerts (multi-language)
+text = re.sub(
+    r'^\s*(?:>\s*)?\*\*<u>(Note|Nota|Pastaba|Примечание)\.?:?</u>\*\*\s*',
+    r'> [!NOTE]\n> ',
+    text,
+    flags=re.MULTILINE,
+)
+text = re.sub(
+    r'^\s*(?:>\s*)?\*\*(Note|Nota|Pastaba|Примечание)\.?:?\*\*\s*',
+    r'> [!NOTE]\n> ',
+    text,
+    flags=re.MULTILINE,
+)
+
+# Demote specific headings that should be inline underlined text
+text = text.replace(
+    '### To send emergency message to your security service',
+    '**<u>To send emergency message to your security service</u>**',
+)
+emergency_phrases = [
+    'To send emergency message to your security service',
+    'Para enviar un mensaje de emergencia a su servicio de seguridad',
+    'Norėdami Jūsų apsaugos tarnybai išsiųsti pranešimą apie iškilusį pavojų',
+    'Отправление экстренного сообщения охранному предприятию о возникшей опасности',
+]
+for phrase in emergency_phrases:
+    text = re.sub(
+        rf'^###\s+{re.escape(phrase)}\s*:?\s*$',
+        f'**<u>{phrase}</u>**',
+        text,
+        flags=re.MULTILINE,
+    )
+
+lines = text.splitlines()
+first_overview = None
+cover_block = [
+    '<div style="text-align: center;">',
+    '  <img src="./image1.png" alt="" width="400">',
+    '</div>',
+    '',
+]
+
+# Find first Keypad overview heading
+for i, line in enumerate(lines):
+    if line.strip() == '## Keypad overview':
+        first_overview = i
+        break
+
+if first_overview is not None:
+    # Drop cover blocks that appear before the heading
+    i = 0
+    while i < first_overview:
+        if lines[i:i + len(cover_block)] == cover_block:
+            del lines[i:i + len(cover_block)]
+            first_overview -= len(cover_block)
+            continue
+        i += 1
+
+    # Remove any duplicate Keypad overview headings after the first one
+    cleaned = []
+    seen_first = False
+    for line in lines:
+        if line.strip() == '## Keypad overview':
+            if seen_first:
+                continue
+            seen_first = True
+        cleaned.append(line)
+    lines = cleaned
+
+    # Ensure cover image immediately after the heading
+    insert_at = first_overview + 1
+    if lines[insert_at:insert_at + len(cover_block)] != cover_block:
+        lines[insert_at:insert_at] = [''] + cover_block
+
+    # Remove any subsequent cover blocks
+    i = insert_at + len(cover_block)
+    while i < len(lines):
+        if lines[i:i + len(cover_block)] == cover_block:
+            del lines[i:i + len(cover_block)]
+            continue
+        i += 1
+
+# Merge wrapped H2 headings (common in keypad docs)
+i = 0
+while i < len(lines) - 1:
+    if lines[i].startswith('## ') and lines[i + 1].strip() and not lines[i + 1].startswith('#'):
+        lines[i] = f"{lines[i].rstrip()} {lines[i + 1].lstrip()}"
+        del lines[i + 1]
+        continue
+    i += 1
+
+def strip_markup(value: str) -> str:
+    value = re.sub(r'</?u>', '', value)
+    value = value.replace('**', '')
+    value = value.replace(':', '')
+    value = re.sub(r'[()\\[\\]]', '', value)
+    return re.sub(r'\\s+', ' ', value).strip()
+
+overview_titles = {
+    'keypad overview',
+    'vista general del teclado',
+    'klaviatūros apžvalga',
+    'обзор клавиатуры',
+}
+disarm_keywords = ('disarm', 'desarm', 'išjungim', 'снятие')
+arm_keywords = ('arming', 'armado', 'įjungim', 'постанов')
+temporary_keywords = ('temporary', 'temporal', 'laikinas', 'врем')
+
+# Normalize heading markers that include blockquote prefixes
+for idx, line in enumerate(lines):
+    for prefix in ('## ', '### ', '#### '):
+        if line.startswith(prefix) and line[len(prefix):].lstrip().startswith('> '):
+            lines[idx] = prefix + line[len(prefix):].lstrip()[2:]
+            line = lines[idx]
+            break
+
+# Promote LT user/master codes line that was turned into a blockquote
+for idx, line in enumerate(lines):
+    if line.startswith('> '):
+        title = strip_markup(line[2:]).casefold()
+        if 'kodų įvedim' in title and (
+            'vartotojo' in title or 'administratoriaus' in title
+        ):
+            lines[idx] = f"## {strip_markup(line[2:])}"
+
+# Promote/demote headings based on keypad structure
+for idx, line in enumerate(lines):
+    if line.startswith('### '):
+        title = strip_markup(line[4:]).casefold()
+        if title in overview_titles:
+            lines[idx] = f"## {strip_markup(line[4:])}"
+            continue
+        if any(keyword in title for keyword in arm_keywords) and any(
+            keyword in title for keyword in disarm_keywords
+        ):
+            lines[idx] = f"## {strip_markup(line[4:])}"
+            continue
+        if 'bypass' in title and any(keyword in title for keyword in temporary_keywords):
+            lines[idx] = f"## {strip_markup(line[4:])}"
+            continue
+    if line.startswith('## '):
+        title = strip_markup(line[3:]).casefold()
+        if any(keyword in title for keyword in disarm_keywords) and not any(
+            keyword in title for keyword in arm_keywords
+        ):
+            lines[idx] = f"### {strip_markup(line[3:])}"
+            continue
+    underlined = re.match(r'^\\*\\*<u>(.+?)</u>\\s*:?\\*\\*\\s*:?\s*$', line.strip())
+    if underlined:
+        title = strip_markup(underlined.group(1)).casefold()
+        if 'stay' in title or 'sleep' in title or any(keyword in title for keyword in disarm_keywords):
+            lines[idx] = f"### {strip_markup(underlined.group(1))}"
+
+# Clean duplicated words in headings (e.g., "or or", "codes codes")
+for idx, line in enumerate(lines):
+    if line.startswith(('## ', '### ', '#### ')):
+        cleaned = re.sub(r'\b(\w+)(\s+\1\b)+', r'\1', line, flags=re.IGNORECASE)
+        cleaned = re.sub(r'\s+/\s+/\s+', ' / ', cleaned)
+        lines[idx] = cleaned
+
+# Drop duplicate H2 sections (keep first occurrence)
+seen_h2 = set()
+deduped = []
+i = 0
+while i < len(lines):
+    line = lines[i]
+    if line.startswith('## '):
+        title = re.sub(r'\s+', ' ', line[3:].strip()).casefold()
+        if title in seen_h2:
+            i += 1
+            while i < len(lines) and not lines[i].startswith(('## ', '# ')):
+                i += 1
+            continue
+        seen_h2.add(title)
+    deduped.append(line)
+    i += 1
+lines = deduped
+
+# Convert overly long heading lines into notes (likely mis-parsed admonitions)
+for idx, line in enumerate(lines):
+    if line.startswith(('## ', '### ', '#### ')):
+        title = line.lstrip('# ').strip()
+        if len(title) > 120 or ('. ' in title and len(title) > 80):
+            title = re.sub(r'(.{20,}?)\s*/\s*\1', r'\1', title, flags=re.IGNORECASE)
+            lines[idx:idx + 1] = ['> [!NOTE]', f'> {title}']
+
+# Keep only the first keypad-specific H1 title
+title_keywords = ['sk-', 'keypad', 'teclad', 'klaviat', 'клавиат']
+primary_h1 = None
+for idx, line in enumerate(lines):
+    if line.startswith('# '):
+        lower = line.casefold()
+        if any(word in lower for word in title_keywords):
+            primary_h1 = idx
+            break
+if primary_h1 is not None:
+    lines = [line for idx, line in enumerate(lines) if not (line.startswith('# ') and idx != primary_h1)]
+
+# Remove duplicated H1 + "Alarm system arming / disarming" block if it repeats
+if lines:
+    h1_line = None
+    for line in lines:
+        if line.startswith('# '):
+            h1_line = line
+            break
+    if h1_line:
+        h1_indices = [i for i, line in enumerate(lines) if line == h1_line]
+        if len(h1_indices) > 1:
+            dup_start = h1_indices[1]
+            dup_end = len(lines)
+            for i in range(dup_start + 1, len(lines)):
+                if lines[i].startswith('## ') and lines[i] != '## Alarm system arming / disarming':
+                    dup_end = i
+                    break
+            del lines[dup_start:dup_end]
+
+text = '\n'.join(lines) + '\n'
+
+# Restore missing inline icon in keypad note (if present)
+if 'press button []' in text and Path('image8.png').exists():
+    text = text.replace('press button [].', 'press button <img src="./image8.png" alt="" style="width:0.3500in;" />.')
+    text = text.replace('press button []', 'press button <img src="./image8.png" alt="" style="width:0.3500in;" />')
+
+# Unescape bracket markers used for button labels
+text = text.replace('\\[', '[').replace('\\]', ']')
+
+# Remove escaped brackets around bold keypad button labels
+text = re.sub(r'\\\[\*\*([^\]]+)\*\*\\\]', r'**\1**', text)
+text = re.sub(r'\[\*\*([^\]]+)\*\*\]', r'**\1**', text)
+
+# Restore missing inline icon in translated button notes
+if Path('image8.png').exists():
+    text = re.sub(
+        r'(?i)\b(button|bot[oó]n|mygtuką|mygtuka|кнопк[ауе])\s*\[\]',
+        r'\1 <img src="./image8.png" alt="" style="width:0.3500in;" />',
+        text,
+    )
+    text = text.replace('[]', '<img src="./image8.png" alt="" style="width:0.3500in;" />')
+    text = text.replace('command]', 'command').replace('comando]', 'comando')
+
+# Remove duplicated fragments split by slash in notes or headings
+text = re.sub(r'(.{20,}?)\s*/\s*\1', r'\1', text, flags=re.IGNORECASE)
+
+# Clean duplicate sentences and slash separators in note lines
+deduped_lines = []
+for line in text.splitlines():
+    if line.startswith('> ') and ' / ' in line:
+        line = line.replace(' / ', ' ')
+    # Remove repeated fragments within a line (e.g., duplicated sentences).
+    while True:
+        new_line = re.sub(r'(.{20,}?)\s+\1', r'\1', line, flags=re.IGNORECASE)
+        if new_line == line:
+            break
+        line = new_line
+    line = re.sub(r'(o el comando)(?:\s+\1)+', r'\1', line, flags=re.IGNORECASE)
+    parts = re.split(r'(?<=[.!?])\s+', line)
+    seen = set()
+    kept = []
+    for part in parts:
+        key = part.casefold().strip()
+        if not key:
+            continue
+        if key in seen:
+            continue
+        seen.add(key)
+        kept.append(part.strip())
+    if kept:
+        line = ' '.join(kept)
+    deduped_lines.append(line)
+text = '\n'.join(deduped_lines) + '\n'
+
+# Move keypad intro paragraph to the top as a note
+keypad_words = ['keypad', 'klaviat', 'teclad', 'клавиат']
+zone_words = ['zone', 'zon', 'зон']
+paragraphs = []
+current = []
+for line in text.splitlines():
+    if line.strip() == '':
+        if current:
+            paragraphs.append(current)
+            current = []
+        paragraphs.append([''])
+        continue
+    current.append(line)
+if current:
+    paragraphs.append(current)
+
+intro_sentence = None
+intro_sentences = []
+for idx, para in enumerate(paragraphs):
+    if not para or para == ['']:
+        continue
+    joined = ' '.join(para)
+    lowered = joined.casefold()
+    if '16' in joined and '2' in joined:
+        if any(word in lowered for word in keypad_words) and any(word in lowered for word in zone_words):
+            sentences = re.split(r'(?<=[.!?])\s+', joined)
+            selected = []
+            for sentence in sentences:
+                s_lower = sentence.casefold()
+                if any(word in s_lower for word in keypad_words) or any(word in s_lower for word in zone_words):
+                    if any(token in s_lower for token in ['partition', 'area', 'zones', 'zon', 'зон']):
+                        selected.append(sentence.strip())
+            if selected:
+                intro_sentences = selected
+                cleaned = joined
+                for sentence in selected:
+                    cleaned = cleaned.replace(sentence, '').strip()
+                if cleaned:
+                    paragraphs[idx] = [cleaned]
+                else:
+                    paragraphs[idx] = []
+                if any('16' in s and '2' in s for s in selected):
+                    intro_sentence = ' '.join(selected)
+                break
+    if intro_sentence:
+        break
+
+if intro_sentence:
+    note_lines = ['> [!NOTE]', '> ' + intro_sentence]
+    rebuilt = []
+    for para in paragraphs:
+        if para == []:
+            continue
+        rebuilt.extend(para)
+    text = '\n'.join(rebuilt).strip() + '\n'
+    lines = text.splitlines()
+    inserted = False
+    for i in range(len(lines) - len(cover_block) + 1):
+        if lines[i:i + len(cover_block)] == cover_block:
+            insert_at = i + len(cover_block)
+            lines[insert_at:insert_at] = [''] + note_lines + ['']
+            inserted = True
+            break
+    if not inserted:
+        for i, line in enumerate(lines):
+            if line.strip() == '## Keypad overview':
+                lines[i + 1:i + 1] = [''] + note_lines + ['']
+                break
+    text = '\n'.join(lines).strip() + '\n'
+index.write_text(text)
+PY
+fi
 
 # Optimize images for web and print (max 1200px width, 85% quality)
 echo "Optimizing images..."
