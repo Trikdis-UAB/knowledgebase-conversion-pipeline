@@ -647,6 +647,31 @@ text = re.sub(
     flags=re.MULTILINE,
 )
 
+def promote_underlined_heading(match):
+    title = match.group(1).strip()
+    lower = title.casefold()
+    if (
+        'stay' in lower
+        or 'sleep' in lower
+        or 'disarm' in lower
+        or 'arm' in lower
+        or 'armar' in lower
+        or 'armado' in lower
+        or 'įjungim' in lower
+        or 'išjungim' in lower
+        or 'снятие' in lower
+        or 'постанов' in lower
+    ):
+        return f"### {title}"
+    return match.group(0)
+
+text = re.sub(
+    r'^\s*\*\*<u>(.+?)</u>\s*:?\s*\*\*\s*:?\s*$',
+    promote_underlined_heading,
+    text,
+    flags=re.MULTILINE,
+)
+
 # Demote specific headings that should be inline underlined text
 text = text.replace(
     '### To send emergency message to your security service',
@@ -675,6 +700,17 @@ cover_block = [
     '',
 ]
 
+def find_cover_block(start: int, limit: int):
+    for idx in range(start, limit):
+        if lines[idx].strip() == '<div style="text-align: center;">':
+            for j in range(idx + 1, min(idx + 8, limit)):
+                if lines[j].strip() == '</div>':
+                    block = lines[idx:j + 1]
+                    if any('image1.png' in line for line in block):
+                        return idx, j + 1
+                    break
+    return None
+
 # Find first Keypad overview heading
 for i, line in enumerate(lines):
     if line.strip() == '## Keypad overview':
@@ -683,13 +719,13 @@ for i, line in enumerate(lines):
 
 if first_overview is not None:
     # Drop cover blocks that appear before the heading
-    i = 0
-    while i < first_overview:
-        if lines[i:i + len(cover_block)] == cover_block:
-            del lines[i:i + len(cover_block)]
-            first_overview -= len(cover_block)
-            continue
-        i += 1
+    while True:
+        found = find_cover_block(0, first_overview)
+        if not found:
+            break
+        start, end = found
+        del lines[start:end]
+        first_overview -= (end - start)
 
     # Remove any duplicate Keypad overview headings after the first one
     cleaned = []
@@ -710,10 +746,11 @@ if first_overview is not None:
     # Remove any subsequent cover blocks
     i = insert_at + len(cover_block)
     while i < len(lines):
-        if lines[i:i + len(cover_block)] == cover_block:
-            del lines[i:i + len(cover_block)]
-            continue
-        i += 1
+        found = find_cover_block(i, len(lines))
+        if not found:
+            break
+        start, end = found
+        del lines[start:end]
 
 # Merge wrapped H2 headings (common in keypad docs)
 i = 0
@@ -780,10 +817,17 @@ for idx, line in enumerate(lines):
         ):
             lines[idx] = f"### {strip_markup(line[3:])}"
             continue
-    underlined = re.match(r'^\\*\\*<u>(.+?)</u>\\s*:?\\*\\*\\s*:?\s*$', line.strip())
+    underlined = re.match(r'^\*\*<u>(.+?)</u>\s*:?\*\*\s*:?\s*$', line.strip())
     if underlined:
         title = strip_markup(underlined.group(1)).casefold()
-        if 'stay' in title or 'sleep' in title or any(keyword in title for keyword in disarm_keywords):
+        if (
+            'stay' in title
+            or 'sleep' in title
+            or any(keyword in title for keyword in disarm_keywords)
+            or re.search(r'\\barm\\b', title)
+            or 'arming' in title
+            or 'armado' in title
+        ):
             lines[idx] = f"### {strip_markup(underlined.group(1))}"
 
 # Clean duplicated words in headings (e.g., "or or", "codes codes")
@@ -820,7 +864,7 @@ for idx, line in enumerate(lines):
             lines[idx:idx + 1] = ['> [!NOTE]', f'> {title}']
 
 # Keep only the first keypad-specific H1 title
-title_keywords = ['sk-', 'keypad', 'teclad', 'klaviat', 'клавиат']
+title_keywords = ['sk-', 'keypad', 'teclad', 'klaviat', 'клавиат', 'touchpad']
 primary_h1 = None
 for idx, line in enumerate(lines):
     if line.startswith('# '):
@@ -828,6 +872,16 @@ for idx, line in enumerate(lines):
         if any(word in lower for word in title_keywords):
             primary_h1 = idx
             break
+
+if primary_h1 is None:
+    for idx, line in enumerate(lines):
+        if line.startswith('## '):
+            lower = line.casefold()
+            if 'touchpad' in lower and any(word in lower for word in title_keywords):
+                lines[idx] = f"# {line[3:].strip()}"
+                primary_h1 = idx
+                break
+
 if primary_h1 is not None:
     lines = [line for idx, line in enumerate(lines) if not (line.startswith('# ') and idx != primary_h1)]
 
@@ -852,9 +906,13 @@ if lines:
 text = '\n'.join(lines) + '\n'
 
 # Restore missing inline icon in keypad note (if present)
-if 'press button []' in text and Path('image8.png').exists():
-    text = text.replace('press button [].', 'press button <img src="./image8.png" alt="" style="width:0.3500in;" />.')
-    text = text.replace('press button []', 'press button <img src="./image8.png" alt="" style="width:0.3500in;" />')
+if 'press button []' in text:
+    if 'SK-LCD button' in text and Path('image10.png').exists():
+        text = text.replace('press button [].', 'press button <img src="./image10.png" alt="" style="width:0.3500in;" />.')
+        text = text.replace('press button []', 'press button <img src="./image10.png" alt="" style="width:0.3500in;" />')
+    elif Path('image8.png').exists():
+        text = text.replace('press button [].', 'press button <img src="./image8.png" alt="" style="width:0.3500in;" />.')
+        text = text.replace('press button []', 'press button <img src="./image8.png" alt="" style="width:0.3500in;" />')
 
 # Unescape bracket markers used for button labels
 text = text.replace('\\[', '[').replace('\\]', ']')
@@ -862,16 +920,26 @@ text = text.replace('\\[', '[').replace('\\]', ']')
 # Remove escaped brackets around bold keypad button labels
 text = re.sub(r'\\\[\*\*([^\]]+)\*\*\\\]', r'**\1**', text)
 text = re.sub(r'\[\*\*([^\]]+)\*\*\]', r'**\1**', text)
+# Strip brackets from common keypad button labels
+text = re.sub(r'\*\*\[([A-Z0-9]{1,5})\]\*\*', r'**\1**', text)
+text = re.sub(r'\[(ARM|OFF|OK|MENU|SLEEP|STAY|BYP|C|\d{1,2})\]', r'\1', text)
 
 # Restore missing inline icon in translated button notes
-if Path('image8.png').exists():
+if Path('image10.png').exists() and 'SK-LCD button' in text:
+    text = re.sub(
+        r'(?i)\b(button|bot[oó]n|mygtuką|mygtuka|кнопк[ауе])\s*\[\]',
+        r'\1 <img src="./image10.png" alt="" style="width:0.3500in;" />',
+        text,
+    )
+    text = text.replace('[]', '<img src="./image10.png" alt="" style="width:0.3500in;" />')
+elif Path('image8.png').exists():
     text = re.sub(
         r'(?i)\b(button|bot[oó]n|mygtuką|mygtuka|кнопк[ауе])\s*\[\]',
         r'\1 <img src="./image8.png" alt="" style="width:0.3500in;" />',
         text,
     )
     text = text.replace('[]', '<img src="./image8.png" alt="" style="width:0.3500in;" />')
-    text = text.replace('command]', 'command').replace('comando]', 'comando')
+text = text.replace('command]', 'command').replace('comando]', 'comando')
 
 # Remove duplicated fragments split by slash in notes or headings
 text = re.sub(r'(.{20,}?)\s*/\s*\1', r'\1', text, flags=re.IGNORECASE)
@@ -973,6 +1041,9 @@ if intro_sentence:
                 lines[i + 1:i + 1] = [''] + note_lines + ['']
                 break
     text = '\n'.join(lines).strip() + '\n'
+
+# Fix stray punctuation after keypad button sequences (e.g., **0**.).)
+text = text.replace('**0**.).', '**0**).')
 index.write_text(text)
 PY
 fi
