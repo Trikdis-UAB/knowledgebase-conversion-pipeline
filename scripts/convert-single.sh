@@ -693,9 +693,10 @@ for phrase in emergency_phrases:
 
 lines = text.splitlines()
 first_overview = None
+cover_width = "600" if os.getenv("KEYPAD_MODE") else "400"
 cover_block = [
     '<div style="text-align: center;">',
-    '  <img src="./image1.png" alt="" width="400">',
+    f'  <img src="./image1.png" alt="" width="{cover_width}">',
     '</div>',
     '',
 ]
