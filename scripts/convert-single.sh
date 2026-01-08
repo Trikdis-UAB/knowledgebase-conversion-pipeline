@@ -497,6 +497,7 @@ python3 "$SCRIPT_DIR/normalize-lt-terminology.py" index.md
 if [[ "$base" == FIRECOM_* ]]; then
 python3 <<'PY'
 from pathlib import Path
+import os
 import re
 
 index = Path('index.md')
@@ -577,6 +578,7 @@ if [ "$KEYPAD_MODE" = "1" ]; then
   python3 "$SCRIPT_DIR/rewrite_keypad_tables.py" index.md
 python3 <<'PY'
 from pathlib import Path
+import os
 import re
 
 index = Path('index.md')
