@@ -84,11 +84,11 @@ pandoc "$inp" \
   --lua-filter="$FILTER_DIR/demote-extra-h1.lua" \
   --lua-filter="$FILTER_DIR/remove-table-widths.lua" \
   --lua-filter="$FILTER_DIR/convert-warning-tables.lua" \
-  "${keypad_filters_after_warning[@]}" \
+  ${keypad_filters_after_warning[@]:+${keypad_filters_after_warning[@]}} \
   --lua-filter="$FILTER_DIR/convert-legend-tables-ordered-lists.lua" \
   --lua-filter="$FILTER_DIR/flatten-two-cell-tables.lua" \
   --lua-filter="$FILTER_DIR/flatten-instruction-tables.lua" \
-  "${keypad_filters_after_flatten[@]}" \
+  ${keypad_filters_after_flatten[@]:+${keypad_filters_after_flatten[@]}} \
   --lua-filter="$FILTER_DIR/unwrap-table-blockquotes.lua" \
   --lua-filter="$FILTER_DIR/convert-image-tables.lua" \
   --lua-filter="$FILTER_DIR/normalize-headings.lua" \
@@ -99,7 +99,7 @@ pandoc "$inp" \
   --lua-filter="$FILTER_DIR/split-inline-images.lua" \
   --lua-filter="$FILTER_DIR/reposition-sentence-splitting-images.lua" \
   --lua-filter="$FILTER_DIR/convert-image-sizes.lua" \
-  "${keypad_filters_after_image_sizes[@]}" \
+  ${keypad_filters_after_image_sizes[@]:+${keypad_filters_after_image_sizes[@]}} \
   --lua-filter="$FILTER_DIR/softwrap-tokens.lua" \
   --lua-filter="$FILTER_DIR/remove-empty-table-columns.lua" \
   --lua-filter="$FILTER_DIR/clean-table-pipes.lua" \
@@ -1050,6 +1050,11 @@ text = text.replace('**0**.).', '**0**).')
 index.write_text(text)
 PY
 fi
+
+# Final SP3 compatibility cleanup after all markdown reshaping is complete.
+python3 "$SCRIPT_DIR/fix-quoted-headings.py" index.md
+python3 "$SCRIPT_DIR/normalize-residual-underlines.py" index.md
+python3 "$SCRIPT_DIR/inject-sp3-legacy-anchors.py" index.md
 
 # Optimize images for web and print (max 1200px width, 85% quality)
 echo "Optimizing images..."

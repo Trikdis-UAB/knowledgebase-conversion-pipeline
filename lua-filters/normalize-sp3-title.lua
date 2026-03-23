@@ -1,18 +1,68 @@
 -- normalize-sp3-title.lua
--- Ensure SP3 manuals get the expected H1 title "Panel de control FLEXi SP3"
+-- Ensure SP3 manuals get the expected localized H1 title.
 
-local function make_title()
+local function make_title(language)
+  if language == 'lt' then
+    return {
+      pandoc.Str('Apsaugos'),
+      pandoc.Space(),
+      pandoc.Str('centralė'),
+      pandoc.Space(),
+      pandoc.Str('“FLEXi”'),
+      pandoc.Space(),
+      pandoc.Str('SP3')
+    }
+  elseif language == 'es' then
+    return {
+      pandoc.Str('Panel'),
+      pandoc.Space(),
+      pandoc.Str('de'),
+      pandoc.Space(),
+      pandoc.Str('control'),
+      pandoc.Space(),
+      pandoc.Str('FLEXi'),
+      pandoc.Space(),
+      pandoc.Str('SP3')
+    }
+  elseif language == 'ru' then
+    return {
+      pandoc.Str('Охранная'),
+      pandoc.Space(),
+      pandoc.Str('панель'),
+      pandoc.Space(),
+      pandoc.Str('„FLEXI“'),
+      pandoc.Space(),
+      pandoc.Str('SP3')
+    }
+  end
+
   return {
-    pandoc.Str('Panel'),
-    pandoc.Space(),
-    pandoc.Str('de'),
+    pandoc.Str('Security'),
     pandoc.Space(),
     pandoc.Str('control'),
     pandoc.Space(),
-    pandoc.Str('FLEXi'),
+    pandoc.Str('panel'),
+    pandoc.Space(),
+    pandoc.Str('“FLEXi”'),
     pandoc.Space(),
     pandoc.Str('SP3')
   }
+end
+
+local function expected_title(language)
+  if language == 'lt' then
+    return 'Apsaugos centralė “FLEXi” SP3'
+  elseif language == 'es' then
+    return 'Panel de control FLEXi SP3'
+  elseif language == 'ru' then
+    return 'Охранная панель „FLEXI“ SP3'
+  end
+
+  return 'Security control panel “FLEXi” SP3'
+end
+
+local function normalize_text(text)
+  return text:gsub('%s+', ' '):gsub('^%s+', ''):gsub('%s+$', '')
 end
 
 local function is_sp3_doc(blocks)
@@ -29,38 +79,44 @@ local function is_sp3_doc(blocks)
   return false
 end
 
-local function is_spanish_doc(blocks)
+local function detect_language(blocks)
   local limit = math.min(#blocks, 80)
   for i = 1, limit do
     local block = blocks[i]
     if block.t == 'Para' or block.t == 'Plain' or block.t == 'Header' then
-      local text = pandoc.utils.stringify(block):lower()
-      -- Match accent-insensitive substrings to tolerate encoding artifacts (descripci?n, garant?a, etc.)
-      if text:match('descripci[óo]n') or text:match('descripci%?n')
-         or text:match('caracter[íi]sticas') or text:match('tabla de contenido')
-         or text:match('¿') then
-        return true
+      local text = pandoc.utils.stringify(block)
+      local lowered = text:lower()
+
+      if text:match('[Оо]хран') or text:match('[Пп]ольз') or text:match('[Оо]писан') then
+        return 'ru'
+      end
+      if lowered:match('apsaugos') or lowered:match('vartotojai') or lowered:match('aprašymas') then
+        return 'lt'
+      end
+      -- Match accent-insensitive substrings to tolerate encoding artifacts.
+      if lowered:match('descripci[óo]n') or lowered:match('descripci%?n')
+         or lowered:match('caracter[íi]sticas') or lowered:match('tabla de contenido')
+         or lowered:match('usuarios') or text:match('¿') then
+        return 'es'
       end
     end
   end
-  return false
+  return 'en'
 end
 
-local function looks_like_spanish_title(blocks)
-  for _, block in ipairs(blocks) do
-    if block.t == "Header" then
-      local text = pandoc.utils.stringify(block.content or block):lower()
-      if text:match("panel de control") then
-        return true
-      end
-    elseif block.t == "Para" or block.t == "Plain" then
-      local text = pandoc.utils.stringify(block):lower()
-      if text:match("el panel de control") then
-        return true
-      end
-    end
-  end
-  return false
+local function looks_like_bad_title(text)
+  return #normalize_text(text) > 60
+end
+
+local function is_title_candidate(text)
+  return text:match('SP3') and (
+    text:match('Security control panel')
+    or text:match('Apsaugos centralė')
+    or text:match('Panel de control')
+    or text:match('[Оо]хранная панель')
+    or text:match('FLEXi')
+    or text:match('FLEXI')
+  )
 end
 
 function Pandoc(doc)
@@ -68,24 +124,18 @@ function Pandoc(doc)
     return doc
   end
 
-  local spanish = is_spanish_doc(doc.blocks) or looks_like_spanish_title(doc.blocks)
-  if not spanish then
-    return doc
-  end
+  local language = detect_language(doc.blocks)
+  local title_text = expected_title(language)
 
   local title_applied = false
   for i, block in ipairs(doc.blocks) do
-    if block.t == 'Header' then
-      local text = pandoc.utils.stringify(block.content):lower():gsub('%s+', ' ')
-      if block.level == 1 then
-        block.content = make_title()
-        doc.blocks[i] = block
-        title_applied = true
-        break
-      elseif block.level == 2 and text:match('panel de control') then
-        block.level = 1
-        block.content = make_title()
-        doc.blocks[i] = block
+    if block.t == 'Header' and block.level == 1 then
+      local text = normalize_text(pandoc.utils.stringify(block.content))
+      if looks_like_bad_title(text) or is_title_candidate(text) then
+        if text ~= title_text then
+          block.content = make_title(language)
+          doc.blocks[i] = block
+        end
         title_applied = true
         break
       end
@@ -93,7 +143,22 @@ function Pandoc(doc)
   end
 
   if not title_applied then
-    table.insert(doc.blocks, 1, pandoc.Header(1, make_title()))
+    for i, block in ipairs(doc.blocks) do
+      if block.t == 'Header' and block.level == 2 then
+        local text = normalize_text(pandoc.utils.stringify(block.content))
+        if is_title_candidate(text) then
+        block.level = 1
+        block.content = make_title(language)
+        doc.blocks[i] = block
+        title_applied = true
+        break
+        end
+      end
+    end
+  end
+
+  if not title_applied then
+    table.insert(doc.blocks, 1, pandoc.Header(1, make_title(language)))
   end
 
   return doc

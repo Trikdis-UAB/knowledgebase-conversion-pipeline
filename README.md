@@ -251,6 +251,25 @@ After conversion, verify:
 - ✅ No Word artifacts: No `{.underline}`, no error references
 - ✅ Typography: Clean apostrophes, no backticks
 
+### SP3 Multilingual Regression Check
+
+For the SP3 2025-12-08 multilingual manuals, run the focused regression checker on
+the converted output folders:
+
+```bash
+python3 scripts/check-sp3-conversion.py \
+  "/path/to/SP3_TAIM_EN_2025 12 08" \
+  "/path/to/SP3_TAIM_LT_2025 12 08" \
+  "/path/to/SP3_TAIM_ESP_2025 12 08" \
+  "/path/to/SP3_TAIM_RU_2025 12 08"
+```
+
+This verifies the SP3-specific regressions fixed by the pipeline:
+- no residual `{.underline}` artifacts
+- valid legacy `#Users_window` anchor compatibility
+- exactly one H1 title
+- extracted images still present
+
 ---
 
 ## Publishing to GitHub Pages
