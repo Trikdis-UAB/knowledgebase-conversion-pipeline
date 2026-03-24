@@ -144,15 +144,22 @@ function Pandoc(doc)
       inserted = true
     elseif h1_index then
       if first_image_index <= h1_index then
+        -- Image appears BEFORE the H1 — this is a genuine cover/product image.
+        -- Remove it from its original position and re-insert as a centred div
+        -- immediately after the H1.
         blocks:remove(first_image_index)
         h1_index = h1_index - 1
+        blocks:insert(h1_index + 1, centered_image)
+        inserted = true
       end
-      blocks:insert(h1_index + 1, centered_image)
-      inserted = true
+      -- If first_image_index > h1_index the image is CONTENT (e.g. a wiring diagram
+      -- inside a numbered step).  Leave it untouched — no cover image for this doc.
     end
 
     if not inserted then
-      blocks[first_image_index] = centered_image
+      -- No suitable cover image found; leave the document unchanged.
+      -- (Do NOT fall back to replacing the image in-place as a centred div,
+      -- because that would incorrectly centre content images like wiring diagrams.)
     end
   end
 

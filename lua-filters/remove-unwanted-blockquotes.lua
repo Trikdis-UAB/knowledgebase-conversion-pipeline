@@ -51,7 +51,10 @@ function BlockQuote(blockquote)
     return blockquote.content
   end
 
-  -- Generic rule: unwrap simple one-paragraph blockquotes that aren't real quotations
+  -- Generic rule: unwrap simple paragraph-only blockquotes that are not real
+  -- quotations.  However, preserve blockquotes that contain hyperlinks or image
+  -- references — those are intentional styled callouts (e.g. support banners,
+  -- download instructions) and should remain as blockquotes.
   local all_plain = true
   for _, inner in ipairs(blockquote.content) do
     if inner.t ~= 'Para' and inner.t ~= 'Plain' then
@@ -61,6 +64,31 @@ function BlockQuote(blockquote)
   end
 
   if all_plain then
+    -- Check for hyperlinks inside the blockquote content
+    local has_link = false
+    local has_image = false
+    pandoc.walk_block(pandoc.Div(blockquote.content), {
+      Link = function(_) has_link = true end,
+      Image = function(_) has_image = true end,
+      RawInline = function(ri)
+        if ri.text:match('<img') or ri.text:match('http') then
+          has_image = true
+        end
+      end
+    })
+    -- Also check stringified content for URLs (covers plain-text URLs too)
+    if not has_link and content:match('https?://') then
+      has_link = true
+    end
+    if not has_link and content:match('www%.') then
+      has_link = true
+    end
+
+    if has_link or has_image then
+      -- Keep as blockquote — it looks intentional (support link, download banner)
+      return blockquote
+    end
+
     return blockquote.content
   end
 

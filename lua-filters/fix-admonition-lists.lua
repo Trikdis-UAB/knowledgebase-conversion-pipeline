@@ -51,22 +51,11 @@ function Div(div)
   return div
 end
 
--- Also handle OrderedLists that aren't in divs yet (during conversion)
-function OrderedList(ol)
-  -- In the context of callout-like content, reset numbering
-  -- This is a more aggressive fix for lists that reference image numbers
-
-  -- Check if this is a short list (likely a callout reference list)
-  if #ol.content <= 10 and ol.start and ol.start > 1 then
-    -- Reset to 1 if starting number seems wrong (2-9 are suspicious in this context)
-    if ol.start >= 2 and ol.start <= 9 then
-      ol.start = 1
-      return ol
-    end
-  end
-
-  return ol
-end
+-- NOTE: A previous global OrderedList() handler that reset all lists with
+-- start >= 2 to 1 was removed because it conflicts with maintain-list-continuity.lua,
+-- which correctly sets continuation start numbers for multi-step numbered procedures
+-- (e.g. Quick Installation Guides where each step is a separate ordered list broken
+-- by images).  Admonition-internal lists are already covered by the Div() handler above.
 
 function Para(p)
   if not p.content or #p.content == 0 then
@@ -106,5 +95,5 @@ function Para(p)
 end
 
 return {
-  {Div = Div, OrderedList = OrderedList, Para = Para}
+  {Div = Div, Para = Para}
 }

@@ -1,50 +1,26 @@
 -- demote-extra-h1.lua
--- Ensures only the first H1 (product title) remains
--- Demotes all subsequent H1 headings to H2
--- This runs after promote-strong-top.lua creates the product title
+-- Ensures only the FIRST H1 (product title) remains as H1.
+-- All subsequent H1 headings are demoted to H2.
+--
+-- This is more robust than a keyword whitelist because it works for any
+-- product type (communicators, gate controllers, expanders, keypads, etc.)
+-- without needing to enumerate every possible product category.
+--
+-- This runs after promote-strong-top.lua creates the product title.
 
 function Pandoc(doc)
   local blocks = doc.blocks
-
-  -- Product title patterns to keep as H1
-  local product_patterns = {
-    "Alarm Panel",
-    "Control Panel",
-    "Panel de control",
-    "control panel",  -- Matches "Security control panel"
-    "Cellular Communicator",
-    "Ethernet Communicator",
-    "Gate Controller",
-    "Communicator",
-    "Comunicador",
-    "komunikatorius",
-    "Komunikatorius",
-    "centralė",
-    "Centralė",
-    "Apsaugos centralė"
-  }
-
-  -- Helper: Check if text matches any product pattern
-  local function is_product_title(text)
-    for _, pattern in ipairs(product_patterns) do
-      if text:match(pattern) then
-        return true
-      end
-    end
-    return false
-  end
+  local seen_first_h1 = false
 
   for i, block in ipairs(blocks) do
-    -- If this is an H1 heading
     if block.t == "Header" and block.level == 1 then
-      local text = pandoc.utils.stringify(block.content)
-
-      if is_product_title(text) then
-        -- Keep product title as H1
-        -- (Product titles contain: Alarm Panel, Control Panel, Cellular Communicator, Gate Controller)
+      if not seen_first_h1 then
+        -- Keep the very first H1 — that is the product title
+        seen_first_h1 = true
       else
-        -- Demote non-product H1s to H2
+        -- Demote any subsequent H1 to H2
         block.level = 2
+        blocks[i] = block
       end
     end
   end

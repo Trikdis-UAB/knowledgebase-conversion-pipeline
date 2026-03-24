@@ -485,10 +485,15 @@ python3 "$SCRIPT_DIR/fix-disposal-icon.py" index.md
 # Fix table spacing: ensure blank line before tables
 python3 "$SCRIPT_DIR/fix-table-spacing.py" index.md
 
-# Remove stray images that interrupt bullet lists (e.g., image3.png in SP3 Features section)
-# These are typically product images incorrectly placed in the middle of feature lists
-# Runs after all Python post-processors to ensure it's not re-added
-sed -i '' '/src="\.\/image3\.png"/d' index.md
+# Remove stray images that interrupt bullet lists in SP3 Features section.
+# image3.png in SP3 is a product photo incorrectly placed mid-list; remove it.
+# NOTE: Do NOT apply globally — other documents (e.g. iO-8 QI) use image3.png as
+# a legitimate content image (step 3 wiring diagram in a numbered installation list).
+case "$base" in
+  SP3*|*_SP3_*)
+    sed -i '' '/src="\.\/image3\.png"/d' index.md
+    ;;
+esac
 
 # Replace GSM with Cellular in gate controller manuals
 python3 "$SCRIPT_DIR/replace-gsm-with-cellular.py" index.md

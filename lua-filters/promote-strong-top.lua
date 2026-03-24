@@ -4,9 +4,56 @@
 -- 1. "Cellular communicator [MODEL]" (GT/GT+ style)
 -- 2. "Cellular/Ethernet communicator [MODEL]" (GET style)
 -- 3. H2 at document start (SP3 style: "## **Security control panel...**")
--- 4. Other bold text patterns
+-- 4. "Input and output expander [MODEL]" (iO-8 style - mixed inline paragraph)
+-- 5. "Wireless expander [MODEL]" (iO-LORA style)
+-- 6. Other bold text patterns
 
 local S = pandoc.utils.stringify
+
+-- Try to match expander/module product titles from mixed-content paragraphs.
+-- These are plain paragraphs (not single-Strong) that describe the product type
+-- and model, e.g. "Input and output expander ***iO-8***".
+-- Returns (model, product_type) or nil.
+local function match_expander_title(para_text)
+  local model, product_type
+
+  -- "Input and output expander [MODEL]"
+  model = para_text:match("^[Ii]nput%s+and%s+output%s+expander%s+(.+)$")
+  if model then return model, "Input/Output Expander" end
+
+  -- "Wireless expander [MODEL]" / "LoRa expander [MODEL]"
+  model = para_text:match("^[Ww]ireless%s+expander%s+(.+)$")
+  if model then return model, "Wireless Expander" end
+
+  model = para_text:match("^[Ll][Oo][Rr][Aa]%s+expander%s+(.+)$")
+  if model then return model, "LoRa Expander" end
+
+  -- "LoRa transceiver [MODEL]"
+  model = para_text:match("^[Ll][Oo][Rr][Aa]%s+transceiver%s+(.+)$")
+  if model then return model, "LoRa Transceiver" end
+
+  -- "[MODEL] expander" (model first)
+  model = para_text:match("^([A-Za-z0-9%-%+]+)%s+[Ee]xpander$")
+  if model then return model, "Expander" end
+
+  -- LT: "Įėjimų ir išėjimų plėtiklis [MODEL]" (input and output expander)
+  model = para_text:match("plėtiklis%s+([A-Za-z][A-Za-z0-9%-%+]*)$")
+  if model then return model, "Įėjimų ir išėjimų plėtiklis" end
+
+  -- ES: "Expansor de entrada y salida [MODEL]"
+  model = para_text:match("[Ee]xpansor%s+de%s+entrada%s+y%s+salida%s+(.+)$")
+  if model then return model, "Expansor de entrada y salida" end
+
+  -- ES: "Expansor [MODEL]" (generic Spanish expander)
+  model = para_text:match("^[Ee]xpansor%s+([A-Za-z][A-Za-z0-9%-%+]*)$")
+  if model then return model, "Expansor" end
+
+  -- RU: "Расширитель входов и выходов [MODEL]" (may be combined from two paragraphs)
+  model = para_text:match("Расширитель%s+входов%s+и%s+выходов%s+(.+)$")
+  if model then return model, "Расширитель входов и выходов" end
+
+  return nil, nil
+end
 
 function Pandoc(doc)
   local out = {}
@@ -83,6 +130,46 @@ function Pandoc(doc)
       end
 
       seen_header = true
+    end
+
+    -- Check for expander/module product names in mixed-content paragraphs BEFORE
+    -- checking for single-Strong paragraphs.  These appear as normal paragraphs
+    -- with inline bold/italic text mixed with plain text, e.g.:
+    --   "Input and output expander ***iO-8***"
+    -- The stringified text of the whole paragraph matches the product-type pattern.
+    if not seen_header and not first_strong_found and b.t == 'Para' then
+      local para_txt = S(b)
+      para_txt = para_txt:gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")
+      local model, product_type = match_expander_title(para_txt)
+      if model then
+        model = model:gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")
+        local title = model .. " " .. product_type
+        table.insert(out, pandoc.Header(1, {pandoc.Str(title)}))
+        first_strong_found = true
+        goto continue
+      end
+    end
+
+    -- Also try combining the current Para with the NEXT Para for multi-line product titles.
+    -- This handles cases like the Russian iO-8 title which is split across two paragraphs:
+    --   Para 1: "Расширитель входов"
+    --   Para 2: "и выходов ***iO-8***"
+    -- Combined: "Расширитель входов и выходов iO-8"
+    if not seen_header and not first_strong_found and b.t == 'Para' then
+      local next_b = doc.blocks[i + 1]
+      if next_b and next_b.t == 'Para' then
+        local p1 = S(b):gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")
+        local p2 = S(next_b):gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")
+        local combined = (p1 .. " " .. p2):gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")
+        local m2, pt2 = match_expander_title(combined)
+        if m2 then
+          m2 = m2:gsub("%s+", " "):gsub("^%s+", ""):gsub("%s+$", "")
+          table.insert(out, pandoc.Header(1, {pandoc.Str(m2 .. " " .. pt2)}))
+          first_strong_found = true
+          skip_next = true
+          goto continue
+        end
+      end
     end
 
     -- Look for first bold paragraph (product name on cover) - GT/GT+/GET style

@@ -81,53 +81,87 @@ def remove_duplicate_cover_images(file_path):
             i += 1
 
     # If no centered image div was preserved, attempt to insert one after the
-    # first H1 using the earliest image reference available.
+    # first H1 — but ONLY for full user-manual style documents that have a
+    # dedicated "Description" or content section after the title.
+    #
+    # Quick Installation Guides (QI) and similar short documents do NOT have a
+    # cover/product photo; image1.png is typically a wiring diagram or a
+    # step-illustration.  Inserting it as a centred cover image would be wrong.
+    #
+    # Heuristic: skip the fallback if the first image in the document appears
+    # inside a numbered list (i.e. it is a content illustration, not a cover
+    # photo).  We detect this by checking whether any numbered-list item appears
+    # before the first <img> reference in the result.
     if not seen_first_centered_image:
-        image_src = None
-        manual_dir = os.path.dirname(file_path)
-
-        # Prefer common cover image filenames if present alongside the markdown.
-        preferred_names = [
-            "image1.png",
-            "image1.jpg",
-            "image01.png",
-            "image01.jpg"
-        ]
-        for name in preferred_names:
-            candidate_path = os.path.join(manual_dir, name)
-            if os.path.exists(candidate_path):
-                image_src = f"./{name}"
+        # Check whether the document is a QI-style doc (first image is a content
+        # illustration that follows a numbered list item rather than a cover photo).
+        first_img_line_idx = None
+        first_list_item_line_idx = None
+        list_item_re = re.compile(r'^\d+\.\s+')
+        img_ref_re = re.compile(r'<img[^>]*src=')
+        for idx, ln in enumerate(result):
+            if first_list_item_line_idx is None and list_item_re.match(ln):
+                first_list_item_line_idx = idx
+            if first_img_line_idx is None and img_ref_re.search(ln):
+                first_img_line_idx = idx
+            if first_list_item_line_idx is not None and first_img_line_idx is not None:
                 break
 
-        # Otherwise look for the first explicit image reference in the document,
-        # skipping the known stray image3.png that we strip later in the pipeline.
-        if not image_src:
-            img_tag = re.compile(r'<img[^>]*src="([^"]+)"')
-            for line in result:
-                match = img_tag.search(line)
-                if match:
-                    candidate = match.group(1)
-                    if candidate.endswith("image3.png"):
-                        continue
-                    image_src = candidate
+        is_qi_style = (
+            first_list_item_line_idx is not None
+            and first_img_line_idx is not None
+            and first_img_line_idx > first_list_item_line_idx
+        )
+
+        if is_qi_style:
+            # QI document — no cover image needed; skip the fallback entirely.
+            pass
+        else:
+            image_src = None
+            manual_dir = os.path.dirname(file_path)
+
+            # Prefer common cover image filenames if present alongside the markdown.
+            preferred_names = [
+                "image1.png",
+                "image1.jpg",
+                "image01.png",
+                "image01.jpg"
+            ]
+            for name in preferred_names:
+                candidate_path = os.path.join(manual_dir, name)
+                if os.path.exists(candidate_path):
+                    image_src = f"./{name}"
                     break
 
-        if image_src:
-            insert_idx = 0
-            for idx, line in enumerate(result):
-                if line.startswith('# '):
-                    insert_idx = idx + 1
-                    break
-            block = []
-            if insert_idx > 0 and result[insert_idx - 1].strip() != '':
-                block.append('\n')
-            block.extend([
-                '<div style="text-align: center;">\n',
-                f'  <img src="{image_src}" alt="" width="400">\n',
-                '</div>\n',
-                '\n'
-            ])
-            result[insert_idx:insert_idx] = block
+            # Otherwise look for the first explicit image reference in the document,
+            # skipping the known stray image3.png that we strip later in the pipeline.
+            if not image_src:
+                img_tag = re.compile(r'<img[^>]*src="([^"]+)"')
+                for line in result:
+                    match = img_tag.search(line)
+                    if match:
+                        candidate = match.group(1)
+                        if candidate.endswith("image3.png"):
+                            continue
+                        image_src = candidate
+                        break
+
+            if image_src:
+                insert_idx = 0
+                for idx, line in enumerate(result):
+                    if line.startswith('# '):
+                        insert_idx = idx + 1
+                        break
+                block = []
+                if insert_idx > 0 and result[insert_idx - 1].strip() != '':
+                    block.append('\n')
+                block.extend([
+                    '<div style="text-align: center;">\n',
+                    f'  <img src="{image_src}" alt="" width="400">\n',
+                    '</div>\n',
+                    '\n'
+                ])
+                result[insert_idx:insert_idx] = block
 
     # Write back
     with open(file_path, 'w', encoding='utf-8') as f:

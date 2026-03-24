@@ -66,17 +66,26 @@ local function normalize_text(text)
 end
 
 local function is_sp3_doc(blocks)
-  local limit = math.min(#blocks, 40)
+  -- Require BOTH "FLEXi" AND "SP3" to appear in the first 15 blocks (title area).
+  -- This prevents false-positive matches when other manuals merely reference SP3
+  -- as a compatible device in their body text (e.g., iO-8 mentions "SP3" in its
+  -- list of compatible main units, but the document is not about the SP3 panel).
+  local limit = math.min(#blocks, 15)
+  local has_flexi = false
+  local has_sp3 = false
   for i = 1, limit do
     local block = blocks[i]
     if block.t == 'Para' or block.t == 'Plain' or block.t == 'Header' then
       local text = pandoc.utils.stringify(block)
-      if text:match('SP3') or text:match('FLEXi') then
-        return true
+      if text:match('FLEXi') or text:match('FLEXI') then
+        has_flexi = true
+      end
+      if text:match('SP3') then
+        has_sp3 = true
       end
     end
   end
-  return false
+  return has_flexi and has_sp3
 end
 
 local function detect_language(blocks)
