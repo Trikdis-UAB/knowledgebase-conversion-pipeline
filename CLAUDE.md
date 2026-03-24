@@ -48,12 +48,14 @@ cd /Users/local/projects/knowledgebase-conversion-pipeline
 ```
 
 ### Preview Converted Manuals
+After copying output to the manuals repo, preview with its own virtualenv:
 ```bash
-./scripts/preview.sh
+cd /Users/andriaus/Projects/TRIKDIS/manuals
+.venv/bin/mkdocs serve
+# Visit http://127.0.0.1:8000
 ```
-- Syncs latest mkdocs.yml from trikdis-docs
-- Serves on http://127.0.0.1:8001
-- Shows exactly how manuals will look when published
+**Always inspect visually before pushing.** Check headings, images, numbered
+steps, admonitions, and navigation. Only push after sign-off.
 
 ### Output Location
 ```
@@ -75,9 +77,18 @@ docs/manuals/[Manual Name]/
 
 ### Publishing Workflow
 1. Convert DOCX in this project
-2. Copy output to `/Users/local/projects/trikdis-docs/manuals/docs/manual/`
-3. Update mkdocs.yml if needed
-4. Git commit and push (auto-deploys to https://docs.trikdis.com)
+2. Copy output to the correct language/category path in `/Users/andriaus/Projects/TRIKDIS/manuals/docs/{lang}/{category}/{product}/`
+3. Update `mkdocs.yml` nav if needed (all 4 language sections: en, lt, es, ru)
+4. **Serve locally and visually inspect before pushing:**
+   ```bash
+   cd /Users/andriaus/Projects/TRIKDIS/manuals
+   .venv/bin/mkdocs serve
+   # Visit http://127.0.0.1:8000 — check layout, images, numbering, headings
+   ```
+5. Only after visual sign-off: `git commit && git push`
+   - Deployment is via **Netlify** (not GitHub Pages/Actions)
+   - Netlify auto-builds on push to `main` using `Scripts/build_docs.sh`
+   - Live at https://docs.trikdis.com
 
 ### Prerequisites
 - Pandoc installed via Homebrew
@@ -163,7 +174,7 @@ docs/manuals/[Manual Name]/
 ✅ Standalone asterisks removal
 ✅ Empty table columns removed
 ✅ Batch script refactored for consistency
-✅ GitHub Pages deployment documented
+✅ Netlify deployment (auto-builds on push to main)
 ✅ MkDocs Material compatibility confirmed
 ✅ Automatic table structure fixes
 ✅ GitHub alerts support
