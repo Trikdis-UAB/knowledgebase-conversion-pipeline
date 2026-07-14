@@ -1,0 +1,96 @@
+{
+  "guides": [
+    {
+      "id": "user-guide-en",
+      "kind": "user",
+      "locale": "en",
+      "source": "temp-source-docs/SP3/_ENG/SP3_UM_PROTEGUS_PARADOX_EN_2022 07 28.docx",
+      "destination": "en/control-panels/sp3/paradox-user-guide",
+      "title": "FLEXi SP3 user guide with Protegus and Paradox keypads",
+      "trim_after": "Information about the protected object",
+      "section_marker": "Press buttons 1 and 2 simultaneously",
+      "section_heading": "Paradox keypad user code operations",
+      "required_sections": ["Paradox keypad user code operations", "Programming user control codes", "Control using iButton keys", "Control of PGM outputs"],
+      "required_terms": ["Paradox keypad", "Programming user control codes", "User code"]
+    },
+    {
+      "id": "user-guide-lt",
+      "kind": "user",
+      "locale": "lt",
+      "source": "temp-source-docs/SP3/_LT/SP3_UM_PROTEGUS_PARADOX_LT_2022 07 28.docx",
+      "destination": "lt/control-panels/sp3/paradox-user-guide",
+      "title": "„FLEXi“ SP3 apsaugos centralės su Protegus ir Paradox klaviatūromis vartotojo vadovas",
+      "trim_after": "Informacija apie saugomą objektą",
+      "section_marker": "Vartotojų (User) kodų ištrynimas",
+      "section_heading": "Paradox klaviatūros vartotojų kodų veiksmai",
+      "required_sections": ["Paradox klaviatūros vartotojų kodų veiksmai", "Vartotojų valdymo kodų programavimas", "Valdymas iButton raktais", "PGM išėjimų valdymas"],
+      "required_terms": ["Paradox", "Vartotojo", "kod"]
+    },
+    {
+      "id": "user-guide-es",
+      "kind": "user",
+      "locale": "es",
+      "source": "temp-source-docs/SP3/_ESP/SP3_UM_PROTEGUS_PARADOX_ESP_2022 07 28.docx",
+      "destination": "es/control-panels/sp3/paradox-user-guide",
+      "title": "Manual de usuario de FLEXi SP3 con teclados Protegus y Paradox",
+      "trim_after": "Información sobre el objeto protegido",
+      "section_marker": "Presione los botones 1 y 2 simultáneamente",
+      "section_heading": "Operaciones de códigos de usuario con teclado Paradox",
+      "required_sections": ["Operaciones de códigos de usuario con teclado Paradox", "Programar códigos de control de usuario", "Control mediante llaves iButton", "Control de salidas PGM"],
+      "required_terms": ["Paradox", "código de usuario"]
+    },
+    {
+      "id": "user-guide-ru",
+      "kind": "user",
+      "locale": "ru",
+      "source": "temp-source-docs/SP3/_RU/SP3_UM_PROTEGUS_PARADOX_RU_2022 07 28.docx",
+      "destination": "ru/control-panels/sp3/paradox-user-guide",
+      "title": "Руководство пользователя охранной панели „FLEXi“ SP3 с клавиатурами Protegus и Paradox",
+      "trim_after": "Информация об охраняемом объекте",
+      "section_marker": "Удаление кодов пользователей (User)",
+      "section_heading": "Операции с кодами пользователей на клавиатуре Paradox",
+      "required_sections": ["Операции с кодами пользователей на клавиатуре Paradox", "Программирование кодов пользователей", "Управление контактными ключами iButton", "Управление PGM выходами"],
+      "required_terms": ["Paradox", "Код пользователя"]
+    },
+    {
+      "id": "rtx3-en",
+      "kind": "rtx3",
+      "locale": "en",
+      "source": "temp-source-docs/SP3/_ENG/SP3 +RTX3 paradox EN 2022 09 20.docx",
+      "destination": "en/control-panels/sp3/paradox-rtx3",
+      "title": "Using Paradox wireless devices with FLEXi SP3 (RTX3)",
+      "required_sections": ["Control panel firmware replacement", "Linking a wireless sensors", "Linking a wireless keypad"],
+      "required_terms": ["RTX3", "firmware", "Linking a wireless keypad"]
+    },
+    {
+      "id": "rtx3-lt",
+      "kind": "rtx3",
+      "locale": "lt",
+      "source": "temp-source-docs/SP3/_LT/SP3 +RTX3 paradox LT 2022 09 20.docx",
+      "destination": "lt/control-panels/sp3/paradox-rtx3",
+      "title": "Paradox belaidžiai įrenginiai su „FLEXi“ SP3 (RTX3)",
+      "required_sections": ["Apsaugos centralės programinės įrangos pakeitimas", "Belaidžių jutiklių registravimas", "Belaidės klaviatūros registravimas"],
+      "required_terms": ["RTX3", "program", "klaviat"]
+    },
+    {
+      "id": "rtx3-es",
+      "kind": "rtx3",
+      "locale": "es",
+      "source": "temp-source-docs/SP3/_ESP/SP3 +RTX3 paradox ESP 2022 09 20.docx",
+      "destination": "es/control-panels/sp3/paradox-rtx3",
+      "title": "Dispositivos inalámbricos Paradox con FLEXi SP3 (RTX3)",
+      "required_sections": ["Panel de control", "Vinculación de sensores inalámbricos", "Vinculación de un teclado inalámbrico"],
+      "required_terms": ["RTX3", "firmware", "teclado"]
+    },
+    {
+      "id": "rtx3-ru",
+      "kind": "rtx3",
+      "locale": "ru",
+      "source": "temp-source-docs/SP3/_RU/SP3 +RTX3 paradox RU 2022 09 20.docx",
+      "destination": "ru/control-panels/sp3/paradox-rtx3",
+      "title": "Беспроводные устройства Paradox с „FLEXi“ SP3 (RTX3)",
+      "required_sections": ["Замена программного обеспечения охранной панели", "Регистрация беспроводных датчиков", "Регистрация беспроводной клавиатуры"],
+      "required_terms": ["RTX3", "прошив", "клавиат"]
+    }
+  ]
+}

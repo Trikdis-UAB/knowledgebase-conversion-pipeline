@@ -270,6 +270,25 @@ This verifies the SP3-specific regressions fixed by the pipeline:
 - exactly one H1 title
 - extracted images still present
 
+### SP3 Paradox Companion Guides
+
+The eight localized SP3 companion guides (Protegus/Paradox user operation and
+Paradox RTX3 wireless devices) are declared in
+`configs/sp3-paradox-guides.json`. Convert them to a separate staging root and
+run the focused check before copying the eight guide folders into the manuals
+repository:
+
+```bash
+python3 scripts/convert-sp3-paradox-guides.py --output-root /tmp/sp3-paradox-guides
+python3 scripts/check-sp3-paradox-guides.py --output-root /tmp/sp3-paradox-guides
+```
+
+The batch converter supplies each localized title through `DOCUMENT_TITLE`.
+That override is applied after cover/contents cleanup, makes the supplied title
+the sole H1, and demotes later H1s. The generic SP3 title normalizer is limited
+to primary manuals named `SP3_TAIM_*`, so it cannot overwrite a companion-guide
+title.
+
 ---
 
 ## Publishing to GitHub Pages

@@ -17,6 +17,7 @@ Heuristics:
 
 from __future__ import annotations
 
+import os
 import re
 import sys
 from pathlib import Path
@@ -71,6 +72,24 @@ def normalize_candidate(text: str) -> str | None:
 
 def ensure_h1(path: Path) -> None:
     lines = path.read_text(encoding="utf-8").splitlines()
+
+    title_override = os.environ.get("DOCUMENT_TITLE", "").strip()
+    if title_override:
+        first_h1 = next((idx for idx, line in enumerate(lines) if line.startswith("# ")), None)
+
+        # A leading H1 is a generated document title and can be replaced.  A
+        # later H1 is a real section (as in the legacy Paradox user guide), so
+        # retain it as an H2 beneath the supplied document title.
+        if first_h1 is not None and all(not line.strip() for line in lines[:first_h1]):
+            lines[first_h1] = f"# {title_override}"
+        else:
+            while lines and not lines[0].strip():
+                lines.pop(0)
+            lines = [f"# {title_override}", "", *lines]
+
+        lines = [f"## {line[2:]}" if line.startswith("# ") and line != f"# {title_override}" else line for line in lines]
+        path.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
+        return
 
     def dedupe_subheading(content: list[str]) -> None:
         first_heading = None

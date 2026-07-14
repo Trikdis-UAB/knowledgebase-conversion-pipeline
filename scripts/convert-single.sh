@@ -16,6 +16,7 @@ if [ $# -eq 0 ]; then
 fi
 
 OUT_DIR="${OUT_DIR:-docs/manuals}"
+DOCUMENT_TITLE="${DOCUMENT_TITLE:-}"
 
 # Get absolute paths
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -56,6 +57,7 @@ pushd "$doc_dir" >/dev/null
 keypad_filters_after_warning=()
 keypad_filters_after_flatten=()
 keypad_filters_after_image_sizes=()
+sp3_title_filter=""
 if [ "$KEYPAD_MODE" = "1" ]; then
   keypad_filters_after_warning=(
     --lua-filter="$FILTER_DIR/collapse-spacer-columns.lua"
@@ -69,6 +71,16 @@ if [ "$KEYPAD_MODE" = "1" ]; then
     --lua-filter="$FILTER_DIR/scale-inline-icons.lua"
   )
 fi
+
+# The canonical SP3 title is only valid for the main technical manual.  Other
+# SP3 documents (for example Paradox user and RTX3 guides) provide their own
+# title through DOCUMENT_TITLE and must not be relabelled as the general SP3
+# manual.
+case "$base" in
+  SP3_TAIM_*)
+    sp3_title_filter="--lua-filter=$FILTER_DIR/normalize-sp3-title.lua"
+    ;;
+esac
 
 pandoc "$inp" \
   -o "index.md" \
@@ -94,7 +106,7 @@ pandoc "$inp" \
   --lua-filter="$FILTER_DIR/normalize-headings.lua" \
   --lua-filter="$FILTER_DIR/strip-manual-heading-numbers.lua" \
   --lua-filter="$FILTER_DIR/promote-centered-bold.lua" \
-  --lua-filter="$FILTER_DIR/normalize-sp3-title.lua" \
+  ${sp3_title_filter:+$sp3_title_filter} \
   --lua-filter="$FILTER_DIR/move-first-image-to-description.lua" \
   --lua-filter="$FILTER_DIR/split-inline-images.lua" \
   --lua-filter="$FILTER_DIR/reposition-sentence-splitting-images.lua" \
@@ -297,7 +309,7 @@ sed -i '' 's/^Connects to the control panel'\''s serial or keyboard bus or telep
 # - Python script handles unnumbered headings with Word classes (.2-Po-Pag)
 # - Lua filter handles numbered headings in text (11.1 Title)
 python3 "$SCRIPT_DIR/fix-heading-hierarchy.py" index.md
-python3 "$SCRIPT_DIR/ensure-first-h1.py" index.md
+DOCUMENT_TITLE="$DOCUMENT_TITLE" python3 "$SCRIPT_DIR/ensure-first-h1.py" index.md
 
 # Add centered product image after H1 title (must run AFTER heading normalization)
 # Works for all product types: Communicators, Alarm Panels, etc.
